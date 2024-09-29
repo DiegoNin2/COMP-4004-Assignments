@@ -36,7 +36,7 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
 
-        int adventureDeckSize = game.getEventDeckSize();
+        int adventureDeckSize = game.getAdventureDeckSize();
 
         //there should be 50 Foe cards & 50 Weapon cards
         int numWeaponCards = 0;
@@ -290,9 +290,9 @@ class MainTest {
                 finalNumPrCards = numPrCards;
         assertAll(
                 "Amount Check",
-                () -> assertEquals(3, finalNumPlCards),
-                () -> assertEquals(4, finalNumQFCards),
-                () -> assertEquals(3, finalNumPrCards)
+                () -> assertEquals(1, finalNumPlCards),
+                () -> assertEquals(2, finalNumQFCards),
+                () -> assertEquals(2, finalNumPrCards)
         );
     }
 
