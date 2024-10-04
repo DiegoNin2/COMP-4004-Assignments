@@ -17,6 +17,10 @@ public class Main {
 
     ArrayList<Card> adventureDeck = new ArrayList<Card>();
     ArrayList<Card> eventDeck = new ArrayList<Card>();
+    ArrayList<Card> p1Hand = new ArrayList<Card>();
+    ArrayList<Card> p2Hand = new ArrayList<Card>();
+    ArrayList<Card> p3Hand = new ArrayList<Card>();
+    ArrayList<Card> p4Hand = new ArrayList<Card>();
 
     public void initializeDecks() {
         adventureDeck = new ArrayList<Card>();
@@ -265,27 +269,34 @@ public class Main {
     }
 
     public void dealCards() {
-
+        for (int i = 0; i < 12; i++) {
+            p1Hand.add(drawCard());
+            p2Hand.add(drawCard());
+            p3Hand.add(drawCard());
+            p4Hand.add(drawCard());
+        }
     }
 
     public int getP1HandSize() {
-        return 0;
+        return p1Hand.size();
     }
 
     public int getP2HandSize() {
-        return 0;
+        return p2Hand.size();
     }
 
     public int getP3HandSize() {
-        return 0;
+        return p3Hand.size();
     }
 
     public int getP4HandSize() {
-        return 0;
+        return p4Hand.size();
     }
 
     public Card drawCard() {
-        return new Card();
+        Card drawnCard = null;
+        drawnCard = adventureDeck.removeFirst();
+        return drawnCard;
     }
 
 }
