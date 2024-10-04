@@ -296,4 +296,34 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Deal 12 cards to each player")
+    void RESP_02_test_01() {
+        Main game = new Main();
+        game.initializeDecks();
+
+        game.dealCards();
+
+        //all players should have 12 cards
+        assertAll(
+                "hand check",
+                () -> assertEquals(12, game.getP1HandSize()),
+                () -> assertEquals(12, game.getP2HandSize()),
+                () -> assertEquals(12, game.getP3HandSize()),
+                () -> assertEquals(12, game.getP4HandSize())
+        );
+    }
+
+    @Test
+    @DisplayName("Check if adventure deck is updated after dealing cards")
+    void RESP_02_test_02() {
+        Main game = new Main();
+        game.initializeDecks();
+
+        game.dealCards();
+
+        //adventure deck should have 52 cards after dealing
+        assertEquals(52,game.getAdventureDeckSize());
+    }
+
 }

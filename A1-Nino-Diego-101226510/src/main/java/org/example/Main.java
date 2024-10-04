@@ -264,6 +264,26 @@ public class Main {
         return eventDeck.size();
     }
 
+    public void dealCards() {
+
+    }
+
+    public int getP1HandSize() {
+        return 0;
+    }
+
+    public int getP2HandSize() {
+        return 0;
+    }
+
+    public int getP3HandSize() {
+        return 0;
+    }
+
+    public int getP4HandSize() {
+        return 0;
+    }
+
     public Card drawCard() {
         return new Card();
     }
