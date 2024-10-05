@@ -21,6 +21,10 @@ public class Main {
     ArrayList<Card> p2Hand = new ArrayList<Card>();
     ArrayList<Card> p3Hand = new ArrayList<Card>();
     ArrayList<Card> p4Hand = new ArrayList<Card>();
+    int p1Shields = 0;
+    int p2Shields = 0;
+    int p3Shields = 0;
+    int p4Shields = 0;
 
     public void initializeDecks() {
         adventureDeck = new ArrayList<Card>();
@@ -300,11 +304,32 @@ public class Main {
     }
 
     public void setShield(int score, int playerID) {
-
+        switch(playerID) {
+            case 1:
+                p1Shields = score;
+            case 2:
+                p2Shields = score;
+            case 3:
+                p3Shields = score;
+            case 4:
+                p4Shields = score;
+        }
     }
 
     public int getPlayerScore(int playerID) {
-        return -1;
+        switch(playerID) {
+            case 1:
+                return p1Shields;
+            case 2:
+                return p2Shields;
+            case 3:
+                return p3Shields;
+            case 4:
+                return p4Shields;
+            default:
+                //this means something went wrong :)
+                return -1;
+        }
     }
 
 }
