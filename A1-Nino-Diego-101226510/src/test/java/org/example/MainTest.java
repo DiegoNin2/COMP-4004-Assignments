@@ -46,9 +46,9 @@ class MainTest {
         int numFoeCards = 0;
 
         for (int i = 0; i < adventureDeckSize; i++) {
-            if (game.adventureDeck.get(i).type.equals("Weapon")) {
+            if (game.adventureDeck.get(i).getType().equals("Weapon")) {
                 numWeaponCards++;
-            } else if (game.adventureDeck.get(i).type.equals("Foe")) {
+            } else if (game.adventureDeck.get(i).getType().equals("Foe")) {
                 numFoeCards++;
             }
         }
@@ -75,9 +75,9 @@ class MainTest {
         int numEventCards = 0;
 
         for (int i = 0; i < eventDeckSize; i++) {
-            if (game.eventDeck.get(i).type.equals("Quest")) {
+            if (game.eventDeck.get(i).getType().equals("Quest")) {
                 numQuestCards++;
-            } else if (game.eventDeck.get(i).type.equals("Event")) {
+            } else if (game.eventDeck.get(i).getType().equals("Event")) {
                 numEventCards++;
             }
         }
@@ -105,8 +105,8 @@ class MainTest {
                 numF70Cards = 0;
 
         for (int i = 0; i < adventureDeckSize; i++) {
-            if (game.adventureDeck.get(i).type.equals("Foe")) {
-                switch(game.adventureDeck.get(i).value) {
+            if (game.adventureDeck.get(i).getType().equals("Foe")) {
+                switch(game.adventureDeck.get(i).getValue()) {
                     case "5":
                         numF5Cards++;
                         break;
@@ -177,8 +177,8 @@ class MainTest {
                 numVal15Cards = 0, numVal20Cards = 0, numVal30Cards = 0;
 
         for (int i = 0; i < adventureDeckSize; i++) {
-            if (game.adventureDeck.get(i).type.equals("Weapon")) {
-                switch(game.adventureDeck.get(i).name) {
+            if (game.adventureDeck.get(i).getType().equals("Weapon")) {
+                switch(game.adventureDeck.get(i).getName()) {
                     case "Dagger":
                         numVal5Cards++;
                         break;
@@ -230,8 +230,8 @@ class MainTest {
                 numQ5Cards = 0;
 
         for (int i = 0; i < eventDeckSize; i++) {
-            if (game.eventDeck.get(i).type.equals("Quest")) {
-                switch(game.eventDeck.get(i).value) {
+            if (game.eventDeck.get(i).getType().equals("Quest")) {
+                switch(game.eventDeck.get(i).getValue()) {
                     case "Q2":
                         numQ2Cards++;
                         break;
@@ -273,8 +273,8 @@ class MainTest {
         int numPlCards = 0, numQFCards = 0, numPrCards = 0;
 
         for (int i = 0; i < eventDeckSize; i++) {
-            if (game.eventDeck.get(i).type.equals("Event")) {
-                switch(game.eventDeck.get(i).value) {
+            if (game.eventDeck.get(i).getType().equals("Event")) {
+                switch(game.eventDeck.get(i).getValue()) {
                     case "-2Sh":
                         numPlCards++;
                         break;
@@ -304,16 +304,17 @@ class MainTest {
     void RESP_02_test_01() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
 
         game.dealCards();
 
         //all players should have 12 cards
         assertAll(
                 "hand check",
-                () -> assertEquals(12, game.getP1HandSize()),
-                () -> assertEquals(12, game.getP2HandSize()),
-                () -> assertEquals(12, game.getP3HandSize()),
-                () -> assertEquals(12, game.getP4HandSize())
+                () -> assertEquals(12, game.p1.getHandSize()),
+                () -> assertEquals(12, game.p2.getHandSize()),
+                () -> assertEquals(12, game.p3.getHandSize()),
+                () -> assertEquals(12, game.p4.getHandSize())
         );
     }
 
@@ -322,6 +323,7 @@ class MainTest {
     void RESP_02_test_02() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
 
         game.dealCards();
 
@@ -334,12 +336,15 @@ class MainTest {
     void RESP_03_test_01() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
         game.dealCards();
 
         //game should determine that player 1 wins
-        game.setShield(7, 1);
+        game.p1.setShields(8);
 
-        assertTrue(game.getPlayerScore(1) >= 7);
+        game.checkForWinners();
+
+        assertTrue(game.p1.getWinnerStatus());
     }
 
     @Test
@@ -347,13 +352,16 @@ class MainTest {
     void RESP_03_test_02() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
         game.dealCards();
 
         //game should determine that player 2 & player 4 win
-        game.setShield(10, 2);
-        game.setShield(25243, 4);
+        game.p2.setShields(10);
+        game.p4.setShields(25243);
 
-        assertTrue(game.getPlayerScore(2) >= 7 && game.getPlayerScore(4) >= 7);
+        game.checkForWinners();
+
+        assertTrue(game.p2.getWinnerStatus() && game.p4.getWinnerStatus());
     }
 
     @Test
@@ -361,22 +369,25 @@ class MainTest {
     void RESP_03_test_03() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
         game.dealCards();
 
         //game should determine that no one wins
-        game.setShield(1, 1);
-        game.setShield(0, 2);
-        game.setShield(6,3);
-        game.setShield(5,4);
+        game.p1.setShields(1);
+        game.p2.setShields(0);
+        game.p3.setShields(6);
+        game.p4.setShields(5);
+
+        game.checkForWinners();
 
         //im adding a 0 check because it would pass automatically otherwise
         //also it shouldn't be less than 0 anyway
         assertAll(
                 "score check",
-                () -> assertTrue(game.getPlayerScore(1) >= 0 && game.getPlayerScore(1) < 7),
-                () -> assertTrue(game.getPlayerScore(2) >= 0 && game.getPlayerScore(2) < 7),
-                () -> assertTrue(game.getPlayerScore(3) >= 0 && game.getPlayerScore(3) < 7),
-                () -> assertTrue(game.getPlayerScore(4) >= 0 && game.getPlayerScore(4) < 7)
+                () -> assertTrue(game.getPlayerScore(1) >= 0 && !game.p1.getWinnerStatus()),
+                () -> assertTrue(game.getPlayerScore(2) >= 0 && !game.p2.getWinnerStatus()),
+                () -> assertTrue(game.getPlayerScore(3) >= 0 && !game.p3.getWinnerStatus()),
+                () -> assertTrue(game.getPlayerScore(4) >= 0 && !game.p4.getWinnerStatus())
         );
     }
 
@@ -385,12 +396,13 @@ class MainTest {
     void RESP_04_test_01() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
         game.dealCards();
 
         //game should display player 1 as the winner
         StringWriter output = new StringWriter();
 
-        game.setShield(8, 1);
+        game.p1.setShields(8);
 
         game.displayWinner(new PrintWriter(output));
 
@@ -402,14 +414,15 @@ class MainTest {
     void RESP_04_test_02() {
         Main game = new Main();
         game.initializeDecks();
+        game.initializePlayers();
         game.dealCards();
 
         //game should display player 2, 3 & 4 as the winners
         StringWriter output = new StringWriter();
 
-        game.setShield(8, 2);
-        game.setShield(7, 3);
-        game.setShield(9999999, 4);
+        game.p2.setShields(8);
+        game.p3.setShields(7);
+        game.p4.setShields(9999999);
 
         game.displayWinner(new PrintWriter(output));
 
