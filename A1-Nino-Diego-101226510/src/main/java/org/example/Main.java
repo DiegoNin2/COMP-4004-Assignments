@@ -299,4 +299,12 @@ public class Main {
         return drawnCard;
     }
 
+    public void setShield(int score, int playerID) {
+
+    }
+
+    public int getPlayerScore(int playerID) {
+        return -1;
+    }
+
 }

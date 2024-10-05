@@ -326,4 +326,55 @@ class MainTest {
         assertEquals(52,game.getAdventureDeckSize());
     }
 
+    @Test
+    @DisplayName("Determine if one player has achieved 7 or more shields")
+    void RESP_03_test_01() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.dealCards();
+
+        //game should determine that player 1 wins
+        game.setShield(7, 1);
+
+        assertTrue(game.getPlayerScore(1) >= 7);
+    }
+
+    @Test
+    @DisplayName("Determine if more than one player has achieved 7 or more shields")
+    void RESP_03_test_02() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.dealCards();
+
+        //game should determine that player 2 & player 4 win
+        game.setShield(10, 2);
+        game.setShield(25243, 4);
+
+        assertTrue(game.getPlayerScore(2) >= 7 && game.getPlayerScore(4) >= 7);
+    }
+
+    @Test
+    @DisplayName("Determine if no one has achieved more than 7 or more shields")
+    void RESP_03_test_03() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.dealCards();
+
+        //game should determine that no one wins
+        game.setShield(1, 1);
+        game.setShield(0, 2);
+        game.setShield(6,3);
+        game.setShield(5,4);
+
+        //im adding a 0 check because it would pass automatically otherwise
+        //also it shouldn't be less than 0 anyway
+        assertAll(
+                "score check",
+                () -> assertTrue(game.getPlayerScore(1) >= 0 && game.getPlayerScore(1) < 7),
+                () -> assertTrue(game.getPlayerScore(2) >= 0 && game.getPlayerScore(2) < 7),
+                () -> assertTrue(game.getPlayerScore(3) >= 0 && game.getPlayerScore(3) < 7),
+                () -> assertTrue(game.getPlayerScore(4) >= 0 && game.getPlayerScore(4) < 7)
+        );
+    }
+
 }
