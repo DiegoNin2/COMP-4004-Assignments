@@ -3,6 +3,9 @@ package org.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
@@ -375,6 +378,42 @@ class MainTest {
                 () -> assertTrue(game.getPlayerScore(3) >= 0 && game.getPlayerScore(3) < 7),
                 () -> assertTrue(game.getPlayerScore(4) >= 0 && game.getPlayerScore(4) < 7)
         );
+    }
+
+    @Test
+    @DisplayName("Displays id of one winner")
+    void RESP_04_test_01() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.dealCards();
+
+        //game should display player 1 as the winner
+        StringWriter output = new StringWriter();
+
+        game.setShield(8, 1);
+
+        game.displayWinner(new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Winner: P1"));
+    }
+
+    @Test
+    @DisplayName("Displays id of multiple winners")
+    void RESP_04_test_02() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.dealCards();
+
+        //game should display player 2, 3 & 4 as the winners
+        StringWriter output = new StringWriter();
+
+        game.setShield(8, 2);
+        game.setShield(7, 3);
+        game.setShield(9999999, 4);
+
+        game.displayWinner(new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Winners: P2, P3 and P4"));
     }
 
 }

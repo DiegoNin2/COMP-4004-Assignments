@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -330,6 +331,10 @@ public class Main {
                 //this means something went wrong :)
                 return -1;
         }
+    }
+
+    public void displayWinner(PrintWriter output) {
+
     }
 
 }
