@@ -308,12 +308,16 @@ public class Main {
         switch(playerID) {
             case 1:
                 p1Shields = score;
+                break;
             case 2:
                 p2Shields = score;
+                break;
             case 3:
                 p3Shields = score;
+                break;
             case 4:
                 p4Shields = score;
+                break;
         }
     }
 
@@ -334,6 +338,28 @@ public class Main {
     }
 
     public void displayWinner(PrintWriter output) {
+        int winnerCount = 0;
+        ArrayList<String> winnerIDs = new ArrayList<String>();
+
+        if (p1Shields >= 7) { winnerCount++; winnerIDs.add("P1"); }
+        if (p2Shields >= 7) { winnerCount++; winnerIDs.add("P2"); }
+        if (p3Shields >= 7) { winnerCount++; winnerIDs.add("P3"); }
+        if (p4Shields >= 7) { winnerCount++; winnerIDs.add("P4");}
+
+        switch(winnerCount) {
+            case 1:
+                output.println("Winner: " + winnerIDs.get(0));
+                break;
+            case 2:
+                output.println("Winners: " + winnerIDs.get(0) + " and " + winnerIDs.get(1));
+                break;
+            case 3:
+                output.println("Winners: " + winnerIDs.get(0) + ", " + winnerIDs.get(1) + " and " + winnerIDs.get(2));
+                break;
+            case 4:
+                output.println("Winners: " + winnerIDs.get(0) + ", " + winnerIDs.get(1) + ", " + winnerIDs.get(2) + " and " + winnerIDs.get(3));
+                break;
+        }
 
     }
 
