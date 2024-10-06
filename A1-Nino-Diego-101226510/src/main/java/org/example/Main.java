@@ -351,12 +351,53 @@ public class Main {
 
     }
 
+    //will be modified to handle other players & additional turn stuff soon
     public void takeTurn(PrintWriter output) {
+        output.println("Current Player: P1");
 
+        output.println("Displaying hand: ");
+
+        Collections.sort(p1.getHand());
+
+        for (int i = 0; i < p1.getHandSize(); i++) {
+            output.print(p1.getHand().get(i).toString());
+            output.print(" \n");
+        }
     }
 
+    //for testing purposes
     public void pickCard(int index, String type, String name, String value, int playerID) {
-
+        Card c;
+        switch(playerID){
+            case 1:
+                c = new Card();
+                c.setType(type);
+                c.setName(name);
+                c.setValue(value);
+                p1.getHand().add(index, c);
+                break;
+            case 2:
+                c = new Card();
+                c.setType(type);
+                c.setName(name);
+                c.setValue(value);
+                p2.getHand().add(index, c);
+                break;
+            case 3:
+                c = new Card();
+                c.setType(type);
+                c.setName(name);
+                c.setValue(value);
+                p3.getHand().add(index, c);
+                break;
+            case 4:
+                c = new Card();
+                c.setType(type);
+                c.setName(name);
+                c.setValue(value);
+                p4.getHand().add(index, c);
+                break;
+        }
     }
 
 }
