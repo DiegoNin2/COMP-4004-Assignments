@@ -512,7 +512,7 @@ class MainTest {
 
         assertAll(
                 "deck size check",
-                () -> assertEquals(11, game.getEventDeckSize()),
+                () -> assertEquals(16, game.getEventDeckSize()),
                 () -> assertEquals(1, game.getEventDiscardSize())
         );
 

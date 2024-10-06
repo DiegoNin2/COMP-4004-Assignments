@@ -283,7 +283,7 @@ public class Main {
     }
 
     public int getEventDiscardSize() {
-        return -1;
+        return eventDiscardDeck.size();
     }
 
     public void dealCards() {
@@ -369,6 +369,12 @@ public class Main {
             output.print(p1.getHand().get(i).toString());
             output.print(" \n");
         }
+
+        output.println("drawing from event deck: ");
+        Card c = drawSpecificCard("Event","Queen's Favor","+2P"); //this will be replaced by the regular drawCard function
+        output.println(c.toString());
+
+        eventDiscardDeck.add(c);
     }
 
     //for testing purposes only
@@ -407,8 +413,15 @@ public class Main {
     }
 
     //for testing purposes only
-    private void drawSpecificCard(String type, String name, String value) {
-
+    private Card drawSpecificCard(String type, String name, String value) {
+        Card drawnCard = null;
+        for (int i = 0; i < getEventDeckSize(); i++) {
+            if (eventDeck.get(i).getName().equals(name) && eventDeck.get(i).getType().equals(type) && eventDeck.get(i).getValue().equals(value)) {
+                drawnCard = eventDeck.remove(i);
+                break;
+            }
+        }
+        return drawnCard;
     }
 
 }
