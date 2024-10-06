@@ -494,6 +494,11 @@ class MainTest {
         game.initializePlayers();
 
         //game should display event card
+        Card c = new Card();
+        c.setName("Queen's Favor");
+        c.setType("Event");
+        c.setValue("+2P");
+        game.eventDeck.set(0, c);
         game.takeTurn(new PrintWriter(output));
 
         assertTrue(output.toString().contains("Queen's Favor, value = +2P"));
@@ -517,5 +522,7 @@ class MainTest {
         );
 
     }
+
+    
 
 }

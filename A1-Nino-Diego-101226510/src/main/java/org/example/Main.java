@@ -288,18 +288,23 @@ public class Main {
 
     public void dealCards() {
         for (int i = 0; i < 12; i++) {
-            p1.getHand().add(drawCard());
-            p2.getHand().add(drawCard());
-            p3.getHand().add(drawCard());
-            p4.getHand().add(drawCard());
+            p1.getHand().add(drawCard("adventure"));
+            p2.getHand().add(drawCard("adventure"));
+            p3.getHand().add(drawCard("adventure"));
+            p4.getHand().add(drawCard("adventure"));
         }
     }
 
-    //update to apply for event deck
-    public Card drawCard() {
-        Card drawnCard = null;
-        drawnCard = adventureDeck.removeFirst();
-        return drawnCard;
+    public Card drawCard(String deck) {
+        if (deck.equals("adventure")) {
+            Card drawnCard = null;
+            drawnCard = adventureDeck.removeFirst();
+            return drawnCard;
+        } else {
+            Card drawnCard = null;
+            drawnCard = eventDeck.removeFirst();
+            return drawnCard;
+        }
     }
 
     //might be removed eventually
@@ -371,7 +376,7 @@ public class Main {
         }
 
         output.println("drawing from event deck: ");
-        Card c = drawSpecificCard("Event","Queen's Favor","+2P"); //this will be replaced by the regular drawCard function
+        Card c = drawCard("event");
         output.println(c.toString());
 
         eventDiscardDeck.add(c);
@@ -410,18 +415,6 @@ public class Main {
                 p4.getHand().add(index, c);
                 break;
         }
-    }
-
-    //for testing purposes only
-    private Card drawSpecificCard(String type, String name, String value) {
-        Card drawnCard = null;
-        for (int i = 0; i < getEventDeckSize(); i++) {
-            if (eventDeck.get(i).getName().equals(name) && eventDeck.get(i).getType().equals(type) && eventDeck.get(i).getValue().equals(value)) {
-                drawnCard = eventDeck.remove(i);
-                break;
-            }
-        }
-        return drawnCard;
     }
 
 }
