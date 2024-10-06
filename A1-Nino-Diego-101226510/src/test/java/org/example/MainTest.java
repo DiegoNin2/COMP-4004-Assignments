@@ -485,4 +485,37 @@ class MainTest {
         assertTrue(output.toString().contains(expectedOutput));
     }
 
+    @Test
+    @DisplayName("Check if Event Card is displayed")
+    void RESP_06_test_01() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should display event card
+        game.takeTurn(new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Queen's Favor, value = +2P"));
+    }
+
+    @Test
+    @DisplayName("Check if event deck & discard deck is updated after card is drawn")
+    void RESP_06_test_02() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //event deck should have 1 less card and discard deck should have 1 card
+        game.takeTurn(new PrintWriter(output));
+
+        assertAll(
+                "deck size check",
+                () -> assertEquals(11, game.getEventDeckSize()),
+                () -> assertEquals(1, game.getEventDiscardSize())
+        );
+
+    }
+
 }

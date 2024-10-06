@@ -18,6 +18,7 @@ public class Main {
 
     ArrayList<Card> adventureDeck = new ArrayList<Card>();
     ArrayList<Card> eventDeck = new ArrayList<Card>();
+    ArrayList<Card> eventDiscardDeck = new ArrayList<Card>();
     Player p1 = new Player();
     Player p2 = new Player();
     Player p3 = new Player();
@@ -281,6 +282,10 @@ public class Main {
         return eventDeck.size();
     }
 
+    public int getEventDiscardSize() {
+        return -1;
+    }
+
     public void dealCards() {
         for (int i = 0; i < 12; i++) {
             p1.getHand().add(drawCard());
@@ -290,6 +295,7 @@ public class Main {
         }
     }
 
+    //update to apply for event deck
     public Card drawCard() {
         Card drawnCard = null;
         drawnCard = adventureDeck.removeFirst();
@@ -365,7 +371,7 @@ public class Main {
         }
     }
 
-    //for testing purposes
+    //for testing purposes only
     public void pickCard(int index, String type, String name, String value, int playerID) {
         Card c;
         switch(playerID){
@@ -398,6 +404,11 @@ public class Main {
                 p4.getHand().add(index, c);
                 break;
         }
+    }
+
+    //for testing purposes only
+    private void drawSpecificCard(String type, String name, String value) {
+
     }
 
 }
