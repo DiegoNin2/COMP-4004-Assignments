@@ -351,4 +351,12 @@ public class Main {
 
     }
 
+    public void takeTurn(PrintWriter output) {
+
+    }
+
+    public void pickCard(int index, String type, String name, String value, int playerID) {
+
+    }
+
 }

@@ -17,5 +17,4 @@ public class Card {
     public void setValue(String cVal) {value = cVal;}
     public void setName(String cName) {name = cName;}
 
-
 }
