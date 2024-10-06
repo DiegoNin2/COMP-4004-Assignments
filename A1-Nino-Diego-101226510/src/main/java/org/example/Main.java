@@ -379,6 +379,28 @@ public class Main {
         Card c = drawCard("event");
         output.println(c.toString());
 
+        if (c.getType().equals("Event")) {
+            if (c.getName().equals("Plague")) {
+                if (p1.getShields() >= 2) {
+                    p1.setShields(p1.getShields()-2);
+                } else {
+                    p1.setShields(0);
+                }
+            } else if (c.getName().equals("Queen's Favor")) {
+                for (int i = 0; i < 2; i++) {
+                    p1.getHand().add(drawCard("adventure"));
+                }
+            } else {
+                //this is the prosperity card
+                for (int i = 0; i < 2; i++) {
+                    p1.getHand().add(drawCard("adventure"));
+                    p2.getHand().add(drawCard("adventure"));
+                    p3.getHand().add(drawCard("adventure"));
+                    p4.getHand().add(drawCard("adventure"));
+                }
+            }
+        }
+
         eventDiscardDeck.add(c);
     }
 
