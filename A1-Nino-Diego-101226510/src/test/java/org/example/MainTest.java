@@ -523,6 +523,88 @@ class MainTest {
 
     }
 
-    
+    @Test
+    @DisplayName("Check if Plague card effect is applied (shields >= 2)")
+    void RESP_07_test_01() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //player should lose 2 shields
+        game.p1.setShields(4);
+        Card c = new Card();
+        c.setName("Plague");
+        c.setType("Event");
+        c.setValue("-2Sh");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new PrintWriter(output));
+
+        assertEquals(2,game.p1.getShields());
+    }
+
+    @Test
+    @DisplayName("Check if Plague card effect is applied (shields < 2)")
+    void RESP_07_test_02() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+
+        //player should lose 2 shields but remain at 0
+        Card c = new Card();
+        c.setName("Plague");
+        c.setType("Event");
+        c.setValue("-2Sh");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new PrintWriter(output));
+
+        assertEquals(0,game.p1.getShields());
+    }
+
+    @Test
+    @DisplayName("Check if Queen's Favor card effect is applied")
+    void RESP_07_test_03() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //player should receive 2 more adventure cards
+        Card c = new Card();
+        c.setName("Queen's Favor");
+        c.setType("Event");
+        c.setValue("+2P");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new PrintWriter(output));
+
+        assertEquals(14,game.p1.getHandSize());
+    }
+
+    @Test
+    @DisplayName("Check if Prosperity card effect is applied")
+    void RESP_07_test_04() {
+        StringWriter output = new StringWriter();
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //all players should receive 2 more adventure cards
+        Card c = new Card();
+        c.setName("Prosperity");
+        c.setType("Event");
+        c.setValue("+2All");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new PrintWriter(output));
+
+        assertAll(
+                "hand size check",
+                () -> assertEquals(14, game.p1.getHandSize()),
+                () -> assertEquals(14, game.p2.getHandSize()),
+                () -> assertEquals(14, game.p3.getHandSize()),
+                () -> assertEquals(14, game.p4.getHandSize())
+        );
+    }
 
 }
