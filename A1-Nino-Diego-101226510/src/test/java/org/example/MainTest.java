@@ -669,6 +669,8 @@ class MainTest {
         assertTrue(output.toString().contains("Current Player: P2"));
     }
 
+    //note may or may not add another test for RESP_09 that checks if player 2's hand is displayed or not
+
     @Test
     @DisplayName("Check if all 4 players get their turn")
     void RESP_09_test_02() {
@@ -821,6 +823,90 @@ class MainTest {
                 "\n[11] Lance, value = 20 \n[12] Excalibur, value = 30";
 
         assertTrue(output.toString().contains(expectedOutput));
+    }
+
+    @Test
+    @DisplayName("Check if 2 Stage Quest was applied")
+    void RESP_13_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display that a 2 stage quest will start
+        Card c = new Card();
+        c.setName("2 Stage Quest");
+        c.setType("Quest");
+        c.setValue("Q2");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("A 2 Stage Quest will start!"));
+    }
+
+    @Test
+    @DisplayName("Check if 3 Stage Quest was applied")
+    void RESP_13_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display that a 3 stage quest will start
+        Card c = new Card();
+        c.setName("3 Stage Quest");
+        c.setType("Quest");
+        c.setValue("Q3");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("A 3 Stage Quest will start!"));
+    }
+
+    @Test
+    @DisplayName("Check if 4 Stage Quest was applied")
+    void RESP_13_test_03() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display that a 4 stage quest will start
+        Card c = new Card();
+        c.setName("4 Stage Quest");
+        c.setType("Quest");
+        c.setValue("Q4");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("A 4 Stage Quest will start!"));
+    }
+
+    @Test
+    @DisplayName("Check if 5 Stage Quest was applied")
+    void RESP_13_test_04() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display that a 2 stage quest will start
+        Card c = new Card();
+        c.setName("5 Stage Quest");
+        c.setType("Quest");
+        c.setValue("Q5");
+        game.eventDeck.set(0, c);
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("A 5 Stage Quest will start!"));
     }
 
 }
