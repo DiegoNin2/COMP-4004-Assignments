@@ -949,4 +949,38 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if a player can decline to sponsor quest")
+    void RESP_15_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should indicate that it is moving on to ask the next player
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+
+        assertTrue(output.toString().contains("P1 declined, asking next player..."));
+    }
+
+    @Test
+    @DisplayName("Check if turn ends after all players decline to sponsor quest")
+    void RESP_15_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "n\nn\nn\nn";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should end turn after all players decline to sponsor quest
+        for (int i = 0; i < 4; i++) {
+            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
+        }
+
+        assertTrue(output.toString().contains("All players have declined. Ending turn..."));
+    }
+
 }
