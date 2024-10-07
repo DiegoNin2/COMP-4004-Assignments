@@ -11,7 +11,7 @@ public class Player {
     //getters
     public int getShields() {return shields;}
     public ArrayList<Card> getHand() {return hand;}
-    public String id() {return id;}
+    public String getId() {return id;}
     public int getHandSize() {return hand.size();}
     public boolean getWinnerStatus() {return winnerStatus;}
 

@@ -20,10 +20,12 @@ public class Main {
     ArrayList<Card> adventureDeck = new ArrayList<Card>();
     ArrayList<Card> eventDeck = new ArrayList<Card>();
     ArrayList<Card> eventDiscardDeck = new ArrayList<Card>();
+    ArrayList<Player> playerList = new ArrayList<Player>();
     Player p1 = new Player();
     Player p2 = new Player();
     Player p3 = new Player();
     Player p4 = new Player();
+    private int playerIndex = 0;
 
     public void initializePlayers() {
         //set up ids
@@ -37,6 +39,10 @@ public class Main {
         p2.setShields(0);
         p3.setShields(0);
         p4.setShields(0);
+        playerList.add(p1);
+        playerList.add(p2);
+        playerList.add(p3);
+        playerList.add(p4);
     }
 
     public void initializeDecks() {
@@ -365,7 +371,7 @@ public class Main {
 
     //will be modified to handle other players & additional turn stuff soon
     public void takeTurn(Scanner input, PrintWriter output) {
-        output.println("Current Player: P1");
+        output.println("Current Player: " + playerList.get(playerIndex).getId());
 
         output.println("Displaying hand: ");
 
@@ -413,6 +419,11 @@ public class Main {
             output.println("Clearing output for next player...");
             output.print("\033[H\033[2J");
             output.flush();
+        }
+        if (playerIndex >= playerList.size()) {
+            playerIndex = 0;
+        } else {
+            playerIndex++;
         }
     }
 

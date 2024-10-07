@@ -540,6 +540,7 @@ class MainTest {
 
         //player should lose 2 shields
         game.p1.setShields(4);
+
         Card c = new Card();
         c.setName("Plague");
         c.setType("Event");
@@ -559,6 +560,9 @@ class MainTest {
         game.initializeDecks();
 
         //player should lose 2 shields but remain at 0
+        game.p1.setShields(0);
+        game.playerList.add(game.p1);
+
         Card c = new Card();
         c.setName("Plague");
         c.setType("Event");
