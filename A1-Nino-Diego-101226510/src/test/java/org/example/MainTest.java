@@ -711,4 +711,61 @@ class MainTest {
         assertEquals(4,newHandAmount);
     }
 
+    @Test
+    @DisplayName("Check if the game displays the hand with numbered positions")
+    void RESP_11_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should calculate the right amount of cards to discard
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+        game.pickCard(12,"Foe","F70", "70", 1);
+        game.pickCard(13,"Foe","F50", "50", 1);
+        game.pickCard(14,"Foe","F35", "35", 1);
+        game.pickCard(15,"Foe","F40", "40", 1);
+
+        game.trimHand(new Scanner(input), new PrintWriter(output));
+
+        String expectedOutput = "[1] Foe, value = 5 \n[2] Foe, value = 10 \n[3] Foe, value = 15 \n[4] Foe, value = 20 \n[5] Foe, value = 35 \n[6] Foe, value = 40 " +
+                "\n[7] Foe, value = 50 \n[8] Foe, value = 70 \n[9] Dagger, value = 5 \n[10] Dagger, value = 5 \n[11] Dagger, value = 5 \n[12] Sword, value = 10 " +
+                "\n[13] Horse, value = 10 \n[14] battle-Axe, value = 15 \n[15] Lance, value = 20 \n[16] Excalibur, value = 30";
+
+        assertTrue(output.toString().contains(expectedOutput));
+    }
+
+    @Test
+    @DisplayName("Check if the game prompts which position of the card to delete")
+    void RESP_11_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should calculate the right amount of cards to discard
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+
+        game.trimHand(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Select the position of the card to remove: "));
+    }
+
 }

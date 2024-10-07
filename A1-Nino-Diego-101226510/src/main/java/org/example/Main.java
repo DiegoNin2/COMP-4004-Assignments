@@ -477,4 +477,8 @@ public class Main {
         }
     }
 
+    public void trimHand(Scanner input, PrintWriter output) {
+
+    }
+
 }
