@@ -20,6 +20,7 @@ public class Main {
     ArrayList<Card> adventureDeck = new ArrayList<Card>();
     ArrayList<Card> eventDeck = new ArrayList<Card>();
     ArrayList<Card> eventDiscardDeck = new ArrayList<Card>();
+    ArrayList<Card> adventureDiscardDeck = new ArrayList<Card>();
     ArrayList<Player> playerList = new ArrayList<Player>();
     Player p1 = new Player();
     Player p2 = new Player();
@@ -291,6 +292,10 @@ public class Main {
 
     public int getEventDiscardSize() {
         return eventDiscardDeck.size();
+    }
+
+    public int getAdventureDiscardDeckSize() {
+        return -1;
     }
 
     public void dealCards() {

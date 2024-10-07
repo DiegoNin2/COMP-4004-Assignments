@@ -768,4 +768,59 @@ class MainTest {
         assertTrue(output.toString().contains("Select the position of the card to remove: "));
     }
 
+    @Test
+    @DisplayName("Check if game deletes card based on selected position provided by player")
+    void RESP_12_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "5";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should move the card to a discard pile
+        game.p1.getHand().add(game.drawCard("adventure"));
+
+        game.trimHand(new Scanner(input), new PrintWriter(output));
+
+        assertAll(
+                "hand check",
+                () -> assertEquals(12,game.p1.getHandSize()),
+                () -> assertEquals(1, game.getAdventureDiscardDeckSize())
+        );
+    }
+
+    @Test
+    @DisplayName("Check if game displays trimmed hand of player")
+    void RESP_12_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should display new hand without the card at the 6th position
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+        game.pickCard(12,"Foe","F70", "70", 1);
+
+        game.trimHand(new Scanner(input), new PrintWriter(output));
+
+        String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] F70, value = 70 " +
+                "\n[6] Dagger, value = 5 \n[7] Dagger, value = 5 \n[8] Dagger, value = 5 \n[9] Sword, value = 10 \n[10] Horse, value = 10 " +
+                "\n[11] Battle-Axe, value = 15 \n[12] Excalibur, value = 30";
+
+        assertTrue(output.toString().contains(expectedOutput));
+    }
+
 }
