@@ -413,6 +413,7 @@ public class Main {
             }
         } else if (c.getType().equals("Quest")) {
             output.println("A " + c.getName() + " will start!");
+            //questEvent call here
         }
 
         eventDiscardDeck.add(c);
@@ -523,7 +524,7 @@ public class Main {
     }
 
     public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
-
+        output.println("Do you, " + currentPlayerID + ", want to sponsor this quest? (y/n)");
     }
 
 }
