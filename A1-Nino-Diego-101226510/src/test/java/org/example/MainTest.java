@@ -983,4 +983,38 @@ class MainTest {
         assertTrue(output.toString().contains("All players have declined. Ending turn..."));
     }
 
+    @Test
+    @DisplayName("Check if sponsor segment starts after player says 'yes'")
+    void RESP_16_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should indicate the player who has sponsored the quest and then start it
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+
+        assertTrue(output.toString().contains("P1 has sponsored! Quest starting soon!"));
+    }
+
+    @Test
+    @DisplayName("Check if sponsor segment starts after a series of 'no's before a 'yes'")
+    void RESP_16_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "n\nn\ny";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should indicate that P3 has sponsored the quest then start it
+        for (int i = 0; i < 4; i++) {
+            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
+        }
+
+        assertTrue(output.toString().contains("P3 has sponsored! Quest starting soon!"));
+    }
+
 }
