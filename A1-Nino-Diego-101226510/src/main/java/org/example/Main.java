@@ -402,7 +402,18 @@ public class Main {
             }
         }
 
+        //other turn stuff goes here
+
         eventDiscardDeck.add(c);
+
+        output.println("Turn End. Please move out of hot seat for next player.");
+        output.println("Press Enter key if you are the next player");
+        String inputStr = input.nextLine();
+        if (inputStr.isEmpty()) {
+            output.println("Clearing output for next player...");
+            output.print("\033[H\033[2J");
+            output.flush();
+        }
     }
 
     //for testing purposes only
