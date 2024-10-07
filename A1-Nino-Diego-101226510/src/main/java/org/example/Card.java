@@ -7,15 +7,25 @@ public class Card implements Comparable<Card> {
     private String value;
     private String name;
 
+    public Card(String t, String n, String v) {
+        this.type = t;
+        this.name = n;
+        this.value = v;
+    }
+
     //getters
+
     public String getType() {return type;}
     public String getValue() {return value;}
     public String getName() {return name;}
 
     //setters
+
     public void setType(String cType) {type = cType;}
     public void setValue(String cVal) {value = cVal;}
     public void setName(String cName) {name = cName;}
+
+    //other methods
 
     public String toString() {
         return name + ", value = " + value;

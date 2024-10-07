@@ -10,37 +10,21 @@ public class Main {
 
     }
 
-    /*class Card {
-        String type;
-        String value;
-        String name;
-
-    }*/
-
+    //variables
     ArrayList<Card> adventureDeck = new ArrayList<Card>();
     ArrayList<Card> eventDeck = new ArrayList<Card>();
     ArrayList<Card> eventDiscardDeck = new ArrayList<Card>();
     ArrayList<Card> adventureDiscardDeck = new ArrayList<Card>();
     ArrayList<Player> playerList = new ArrayList<Player>();
-    Player p1 = new Player();
-    Player p2 = new Player();
-    Player p3 = new Player();
-    Player p4 = new Player();
+
     private int playerTurnIndex = 0;
     private int playerQuestIndex = 0;
 
     public void initializePlayers() {
-        //set up ids
-        p1.setID("P1");
-        p2.setID("P2");
-        p3.setID("P3");
-        p4.setID("P4");
-
-        //set up shield amounts to 0
-        p1.setShields(0);
-        p2.setShields(0);
-        p3.setShields(0);
-        p4.setShields(0);
+        Player p1 = new Player("P1", 0);
+        Player p2 = new Player("P2", 0);
+        Player p3 = new Player("P3", 0);
+        Player p4 = new Player("P4", 0);
         playerList.add(p1);
         playerList.add(p2);
         playerList.add(p3);
@@ -57,55 +41,37 @@ public class Main {
             switch(i) {
                 case 0:
                     for (int j = 0; j < 6; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Dagger");
-                        card.setValue("5");
+                        Card card = new Card("Weapon","Dagger","5");
                         adventureDeck.add(card);
                     }
                     break;
                 case 1:
                     for (int j = 0; j < 12; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Horse");
-                        card.setValue("10");
+                        Card card = new Card("Weapon","Horse","10");
                         adventureDeck.add(card);
                     }
                     break;
                 case 2:
                     for (int j = 0; j < 16; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Sword");
-                        card.setValue("10");
+                        Card card = new Card("Weapon","Sword","10");
                         adventureDeck.add(card);
                     }
                     break;
                 case 3:
                     for (int j = 0; j < 8; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Battle-Axe");
-                        card.setValue("15");
+                        Card card = new Card("Weapon","Battle-Axe","15");
                         adventureDeck.add(card);
                     }
                     break;
                 case 4:
                     for (int j = 0; j < 6; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Lance");
-                        card.setValue("20");
+                        Card card = new Card("Weapon","Lance","20");
                         adventureDeck.add(card);
                     }
                     break;
                 case 5:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Weapon");
-                        card.setName("Excalibur");
-                        card.setValue("30");
+                        Card card = new Card("Weapon","Excalibur","30");
                         adventureDeck.add(card);
                     }
                     break;
@@ -117,90 +83,60 @@ public class Main {
             switch(i) {
                 case 0:
                     for (int j = 0; j < 8; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F5");
-                        card.setValue("5");
+                        Card card = new Card("Foe","F5","5");
                         adventureDeck.add(card);
                     }
                     break;
                 case 1:
                     for (int j = 0; j < 7; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F10");
-                        card.setValue("10");
+                        Card card = new Card("Foe","F10","10");
                         adventureDeck.add(card);
                     }
                     break;
                 case 2:
                     for (int j = 0; j < 8; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F15");
-                        card.setValue("15");
+                        Card card = new Card("Foe","F15","15");
                         adventureDeck.add(card);
                     }
                     break;
                 case 3:
                     for (int j = 0; j < 7; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F20");
-                        card.setValue("20");
+                        Card card = new Card("Foe","F20","20");
                         adventureDeck.add(card);
                     }
                     break;
                 case 4:
                     for (int j = 0; j < 7; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F25");
-                        card.setValue("25");
+                        Card card = new Card("Foe","F25","25");
                         adventureDeck.add(card);
                     }
                     break;
                 case 5:
                     for (int j = 0; j < 4; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F30");
-                        card.setValue("30");
+                        Card card = new Card("Foe","F30","30");
                         adventureDeck.add(card);
                     }
                     break;
                 case 6:
                     for (int j = 0; j < 4; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F35");
-                        card.setValue("35");
+                        Card card = new Card("Foe","F35","35");
                         adventureDeck.add(card);
                     }
                     break;
                 case 7:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F40");
-                        card.setValue("40");
+                        Card card = new Card("Foe","F40","40");
                         adventureDeck.add(card);
                     }
                     break;
                 case 8:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Foe");
-                        card.setName("F50");
-                        card.setValue("50");
+                        Card card = new Card("Foe","F50","50");
                         adventureDeck.add(card);
                     }
                     break;
                 case 9:
-                    Card card = new Card();
-                    card.setType("Foe");
-                    card.setName("F70");
-                    card.setValue("70");
+                    Card card = new Card("Foe","F70","70");
                     adventureDeck.add(card);
                     break;
             }
@@ -213,27 +149,18 @@ public class Main {
             switch(i) {
                 case 0:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Event");
-                        card.setName("Queen's Favor");
-                        card.setValue("+2P");
+                        Card card = new Card("Event","Queen's Favor", "+2P");
                         eventDeck.add(card);
                     }
                     break;
                 case 1:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Event");
-                        card.setName("Prosperity");
-                        card.setValue("+2All");
+                        Card card = new Card("Event", "Prosperity", "+2All");
                         eventDeck.add(card);
                     }
                     break;
                 case 2:
-                    Card card = new Card();
-                    card.setType("Event");
-                    card.setName("Plague");
-                    card.setValue("-2Sh");
+                    Card card = new Card("Event","Plague","-2Sh");
                     eventDeck.add(card);
                     break;
             }
@@ -244,37 +171,25 @@ public class Main {
             switch(i) {
                 case 0:
                     for (int j = 0; j < 3; j++) {
-                        Card card = new Card();
-                        card.setType("Quest");
-                        card.setName("2 Stage Quest");
-                        card.setValue("Q2");
+                        Card card = new Card("Quest", "2 Stage Quest", "Q2");
                         eventDeck.add(card);
                     }
                     break;
                 case 1:
                     for (int j = 0; j < 4; j++) {
-                        Card card = new Card();
-                        card.setType("Quest");
-                        card.setName("3 Stage Quest");
-                        card.setValue("Q3");
+                        Card card = new Card("Quest", "3 Stage Quest", "Q3");
                         eventDeck.add(card);
                     }
                     break;
                 case 2:
                     for (int j = 0; j < 3; j++) {
-                        Card card = new Card();
-                        card.setType("Quest");
-                        card.setName("4 Stage Quest");
-                        card.setValue("Q4");
+                        Card card = new Card("Quest", "4 Stage Quest", "Q4");
                         eventDeck.add(card);
                     }
                     break;
                 case 3:
                     for (int j = 0; j < 2; j++) {
-                        Card card = new Card();
-                        card.setType("Quest");
-                        card.setName("5 Stage Quest");
-                        card.setValue("Q5");
+                        Card card = new Card("Quest", "5 Stage Quest", "Q5");
                         eventDeck.add(card);
                     }
                     break;
@@ -301,10 +216,10 @@ public class Main {
 
     public void dealCards() {
         for (int i = 0; i < 12; i++) {
-            p1.getHand().add(drawCard("adventure"));
-            p2.getHand().add(drawCard("adventure"));
-            p3.getHand().add(drawCard("adventure"));
-            p4.getHand().add(drawCard("adventure"));
+            playerList.get(0).addCard(drawCard("adventure"));
+            playerList.get(1).addCard(drawCard("adventure"));
+            playerList.get(2).addCard(drawCard("adventure"));
+            playerList.get(3).addCard(drawCard("adventure"));
         }
     }
 
@@ -320,29 +235,12 @@ public class Main {
         }
     }
 
-    //might be removed eventually
-    public int getPlayerScore(int playerID) {
-        switch(playerID) {
-            case 1:
-                return p1.getShields();
-            case 2:
-                return p2.getShields();
-            case 3:
-                return p3.getShields();
-            case 4:
-                return p4.getShields();
-            default:
-                //this means something went wrong :)
-                return -1;
-        }
-    }
-
     //this will be changed to just checking the scores probably whenever i get around to that
     public void checkForWinners() {
-        if (p1.getShields() >= 7) { p1.setWinnerStatus(true); }
-        if (p2.getShields() >= 7) { p2.setWinnerStatus(true); }
-        if (p3.getShields() >= 7) { p3.setWinnerStatus(true); }
-        if (p4.getShields() >= 7) { p4.setWinnerStatus(true); }
+        if (playerList.get(0).getShields() >= 7) { playerList.get(0).setWinnerStatus(true); }
+        if (playerList.get(1).getShields() >= 7) { playerList.get(1).setWinnerStatus(true); }
+        if (playerList.get(2).getShields() >= 7) { playerList.get(2).setWinnerStatus(true); }
+        if (playerList.get(3).getShields() >= 7) { playerList.get(3).setWinnerStatus(true); }
     }
 
     public void displayWinner(PrintWriter output) {
@@ -351,10 +249,10 @@ public class Main {
         int winnerCount = 0;
         ArrayList<String> winnerIDs = new ArrayList<String>();
 
-        if (p1.getWinnerStatus()) { winnerCount++; winnerIDs.add("P1"); }
-        if (p2.getWinnerStatus()) { winnerCount++; winnerIDs.add("P2"); }
-        if (p3.getWinnerStatus()) { winnerCount++; winnerIDs.add("P3"); }
-        if (p4.getWinnerStatus()) { winnerCount++; winnerIDs.add("P4");}
+        if (playerList.get(0).getWinnerStatus()) { winnerCount++; winnerIDs.add("P1"); }
+        if (playerList.get(1).getWinnerStatus()) { winnerCount++; winnerIDs.add("P2"); }
+        if (playerList.get(2).getWinnerStatus()) { winnerCount++; winnerIDs.add("P3"); }
+        if (playerList.get(3).getWinnerStatus()) { winnerCount++; winnerIDs.add("P4");}
 
         switch(winnerCount) {
             case 1:
@@ -381,10 +279,10 @@ public class Main {
 
         output.println("Displaying hand: ");
 
-        Collections.sort(p1.getHand());
+        Collections.sort(playerList.get(playerTurnIndex).getHand());
 
-        for (int i = 0; i < p1.getHandSize(); i++) {
-            output.print(p1.getHand().get(i).toString());
+        for (int i = 0; i < playerList.get(playerTurnIndex).getHandSize(); i++) {
+            output.print(playerList.get(playerTurnIndex).getCardAt(i).toString());
             output.print(" \n");
         }
 
@@ -394,22 +292,22 @@ public class Main {
 
         if (c.getType().equals("Event")) {
             if (c.getName().equals("Plague")) {
-                if (p1.getShields() >= 2) {
-                    p1.setShields(p1.getShields()-2);
+                if (playerList.get(playerTurnIndex).getShields() >= 2) {
+                    playerList.get(playerTurnIndex).setShields(playerList.get(playerTurnIndex).getShields()-2);
                 } else {
-                    p1.setShields(0);
+                    playerList.get(playerTurnIndex).setShields(0);
                 }
             } else if (c.getName().equals("Queen's Favor")) {
                 for (int i = 0; i < 2; i++) {
-                    p1.getHand().add(drawCard("adventure"));
+                    playerList.get(playerTurnIndex).addCard(drawCard("adventure"));
                 }
             } else {
                 //this is the prosperity card
                 for (int i = 0; i < 2; i++) {
-                    p1.getHand().add(drawCard("adventure"));
-                    p2.getHand().add(drawCard("adventure"));
-                    p3.getHand().add(drawCard("adventure"));
-                    p4.getHand().add(drawCard("adventure"));
+                    playerList.get(0).addCard(drawCard("adventure"));
+                    playerList.get(1).addCard(drawCard("adventure"));
+                    playerList.get(2).addCard(drawCard("adventure"));
+                    playerList.get(3).addCard(drawCard("adventure"));
                 }
             }
         } else if (c.getType().equals("Quest")) {
@@ -439,32 +337,20 @@ public class Main {
         Card c;
         switch(playerID){
             case 1:
-                c = new Card();
-                c.setType(type);
-                c.setName(name);
-                c.setValue(value);
-                p1.getHand().add(index, c);
+                c = new Card(type, name, value);
+                playerList.get(0).addCardAt(index, c);
                 break;
             case 2:
-                c = new Card();
-                c.setType(type);
-                c.setName(name);
-                c.setValue(value);
-                p2.getHand().add(index, c);
+                c = new Card(type, name, value);
+                playerList.get(1).addCardAt(index, c);
                 break;
             case 3:
-                c = new Card();
-                c.setType(type);
-                c.setName(name);
-                c.setValue(value);
-                p3.getHand().add(index, c);
+                c = new Card(type, name, value);
+                playerList.get(2).addCardAt(index, c);
                 break;
             case 4:
-                c = new Card();
-                c.setType(type);
-                c.setName(name);
-                c.setValue(value);
-                p4.getHand().add(index, c);
+                c = new Card(type, name, value);
+                playerList.get(3).addCardAt(index, c);
                 break;
         }
     }
@@ -472,29 +358,29 @@ public class Main {
     public int checkHand(String playerID) {
         switch(playerID) {
             case "P1":
-                return p1.getHandSize() - 12;
+                return playerList.get(0).getHandSize() - 12;
             case "P2":
-                return p2.getHandSize() - 12;
+                return playerList.get(1).getHandSize() - 12;
             case "P3":
-                return p3.getHandSize() - 12;
+                return playerList.get(2).getHandSize() - 12;
             case "P4":
-                return p4.getHandSize() - 12;
+                return playerList.get(3).getHandSize() - 12;
             default:
                 return -1; //something went wrong :)
         }
     }
 
-    public void trimHand(Scanner input, PrintWriter output) {
-        //note: add a playerID variable in the signature in a refac commit
-        int amountToDelete = checkHand("P1");
+    public void trimHand(Scanner input, PrintWriter output, String currentPlayerID) {
+        int amountToDelete = checkHand(currentPlayerID);
+        int pIndex = translateID(currentPlayerID);
 
         output.println("Displaying hand: ");
-        Collections.sort(p1.getHand());
+        Collections.sort(playerList.get(pIndex).getHand());
 
         //this would be wrapped in a while loop
         //maybe not idk
-        for (int i = 0; i < p1.getHandSize(); i++) {
-            output.print("[" + Integer.toString(i+1) + "] " + p1.getHand().get(i).toString());
+        for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
+            output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
             output.print(" \n");
         }
 
@@ -508,17 +394,18 @@ public class Main {
             }
         }
 
+        //this is just temporary
         if (!validNum) {
             return;
         }
 
-        adventureDiscardDeck.add(p1.getHand().remove((Integer.parseInt(inputStr) -1)));
+        adventureDiscardDeck.add(playerList.get(pIndex).removeCardAt((Integer.parseInt(inputStr) -1)));
 
         output.println("Displaying trimmed hand: ");
-        Collections.sort(p1.getHand());
+        Collections.sort(playerList.get(pIndex).getHand());
 
-        for (int i = 0; i < p1.getHandSize(); i++) {
-            output.print("[" + Integer.toString(i+1) + "] " + p1.getHand().get(i).toString());
+        for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
+            output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
             output.print(" \n");
         }
 

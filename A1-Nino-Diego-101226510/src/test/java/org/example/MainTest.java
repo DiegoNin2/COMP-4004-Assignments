@@ -312,10 +312,10 @@ class MainTest {
         //all players should have 12 cards
         assertAll(
                 "hand check",
-                () -> assertEquals(12, game.p1.getHandSize()),
-                () -> assertEquals(12, game.p2.getHandSize()),
-                () -> assertEquals(12, game.p3.getHandSize()),
-                () -> assertEquals(12, game.p4.getHandSize())
+                () -> assertEquals(12, game.playerList.get(0).getHandSize()),
+                () -> assertEquals(12, game.playerList.get(1).getHandSize()),
+                () -> assertEquals(12, game.playerList.get(2).getHandSize()),
+                () -> assertEquals(12, game.playerList.get(3).getHandSize())
         );
     }
 
@@ -341,11 +341,11 @@ class MainTest {
         game.dealCards();
 
         //game should determine that player 1 wins
-        game.p1.setShields(8);
+        game.playerList.get(0).setShields(8);
 
         game.checkForWinners();
 
-        assertTrue(game.p1.getWinnerStatus());
+        assertTrue(game.playerList.get(0).getWinnerStatus());
     }
 
     @Test
@@ -357,12 +357,12 @@ class MainTest {
         game.dealCards();
 
         //game should determine that player 2 & player 4 win
-        game.p2.setShields(10);
-        game.p4.setShields(25243);
+        game.playerList.get(1).setShields(10);
+        game.playerList.get(3).setShields(25243);
 
         game.checkForWinners();
 
-        assertTrue(game.p2.getWinnerStatus() && game.p4.getWinnerStatus());
+        assertTrue(game.playerList.get(1).getWinnerStatus() && game.playerList.get(3).getWinnerStatus());
     }
 
     @Test
@@ -374,10 +374,10 @@ class MainTest {
         game.dealCards();
 
         //game should determine that no one wins
-        game.p1.setShields(1);
-        game.p2.setShields(0);
-        game.p3.setShields(6);
-        game.p4.setShields(5);
+        game.playerList.get(0).setShields(1);
+        game.playerList.get(1).setShields(0);
+        game.playerList.get(2).setShields(6);
+        game.playerList.get(3).setShields(5);
 
         game.checkForWinners();
 
@@ -385,10 +385,10 @@ class MainTest {
         //also it shouldn't be less than 0 anyway
         assertAll(
                 "score check",
-                () -> assertTrue(game.getPlayerScore(1) >= 0 && !game.p1.getWinnerStatus()),
-                () -> assertTrue(game.getPlayerScore(2) >= 0 && !game.p2.getWinnerStatus()),
-                () -> assertTrue(game.getPlayerScore(3) >= 0 && !game.p3.getWinnerStatus()),
-                () -> assertTrue(game.getPlayerScore(4) >= 0 && !game.p4.getWinnerStatus())
+                () -> assertTrue(game.playerList.get(0).getShields() >= 0 && !game.playerList.get(0).getWinnerStatus()),
+                () -> assertTrue(game.playerList.get(1).getShields() >= 0 && !game.playerList.get(1).getWinnerStatus()),
+                () -> assertTrue(game.playerList.get(2).getShields() >= 0 && !game.playerList.get(2).getWinnerStatus()),
+                () -> assertTrue(game.playerList.get(3).getShields() >= 0 && !game.playerList.get(3).getWinnerStatus())
         );
     }
 
@@ -403,7 +403,7 @@ class MainTest {
         //game should display player 1 as the winner
         StringWriter output = new StringWriter();
 
-        game.p1.setShields(8);
+        game.playerList.get(0).setShields(8);
 
         game.displayWinner(new PrintWriter(output));
 
@@ -421,9 +421,9 @@ class MainTest {
         //game should display player 2, 3 & 4 as the winners
         StringWriter output = new StringWriter();
 
-        game.p2.setShields(8);
-        game.p3.setShields(7);
-        game.p4.setShields(9999999);
+        game.playerList.get(1).setShields(8);
+        game.playerList.get(2).setShields(7);
+        game.playerList.get(3).setShields(9999999);
 
         game.displayWinner(new PrintWriter(output));
 
@@ -499,10 +499,7 @@ class MainTest {
         game.initializePlayers();
 
         //game should display event card
-        Card c = new Card();
-        c.setName("Queen's Favor");
-        c.setType("Event");
-        c.setValue("+2P");
+        Card c = new Card("Event", "Queen's Favor", "+2P");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -539,16 +536,13 @@ class MainTest {
         game.initializePlayers();
 
         //player should lose 2 shields
-        game.p1.setShields(4);
+        game.playerList.get(0).setShields(4);
 
-        Card c = new Card();
-        c.setName("Plague");
-        c.setType("Event");
-        c.setValue("-2Sh");
+        Card c = new Card("Event", "Plague", "-2Sh");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
-        assertEquals(2,game.p1.getShields());
+        assertEquals(2,game.playerList.get(0).getShields());
     }
 
     @Test
@@ -560,17 +554,14 @@ class MainTest {
         game.initializeDecks();
 
         //player should lose 2 shields but remain at 0
-        game.p1.setShields(0);
-        game.playerList.add(game.p1);
+        Player p1 = new Player("P1",0);
+        game.playerList.add(p1);
 
-        Card c = new Card();
-        c.setName("Plague");
-        c.setType("Event");
-        c.setValue("-2Sh");
+        Card c = new Card("Event","Plague","-2Sh");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
-        assertEquals(0,game.p1.getShields());
+        assertEquals(0,p1.getShields());
     }
 
     @Test
@@ -584,14 +575,11 @@ class MainTest {
         game.dealCards();
 
         //player should receive 2 more adventure cards
-        Card c = new Card();
-        c.setName("Queen's Favor");
-        c.setType("Event");
-        c.setValue("+2P");
+        Card c = new Card("Event", "Queen's Favor", "+2P");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
-        assertEquals(14,game.p1.getHandSize());
+        assertEquals(14, game.playerList.get(0).getHandSize());
     }
 
     @Test
@@ -605,19 +593,16 @@ class MainTest {
         game.dealCards();
 
         //all players should receive 2 more adventure cards
-        Card c = new Card();
-        c.setName("Prosperity");
-        c.setType("Event");
-        c.setValue("+2All");
+        Card c = new Card("Event","Prosperity","+2All");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertAll(
                 "hand size check",
-                () -> assertEquals(14, game.p1.getHandSize()),
-                () -> assertEquals(14, game.p2.getHandSize()),
-                () -> assertEquals(14, game.p3.getHandSize()),
-                () -> assertEquals(14, game.p4.getHandSize())
+                () -> assertEquals(14, game.playerList.get(0).getHandSize()),
+                () -> assertEquals(14, game.playerList.get(1).getHandSize()),
+                () -> assertEquals(14, game.playerList.get(2).getHandSize()),
+                () -> assertEquals(14, game.playerList.get(3).getHandSize())
         );
     }
 
@@ -703,12 +688,12 @@ class MainTest {
         game.dealCards();
 
         //game should calculate the right amount of cards to discard
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
 
-        int newHandAmount = game.checkHand(game.p1.getId());
+        int newHandAmount = game.checkHand(game.playerList.get(0).getId());
 
         assertEquals(4,newHandAmount);
     }
@@ -740,7 +725,7 @@ class MainTest {
         game.pickCard(14,"Foe","F35", "35", 1);
         game.pickCard(15,"Foe","F40", "40", 1);
 
-        game.trimHand(new Scanner(input), new PrintWriter(output));
+        game.trimHand(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] F35, value = 35 \n[6] F40, value = 40 " +
                 "\n[7] F50, value = 50 \n[8] F70, value = 70 \n[9] Dagger, value = 5 \n[10] Dagger, value = 5 \n[11] Dagger, value = 5 \n[12] Sword, value = 10 " +
@@ -760,12 +745,12 @@ class MainTest {
         game.dealCards();
 
         //game should calculate the right amount of cards to discard
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
-        game.p1.getHand().add(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
 
-        game.trimHand(new Scanner(input), new PrintWriter(output));
+        game.trimHand(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Select the position of the card to remove: "));
     }
@@ -781,13 +766,13 @@ class MainTest {
         game.dealCards();
 
         //game should move the card to a discard pile
-        game.p1.getHand().add(game.drawCard("adventure"));
+        game.playerList.get(0).addCard(game.drawCard("adventure"));
 
-        game.trimHand(new Scanner(input), new PrintWriter(output));
+        game.trimHand(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "hand check",
-                () -> assertEquals(12,game.p1.getHandSize()),
+                () -> assertEquals(12,game.playerList.get(0).getHandSize()),
                 () -> assertEquals(1, game.getAdventureDiscardDeckSize())
         );
     }
@@ -816,7 +801,7 @@ class MainTest {
         game.pickCard(11,"Foe","F20", "20", 1);
         game.pickCard(12,"Foe","F70", "70", 1);
 
-        game.trimHand(new Scanner(input), new PrintWriter(output));
+        game.trimHand(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] F70, value = 70 " +
                 "\n[6] Dagger, value = 5 \n[7] Dagger, value = 5 \n[8] Sword, value = 10 \n[9] Horse, value = 10 \n[10] Battle-Axe, value = 15 " +
@@ -836,10 +821,7 @@ class MainTest {
         game.dealCards();
 
         //game should display that a 2 stage quest will start
-        Card c = new Card();
-        c.setName("2 Stage Quest");
-        c.setType("Quest");
-        c.setValue("Q2");
+        Card c = new Card("Quest","2 Stage Quest", "Q2");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -857,10 +839,7 @@ class MainTest {
         game.dealCards();
 
         //game should display that a 3 stage quest will start
-        Card c = new Card();
-        c.setName("3 Stage Quest");
-        c.setType("Quest");
-        c.setValue("Q3");
+        Card c = new Card("Quest", "3 Stage Quest", "Q3");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -878,10 +857,7 @@ class MainTest {
         game.dealCards();
 
         //game should display that a 4 stage quest will start
-        Card c = new Card();
-        c.setName("4 Stage Quest");
-        c.setType("Quest");
-        c.setValue("Q4");
+        Card c = new Card("Quest", "4 Stage Quest", "Q4");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -899,10 +875,7 @@ class MainTest {
         game.dealCards();
 
         //game should display that a 2 stage quest will start
-        Card c = new Card();
-        c.setName("5 Stage Quest");
-        c.setType("Quest");
-        c.setValue("Q5");
+        Card c = new Card("Quest", "5 Stage Quest", "Q5");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -920,7 +893,7 @@ class MainTest {
         game.dealCards();
 
         //game should display prompt if player wants to sponsor quest or not
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Do you, P1, want to sponsor this quest? (y/n)"));
     }
@@ -936,7 +909,7 @@ class MainTest {
         game.dealCards();
 
         //game should display prompt all players wants to sponsor quest or not
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
 
         assertAll(
                 "prompt check",
@@ -958,7 +931,7 @@ class MainTest {
         game.dealCards();
 
         //game should indicate that it is moving on to ask the next player
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P1 declined, asking next player..."));
     }
@@ -974,7 +947,7 @@ class MainTest {
         game.dealCards();
 
         //game should end turn after all players decline to sponsor quest
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p3.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(2).getId());
 
         assertTrue(output.toString().contains("All players have declined. Ending turn..."));
     }
@@ -990,7 +963,7 @@ class MainTest {
         game.dealCards();
 
         //game should indicate the player who has sponsored the quest and then start it
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P1 has sponsored! Quest starting soon!"));
     }
@@ -1006,7 +979,7 @@ class MainTest {
         game.dealCards();
 
         //game should indicate that P3 has sponsored the quest then start it
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P3 has sponsored! Quest starting soon!"));
     }
