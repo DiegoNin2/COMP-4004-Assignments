@@ -463,7 +463,18 @@ public class Main {
     }
 
     public int checkHand(String playerID) {
-        return -1;
+        switch(playerID) {
+            case "P1":
+                return p1.getHandSize() - 12;
+            case "P2":
+                return p2.getHandSize() - 12;
+            case "P3":
+                return p3.getHandSize() - 12;
+            case "P4":
+                return p4.getHandSize() - 12;
+            default:
+                return -1; //something went wrong :)
+        }
     }
 
 }
