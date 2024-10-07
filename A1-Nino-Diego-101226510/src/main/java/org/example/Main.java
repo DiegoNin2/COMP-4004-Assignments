@@ -295,7 +295,7 @@ public class Main {
     }
 
     public int getAdventureDiscardDeckSize() {
-        return -1;
+        return adventureDiscardDeck.size();
     }
 
     public void dealCards() {
@@ -490,13 +490,36 @@ public class Main {
         Collections.sort(p1.getHand());
 
         //this would be wrapped in a while loop
+        //maybe not idk
         for (int i = 0; i < p1.getHandSize(); i++) {
             output.print("[" + Integer.toString(i+1) + "] " + p1.getHand().get(i).toString());
             output.print(" \n");
         }
 
         output.println("Select the position of the card to remove: ");
-        //input thing here
+        String inputStr = input.nextLine();
+        boolean validNum = false;
+        for (int i = 0; i < inputStr.length(); i++) {
+            if (Character.isDigit(inputStr.charAt(i))) {
+                validNum = true;
+                break;
+            }
+        }
+
+        if (!validNum) {
+            return;
+        }
+
+        adventureDiscardDeck.add(p1.getHand().remove((Integer.parseInt(inputStr) -1)));
+
+        output.println("Displaying trimmed hand: ");
+        Collections.sort(p1.getHand());
+
+        for (int i = 0; i < p1.getHandSize(); i++) {
+            output.print("[" + Integer.toString(i+1) + "] " + p1.getHand().get(i).toString());
+            output.print(" \n");
+        }
+
     }
 
 }

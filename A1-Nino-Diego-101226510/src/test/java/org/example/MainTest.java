@@ -817,8 +817,8 @@ class MainTest {
         game.trimHand(new Scanner(input), new PrintWriter(output));
 
         String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] F70, value = 70 " +
-                "\n[6] Dagger, value = 5 \n[7] Dagger, value = 5 \n[8] Dagger, value = 5 \n[9] Sword, value = 10 \n[10] Horse, value = 10 " +
-                "\n[11] Battle-Axe, value = 15 \n[12] Excalibur, value = 30";
+                "\n[6] Dagger, value = 5 \n[7] Dagger, value = 5 \n[8] Sword, value = 10 \n[9] Horse, value = 10 \n[10] Battle-Axe, value = 15 " +
+                "\n[11] Lance, value = 20 \n[12] Excalibur, value = 30";
 
         assertTrue(output.toString().contains(expectedOutput));
     }
