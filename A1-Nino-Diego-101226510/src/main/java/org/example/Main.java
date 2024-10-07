@@ -524,19 +524,46 @@ public class Main {
 
     }
 
-    public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
-        output.println("Do you, " + currentPlayerID + ", want to sponsor this quest? (y/n)");
-        String inputStr = input.nextLine();
-        if (inputStr.contains("n")) {
-            output.println(currentPlayerID + " declined, asking next player...");
-            playerQuestIndex++;
-            if (playerQuestIndex >= playerList.size()) {
-                output.println("All players have declined. Ending turn...");
-            }
-        } else if (inputStr.contains("y")) {
-            //handle later
+    private int translateID(String currentPlayerID) {
+        switch(currentPlayerID) {
+            case "P1":
+                return 0;
+            case "P2":
+                return 1;
+            case "P3":
+                return 2;
+            case "P4":
+                return 3;
+            default:
+                return -1;
         }
+    }
 
+    public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
+        boolean questFinished = false;
+
+        int index = translateID(currentPlayerID);
+
+        while (!questFinished) {
+            if (index >= playerList.size()) {
+                index = 0;
+            }
+
+            output.println("Do you, " + playerList.get(index).getId() + ", want to sponsor this quest? (y/n)");
+            String inputStr = input.nextLine();
+            if (inputStr.contains("n")) {
+                output.println(playerList.get(index).getId()  + " declined, asking next player...");
+                playerQuestIndex++;
+                index++;
+                if (playerQuestIndex >= playerList.size()) {
+                    output.println("All players have declined. Ending turn...");
+                    questFinished = true;
+                }
+            } else if (inputStr.contains("y")) {
+                output.println(playerList.get(index).getId()  + " has sponsored! Quest starting soon!");
+                questFinished = true;
+            }
+        }
     }
 
 }

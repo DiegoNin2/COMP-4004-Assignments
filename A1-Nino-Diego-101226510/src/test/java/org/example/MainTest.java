@@ -913,7 +913,7 @@ class MainTest {
     @DisplayName("Check if the game prompts if the player wants to sponsor the quest")
     void RESP_14_test_01() {
         StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "n\nn\nn\nn";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -929,16 +929,14 @@ class MainTest {
     @DisplayName("Check if the game prompts all players")
     void RESP_14_test_02() {
         StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "n\nn\nn\nn";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
         game.dealCards();
 
         //game should display prompt all players wants to sponsor quest or not
-        for (int i = 0; i < 4; i++) {
-            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
-        }
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
 
         assertAll(
                 "prompt check",
@@ -953,7 +951,7 @@ class MainTest {
     @DisplayName("Check if a player can decline to sponsor quest")
     void RESP_15_test_01() {
         StringWriter output = new StringWriter();
-        String input = "n";
+        String input = "n\nn\nn\nn";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -976,9 +974,7 @@ class MainTest {
         game.dealCards();
 
         //game should end turn after all players decline to sponsor quest
-        for (int i = 0; i < 4; i++) {
-            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
-        }
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p3.getId());
 
         assertTrue(output.toString().contains("All players have declined. Ending turn..."));
     }
@@ -1010,9 +1006,7 @@ class MainTest {
         game.dealCards();
 
         //game should indicate that P3 has sponsored the quest then start it
-        for (int i = 0; i < 4; i++) {
-            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
-        }
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
 
         assertTrue(output.toString().contains("P3 has sponsored! Quest starting soon!"));
     }
