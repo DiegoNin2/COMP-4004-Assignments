@@ -478,7 +478,20 @@ public class Main {
     }
 
     public void trimHand(Scanner input, PrintWriter output) {
+        //note: add a playerID variable in the signature in a refac commit
+        int amountToDelete = checkHand("P1");
 
+        output.println("Displaying hand: ");
+        Collections.sort(p1.getHand());
+
+        //this would be wrapped in a while loop
+        for (int i = 0; i < p1.getHandSize(); i++) {
+            output.print("[" + Integer.toString(i+1) + "] " + p1.getHand().get(i).toString());
+            output.print(" \n");
+        }
+
+        output.println("Select the position of the card to remove: ");
+        //input thing here
     }
 
 }

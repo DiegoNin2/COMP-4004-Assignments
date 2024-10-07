@@ -740,9 +740,9 @@ class MainTest {
 
         game.trimHand(new Scanner(input), new PrintWriter(output));
 
-        String expectedOutput = "[1] Foe, value = 5 \n[2] Foe, value = 10 \n[3] Foe, value = 15 \n[4] Foe, value = 20 \n[5] Foe, value = 35 \n[6] Foe, value = 40 " +
-                "\n[7] Foe, value = 50 \n[8] Foe, value = 70 \n[9] Dagger, value = 5 \n[10] Dagger, value = 5 \n[11] Dagger, value = 5 \n[12] Sword, value = 10 " +
-                "\n[13] Horse, value = 10 \n[14] battle-Axe, value = 15 \n[15] Lance, value = 20 \n[16] Excalibur, value = 30";
+        String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] F35, value = 35 \n[6] F40, value = 40 " +
+                "\n[7] F50, value = 50 \n[8] F70, value = 70 \n[9] Dagger, value = 5 \n[10] Dagger, value = 5 \n[11] Dagger, value = 5 \n[12] Sword, value = 10 " +
+                "\n[13] Horse, value = 10 \n[14] Battle-Axe, value = 15 \n[15] Lance, value = 20 \n[16] Excalibur, value = 30";
 
         assertTrue(output.toString().contains(expectedOutput));
     }
