@@ -692,4 +692,23 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if amount of times that the number of cards need to be discarded is accurate")
+    void RESP_10_test_01() {
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should calculate the right amount of cards to discard
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+        game.p1.getHand().add(game.drawCard("adventure"));
+
+        int newHandAmount = game.checkHand(game.p1.getId());
+
+        assertEquals(4,newHandAmount);
+    }
+
 }

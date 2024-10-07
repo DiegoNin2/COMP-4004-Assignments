@@ -462,4 +462,8 @@ public class Main {
         }
     }
 
+    public int checkHand(String playerID) {
+        return -1;
+    }
+
 }
