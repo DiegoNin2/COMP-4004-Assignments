@@ -3,6 +3,7 @@ package org.example;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -363,7 +364,7 @@ public class Main {
     }
 
     //will be modified to handle other players & additional turn stuff soon
-    public void takeTurn(PrintWriter output) {
+    public void takeTurn(Scanner input, PrintWriter output) {
         output.println("Current Player: P1");
 
         output.println("Displaying hand: ");

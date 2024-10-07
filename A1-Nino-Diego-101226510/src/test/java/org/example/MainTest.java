@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -438,8 +439,9 @@ class MainTest {
 
         //game should display P1
         StringWriter output = new StringWriter();
+        String input = "\n";
 
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("Current Player: P1"));
     }
@@ -453,10 +455,11 @@ class MainTest {
 
         //game should display a dagger weapon card for P1
         StringWriter output = new StringWriter();
+        String input = "\n";
 
         game.pickCard(0, "Weapon", "Dagger", "5", 1);
 
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("Dagger, value = 5"));
     }
@@ -470,6 +473,7 @@ class MainTest {
 
         //game should display a series of Foe and Weapon cards in increasing order with Foe cards first then Weapon cards
         StringWriter output = new StringWriter();
+        String input = "\n";
 
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
@@ -478,7 +482,7 @@ class MainTest {
         game.pickCard(4,"Weapon","Excalibur", "30", 1);
         game.pickCard(5,"Weapon","Dagger", "5", 1);
 
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         String expectedOutput = "F5, value = 5 \nF10, value = 10 \nDagger, value = 5 \nSword, value = 10 \nHorse, value = 10 \nExcalibur, value = 30";
 
@@ -489,6 +493,7 @@ class MainTest {
     @DisplayName("Check if Event Card is displayed")
     void RESP_06_test_01() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -499,7 +504,7 @@ class MainTest {
         c.setType("Event");
         c.setValue("+2P");
         game.eventDeck.set(0, c);
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("Queen's Favor, value = +2P"));
     }
@@ -508,12 +513,13 @@ class MainTest {
     @DisplayName("Check if event deck & discard deck is updated after card is drawn")
     void RESP_06_test_02() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
 
         //event deck should have 1 less card and discard deck should have 1 card
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertAll(
                 "deck size check",
@@ -527,6 +533,7 @@ class MainTest {
     @DisplayName("Check if Plague card effect is applied (shields >= 2)")
     void RESP_07_test_01() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -538,7 +545,7 @@ class MainTest {
         c.setType("Event");
         c.setValue("-2Sh");
         game.eventDeck.set(0, c);
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertEquals(2,game.p1.getShields());
     }
@@ -547,6 +554,7 @@ class MainTest {
     @DisplayName("Check if Plague card effect is applied (shields < 2)")
     void RESP_07_test_02() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
 
@@ -556,7 +564,7 @@ class MainTest {
         c.setType("Event");
         c.setValue("-2Sh");
         game.eventDeck.set(0, c);
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertEquals(0,game.p1.getShields());
     }
@@ -565,6 +573,7 @@ class MainTest {
     @DisplayName("Check if Queen's Favor card effect is applied")
     void RESP_07_test_03() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -576,7 +585,7 @@ class MainTest {
         c.setType("Event");
         c.setValue("+2P");
         game.eventDeck.set(0, c);
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertEquals(14,game.p1.getHandSize());
     }
@@ -585,6 +594,7 @@ class MainTest {
     @DisplayName("Check if Prosperity card effect is applied")
     void RESP_07_test_04() {
         StringWriter output = new StringWriter();
+        String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -596,7 +606,7 @@ class MainTest {
         c.setType("Event");
         c.setValue("+2All");
         game.eventDeck.set(0, c);
-        game.takeTurn(new PrintWriter(output));
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertAll(
                 "hand size check",
@@ -605,6 +615,37 @@ class MainTest {
                 () -> assertEquals(14, game.p3.getHandSize()),
                 () -> assertEquals(14, game.p4.getHandSize())
         );
+    }
+
+    @Test
+    @DisplayName("Check if game prompts player to move hot seat")
+    void RESP_08_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should tell player to move
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        assertTrue(output.toString().contains("Turn End. Please move out of hot seat for next player."));
+    }
+
+    @Test
+    @DisplayName("Check if game flushes display after return key is pressed")
+    void RESP_08_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should clear the console after return key is pressed
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+
+        //apparently this string text should work to clear the screen
+        assertTrue(output.toString().contains("\033[H\033[2J"));
     }
 
 }
