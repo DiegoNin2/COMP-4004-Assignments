@@ -648,4 +648,44 @@ class MainTest {
         assertTrue(output.toString().contains("\033[H\033[2J"));
     }
 
+    @Test
+    @DisplayName("Check if the P2 is displayed after P1 finishes their turn")
+    void RESP_09_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should print out the P2 id after P1 takes their turn
+        for (int i = 0; i < 2; i++) {
+            game.takeTurn(new Scanner(input), new PrintWriter(output));
+        }
+
+        assertTrue(output.toString().contains("Current Player: P2"));
+    }
+
+    @Test
+    @DisplayName("Check if all 4 players get their turn")
+    void RESP_09_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should print out every player's id
+        for (int i = 0; i < 4; i++) {
+            game.takeTurn(new Scanner(input), new PrintWriter(output));
+        }
+
+        assertAll (
+                "id display check",
+                () -> assertTrue(output.toString().contains("Current Player: P1")),
+                () -> assertTrue(output.toString().contains("Current Player: P2")),
+                () -> assertTrue(output.toString().contains("Current Player: P3")),
+                () -> assertTrue(output.toString().contains("Current Player: P4"))
+        );
+    }
+
 }
