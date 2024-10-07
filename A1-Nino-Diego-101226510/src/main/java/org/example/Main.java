@@ -522,4 +522,8 @@ public class Main {
 
     }
 
+    public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
+
+    }
+
 }

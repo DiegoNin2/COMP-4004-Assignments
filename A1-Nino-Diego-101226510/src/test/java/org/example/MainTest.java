@@ -909,4 +909,44 @@ class MainTest {
         assertTrue(output.toString().contains("A 5 Stage Quest will start!"));
     }
 
+    @Test
+    @DisplayName("Check if the game prompts if the player wants to sponsor the quest")
+    void RESP_14_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display prompt if player wants to sponsor quest or not
+        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.p1.getId());
+
+        assertTrue(output.toString().contains("Do you, P1, want to sponsor this quest? (y/n)"));
+    }
+
+    @Test
+    @DisplayName("Check if the game prompts all players")
+    void RESP_14_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "\n";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display prompt all players wants to sponsor quest or not
+        for (int i = 0; i < 4; i++) {
+            game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(i).getId());
+        }
+
+        assertAll(
+                "prompt check",
+                () -> assertTrue(output.toString().contains("Do you, P1, want to sponsor this quest? (y/n)")),
+                () -> assertTrue(output.toString().contains("Do you, P2, want to sponsor this quest? (y/n)")),
+                () -> assertTrue(output.toString().contains("Do you, P3, want to sponsor this quest? (y/n)")),
+                () -> assertTrue(output.toString().contains("Do you, P4, want to sponsor this quest? (y/n)"))
+        );
+    }
+
 }
