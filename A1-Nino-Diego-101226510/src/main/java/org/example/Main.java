@@ -26,7 +26,8 @@ public class Main {
     Player p2 = new Player();
     Player p3 = new Player();
     Player p4 = new Player();
-    private int playerIndex = 0;
+    private int playerTurnIndex = 0;
+    private int playerQuestIndex = 0;
 
     public void initializePlayers() {
         //set up ids
@@ -376,7 +377,7 @@ public class Main {
 
     //will be modified to handle other players & additional turn stuff soon
     public void takeTurn(Scanner input, PrintWriter output) {
-        output.println("Current Player: " + playerList.get(playerIndex).getId());
+        output.println("Current Player: " + playerList.get(playerTurnIndex).getId());
 
         output.println("Displaying hand: ");
 
@@ -426,10 +427,10 @@ public class Main {
             output.print("\033[H\033[2J");
             output.flush();
         }
-        if (playerIndex >= playerList.size()) {
-            playerIndex = 0;
+        if (playerTurnIndex >= playerList.size()) {
+            playerTurnIndex = 0;
         } else {
-            playerIndex++;
+            playerTurnIndex++;
         }
     }
 
@@ -525,6 +526,17 @@ public class Main {
 
     public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
         output.println("Do you, " + currentPlayerID + ", want to sponsor this quest? (y/n)");
+        String inputStr = input.nextLine();
+        if (inputStr.contains("n")) {
+            output.println(currentPlayerID + " declined, asking next player...");
+            playerQuestIndex++;
+            if (playerQuestIndex >= playerList.size()) {
+                output.println("All players have declined. Ending turn...");
+            }
+        } else if (inputStr.contains("y")) {
+            //handle later
+        }
+
     }
 
 }
