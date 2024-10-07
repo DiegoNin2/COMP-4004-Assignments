@@ -411,9 +411,9 @@ public class Main {
                     p4.getHand().add(drawCard("adventure"));
                 }
             }
+        } else if (c.getType().equals("Quest")) {
+            output.println("A " + c.getName() + " will start!");
         }
-
-        //other turn stuff goes here
 
         eventDiscardDeck.add(c);
 
