@@ -453,4 +453,8 @@ public class Main {
         }
     }
 
+    public void buildQuest(Scanner input, PrintWriter output, String currentPlayerID, String questValue) {
+
+    }
+
 }
