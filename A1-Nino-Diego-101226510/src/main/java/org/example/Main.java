@@ -454,6 +454,19 @@ public class Main {
     }
 
     public void buildQuest(Scanner input, PrintWriter output, String currentPlayerID, String questValue) {
+        int pIndex = translateID(currentPlayerID);
+
+        output.println(currentPlayerID + " is currently building the quest!");
+
+        output.println("Displaying current hand: ");
+        Collections.sort(playerList.get(pIndex).getHand());
+
+        for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
+            output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
+            output.print(" \n");
+        }
+
+        output.println("Select position of card to add to current stage. Type 'Quit' when you are finished.");
 
     }
 
