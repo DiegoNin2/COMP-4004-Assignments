@@ -15,6 +15,7 @@ public class Main {
     ArrayList<Card> eventDeck = new ArrayList<Card>();
     ArrayList<Card> eventDiscardDeck = new ArrayList<Card>();
     ArrayList<Card> adventureDiscardDeck = new ArrayList<Card>();
+    ArrayList<Card> currentStageSet = new ArrayList<Card>();
     ArrayList<Player> playerList = new ArrayList<Player>();
 
     private int playerTurnIndex = 0;
