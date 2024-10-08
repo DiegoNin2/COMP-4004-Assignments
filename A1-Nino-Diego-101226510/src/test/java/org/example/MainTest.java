@@ -1044,7 +1044,11 @@ class MainTest {
         //game should explain why the input is invalid then reprompt
         game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
 
-        assertTrue(output.toString().contains("Rejected: Invalid position.\nSelect position of card to add to current stage. Type 'Quit' when you are finished."));
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Invalid position.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."))
+        );
     }
 
     @Test
@@ -1075,7 +1079,12 @@ class MainTest {
 
         game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
 
-        assertTrue(output.toString().contains("Rejected: Foe already chosen.\nSelect position of card to add to current stage. Type 'Quit' when you are finished."));
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Foe already chosen.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."))
+        );
+
     }
 
     @Test
@@ -1106,7 +1115,11 @@ class MainTest {
 
         game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
 
-        assertTrue(output.toString().contains("Rejected: Duplicate weapon.\nSelect position of card to add to current stage. Type 'Quit' when you are finished."));
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Duplicate weapon.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."))
+        );
     }
 
     //im not sure if there is any other conditions for a reprompt
