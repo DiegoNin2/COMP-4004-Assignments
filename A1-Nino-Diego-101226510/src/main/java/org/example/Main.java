@@ -530,7 +530,26 @@ public class Main {
     }
 
     public void buildAttack(Scanner input, PrintWriter output, String currentPlayerID) {
+        int pIndex = translateID(currentPlayerID);
 
+        output.println("Building attack for " + currentPlayerID);
+
+        output.println("Displaying current hand: ");
+        Collections.sort(playerList.get(pIndex).getHand());
+
+        boolean finishedBuilding = false;
+
+        while (!finishedBuilding) {
+            for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
+                output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
+                output.print(" \n");
+            }
+
+            output.println("Select position of card to add to your attack. Type 'quit' when you are finished.");
+
+
+            finishedBuilding = true;
+        }
     }
 
 }
