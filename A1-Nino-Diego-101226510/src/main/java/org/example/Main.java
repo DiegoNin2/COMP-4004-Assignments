@@ -474,6 +474,8 @@ public class Main {
             int inputNum = -1;
             if (input.hasNextInt()) {
                 inputNum = input.nextInt();
+            } else {
+                return;
             }
 
             if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {

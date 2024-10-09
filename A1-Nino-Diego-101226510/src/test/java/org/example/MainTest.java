@@ -1151,5 +1151,22 @@ class MainTest {
 
         assertTrue(output.toString().contains("Current Stage: F5, value = 5"));
     }
+    //could add another test for RESP_19 here idk yet
+
+    @Test
+    @DisplayName("Check if game handles player quitting with no cards")
+    void RESP_20_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "Quit\n5";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should tell the player that the stage cannot be empty
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+
+        assertTrue(output.toString().contains("Cannot Quit: Stage cannot be empty."));
+    }
 
 }
