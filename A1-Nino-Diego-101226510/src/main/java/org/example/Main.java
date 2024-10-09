@@ -472,36 +472,43 @@ public class Main {
 
             output.println("Select position of card to add to current stage. Type 'Quit' when you are finished.");
             int inputNum = -1;
+            String inputStr = "";
             if (input.hasNextInt()) {
                 inputNum = input.nextInt();
             } else {
-                return;
+                inputStr = input.next();
             }
 
-            if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
-                output.println("Rejected: Invalid position.");
-            } else {
-                for (int i = 0; i < currentStageSet.size(); i++) {
-                    if (currentStageSet.get(i).getType().equals("Foe") && playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
-                        output.println("Rejected: Foe already chosen.");
-                        break;
-                    } else if (currentStageSet.get(i).getType().equals("Weapon")) {
-                        if (currentStageSet.get(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
-                            output.println("Rejected: Duplicate weapon.");
+            if (inputStr.equals("Quit")) {
+                if (currentStageSet.isEmpty()) {
+                    output.println("Cannot Quit: Stage cannot be empty.");
+                }
+            } else if (inputStr.isEmpty()) {
+                if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
+                    output.println("Rejected: Invalid position.");
+                } else {
+                    for (int i = 0; i < currentStageSet.size(); i++) {
+                        if (currentStageSet.get(i).getType().equals("Foe") && playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
+                            output.println("Rejected: Foe already chosen.");
                             break;
+                        } else if (currentStageSet.get(i).getType().equals("Weapon")) {
+                            if (currentStageSet.get(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
+                                output.println("Rejected: Duplicate weapon.");
+                                break;
+                            }
                         }
                     }
+                    currentStageSet.add(playerList.get(pIndex).getCardAt(inputNum-1));
+
+                    String cardsInStage = "";
+                    for (int i = 0; i < currentStageSet.size(); i++) {
+                        cardsInStage += currentStageSet.get(i).toString();
+                    }
+
+                    output.println("Current Stage: " + cardsInStage);
+
+                    finishedBuilding = true; //temporary for testing
                 }
-                currentStageSet.add(playerList.get(pIndex).getCardAt(inputNum-1));
-
-                String cardsInStage = "";
-                for (int i = 0; i < currentStageSet.size(); i++) {
-                    cardsInStage += currentStageSet.get(i).toString();
-                }
-
-                output.println("Current Stage: " + cardsInStage);
-
-                finishedBuilding = true; //temporary for testing
             }
         }
 
