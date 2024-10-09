@@ -1189,4 +1189,26 @@ class MainTest {
         assertTrue(output.toString().contains("Cannot Quit: Insufficient values for this stage"));
     }
 
+    @Test
+    @DisplayName("Check if the game displays the cards being used when a valid Quit is sent")
+    void RESP_22_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "Quit";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display the cards used for the stage
+        //we're just gonna pretend these cards were from the player's deck
+        Card c = new Card("Weapon","Dagger","5");
+        Card c1 = new Card("Foe", "F5", "5");
+        game.currentStageSet.add(c);
+        game.currentStageSet.add(c1);
+
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+
+        assertTrue(output.toString().contains("The finished quest stage: F5, value = 5, Dagger, value = 5"));
+    }
+
 }
