@@ -527,6 +527,9 @@ public class Main {
                 }
             }
         }
+    }
+
+    public void buildAttack(Scanner input, PrintWriter output, String currentPlayerID) {
 
     }
 
