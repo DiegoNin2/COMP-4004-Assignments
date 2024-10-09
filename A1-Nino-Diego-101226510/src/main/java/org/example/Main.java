@@ -486,6 +486,18 @@ public class Main {
                     output.println("Cannot Quit: Stage cannot be empty.");
                 } else if (prevQuestVal >= currentQuestVal && prevQuestVal != 0) {
                     output.println("Cannot Quit: Insufficient values for this stage");
+                } else {
+                    Collections.sort(currentStageSet);
+                    String cardsInStage = "";
+                    for (int i = 0; i < currentStageSet.size(); i++) {
+                        if (i == currentStageSet.size()-1) {
+                            cardsInStage += currentStageSet.get(i).toString();
+                        } else {
+                            cardsInStage += currentStageSet.get(i).toString() + ", ";
+                        }
+                    }
+                    output.println("The finished quest stage: " + cardsInStage);
+                    finishedBuilding = true;
                 }
             } else if (inputStr.isEmpty()) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
