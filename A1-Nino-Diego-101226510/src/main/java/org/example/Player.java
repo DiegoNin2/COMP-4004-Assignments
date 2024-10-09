@@ -38,6 +38,10 @@ public class Player {
         hand.add(i,c);
     }
 
+    public void addAttackCard(Card c) {
+
+    }
+
     public void removeCard(Card c) {
         hand.remove(c);
     }

@@ -1258,4 +1258,91 @@ class MainTest {
         assertTrue(output.toString().contains(expectedOutput));
     }
 
+    @Test
+    @DisplayName("Check if game reprompts if invalid position is inputted")
+    void RESP_24_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "15\n5";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should explain why the input is invalid then reprompt
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Invalid position.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to your attack. Type 'quit' when you are finished."))
+        );
+    }
+
+    @Test
+    @DisplayName("Check if game reprompts if player tries to add a repeated weapon")
+    void RESP_24_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "5\n8";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should explain why the input is invalid then reprompt
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+
+        Card c = new Card("Weapon","Dagger","5");
+        game.playerList.get(0).addAttackCard(c);
+
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Duplicate weapon.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to your attack. Type 'quit' when you are finished."))
+        );
+    }
+
+    @Test
+    @DisplayName("Check if game reprompts if player tries to add a foe card")
+    void RESP_24_test_03() {
+        StringWriter output = new StringWriter();
+        String input = "1\n5";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should explain why the input is invalid then reprompt
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+
+        assertAll(
+                "reprompt check",
+                () -> assertTrue(output.toString().contains("Rejected: Foe cannot be selected.")),
+                () -> assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."))
+        );
+    }
+
 }
