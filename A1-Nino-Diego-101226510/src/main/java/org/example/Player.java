@@ -7,12 +7,14 @@ public class Player {
     private ArrayList<Card> hand;
     private String id;
     private boolean winnerStatus;
+    private ArrayList<Card> attackHand;
 
     public Player(String id, int shields) {
         this.id = id;
         this.shields = shields;
         this.hand = new ArrayList<Card>();
         this.winnerStatus = false;
+        this.attackHand = new ArrayList<Card>();
     }
 
     //getters
@@ -21,6 +23,7 @@ public class Player {
     public ArrayList<Card> getHand() {return hand;}
     public String getId() {return id;}
     public int getHandSize() {return hand.size();}
+    public int getAttackHandSize() {return attackHand.size();}
     public boolean getWinnerStatus() {return winnerStatus;}
 
     //setters
@@ -39,7 +42,7 @@ public class Player {
     }
 
     public void addAttackCard(Card c) {
-
+        attackHand.add(c);
     }
 
     public void removeCard(Card c) {
@@ -52,6 +55,10 @@ public class Player {
 
     public Card getCardAt(int i) {
         return hand.get(i);
+    }
+
+    public Card getAttackCardAt(int i) {
+        return attackHand.get(i);
     }
 
 }

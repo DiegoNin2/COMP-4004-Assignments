@@ -538,17 +538,49 @@ public class Main {
         Collections.sort(playerList.get(pIndex).getHand());
 
         boolean finishedBuilding = false;
+        boolean invalid = false;
 
         while (!finishedBuilding) {
+            invalid = false;
+
             for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
                 output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
                 output.print(" \n");
             }
 
             output.println("Select position of card to add to your attack. Type 'quit' when you are finished.");
+            int inputNum = -1;
+            String inputStr = "";
+            if (input.hasNextInt()) {
+                inputNum = input.nextInt();
+            } else {
+                inputStr = input.next();
+            }
 
+            if (inputStr.equals("quit")) {
 
-            finishedBuilding = true;
+            } else if (inputStr.isEmpty()) {
+                if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
+                    output.println("Rejected: Invalid position.");
+                    invalid = true;
+                } else {
+                    if (playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
+                        output.println("Rejected: Foe cannot be selected.");
+                        invalid = true;
+                    } else {
+                        for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
+                            if (playerList.get(pIndex).getAttackCardAt(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
+                                output.println("Rejected: Duplicate weapon.");
+                                invalid = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!invalid) {
+                finishedBuilding = true;
+            }
         }
     }
 

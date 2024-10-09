@@ -1215,13 +1215,26 @@ class MainTest {
     @DisplayName("Check if game prompts for position for position of card (or quit if finished)")
     void RESP_23_test_01() {
         StringWriter output = new StringWriter();
-        String input = "4";
+        String input = "12";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
+
 
         //game should prompt player for position of card to add to the attack (or they can quit)
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+
         game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Select position of card to add to your attack. Type 'quit' when you are finished."));
@@ -1231,7 +1244,7 @@ class MainTest {
     @DisplayName("Check if game displays hand of sponsor with numbered positions")
     void RESP_23_test_02() {
         StringWriter output = new StringWriter();
-        String input = "4";
+        String input = "6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1262,13 +1275,25 @@ class MainTest {
     @DisplayName("Check if game reprompts if invalid position is inputted")
     void RESP_24_test_01() {
         StringWriter output = new StringWriter();
-        String input = "15\n5";
+        String input = "-1\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+
         game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
@@ -1317,7 +1342,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if player tries to add a foe card")
     void RESP_24_test_03() {
         StringWriter output = new StringWriter();
-        String input = "1\n5";
+        String input = "1\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1341,7 +1366,7 @@ class MainTest {
         assertAll(
                 "reprompt check",
                 () -> assertTrue(output.toString().contains("Rejected: Foe cannot be selected.")),
-                () -> assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."))
+                () -> assertTrue(output.toString().contains("Select position of card to add to your attack. Type 'quit' when you are finished."))
         );
     }
 
