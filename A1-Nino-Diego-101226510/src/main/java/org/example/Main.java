@@ -490,6 +490,15 @@ public class Main {
                         }
                     }
                 }
+                currentStageSet.add(playerList.get(pIndex).getCardAt(inputNum-1));
+
+                String cardsInStage = "";
+                for (int i = 0; i < currentStageSet.size(); i++) {
+                    cardsInStage += currentStageSet.get(i).toString();
+                }
+
+                output.println("Current Stage: " + cardsInStage);
+
                 finishedBuilding = true; //temporary for testing
             }
         }
