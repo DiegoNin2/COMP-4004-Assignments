@@ -21,6 +21,7 @@ public class Main {
     private int playerTurnIndex = 0;
     private int playerQuestIndex = 0;
     public int prevQuestVal = 0;
+    private int currentQuestVal = 0;
 
     public void initializePlayers() {
         Player p1 = new Player("P1", 0);
@@ -483,6 +484,8 @@ public class Main {
             if (inputStr.equals("Quit")) {
                 if (currentStageSet.isEmpty()) {
                     output.println("Cannot Quit: Stage cannot be empty.");
+                } else if (prevQuestVal >= currentQuestVal && prevQuestVal != 0) {
+                    output.println("Cannot Quit: Insufficient values for this stage");
                 }
             } else if (inputStr.isEmpty()) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {

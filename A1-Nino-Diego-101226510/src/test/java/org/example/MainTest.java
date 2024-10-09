@@ -1181,6 +1181,8 @@ class MainTest {
 
         //game should tell player that the stage value must be higher
         game.prevQuestVal = 5;
+        Card c = new Card("Weapon","Dagger","5");
+        game.currentStageSet.add(c);
 
         game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
 
