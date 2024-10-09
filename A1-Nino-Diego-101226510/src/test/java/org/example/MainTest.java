@@ -988,7 +988,7 @@ class MainTest {
     @DisplayName("Check if game displays hand of sponsor with numbered positions")
     void RESP_17_test_01() {
         StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "4";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1019,7 +1019,7 @@ class MainTest {
     @DisplayName("Check if game prompts for position of card (or to quit if finished)")
     void RESP_17_test_02() {
         StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "4";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1035,7 +1035,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if invalid position is inputted")
     void RESP_18_test_01() {
         StringWriter output = new StringWriter();
-        String input = "15";
+        String input = "15\n5";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1055,7 +1055,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add another foe")
     void RESP_18_test_02() {
         StringWriter output = new StringWriter();
-        String input = "1";
+        String input = "1\n5";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1091,7 +1091,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add a repeated weapon")
     void RESP_18_test_03() {
         StringWriter output = new StringWriter();
-        String input = "5";
+        String input = "5\n1";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();

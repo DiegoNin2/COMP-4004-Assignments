@@ -462,12 +462,37 @@ public class Main {
         output.println("Displaying current hand: ");
         Collections.sort(playerList.get(pIndex).getHand());
 
-        for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
-            output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
-            output.print(" \n");
-        }
+        boolean finishedBuilding = false;
 
-        output.println("Select position of card to add to current stage. Type 'Quit' when you are finished.");
+        while (!finishedBuilding) {
+            for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
+                output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
+                output.print(" \n");
+            }
+
+            output.println("Select position of card to add to current stage. Type 'Quit' when you are finished.");
+            int inputNum = -1;
+            if (input.hasNextInt()) {
+                inputNum = input.nextInt();
+            }
+
+            if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
+                output.println("Rejected: Invalid position.");
+            } else {
+                for (int i = 0; i < currentStageSet.size(); i++) {
+                    if (currentStageSet.get(i).getType().equals("Foe") && playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
+                        output.println("Rejected: Foe already chosen.");
+                        break;
+                    } else if (currentStageSet.get(i).getType().equals("Weapon")) {
+                        if (currentStageSet.get(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
+                            output.println("Rejected: Duplicate weapon.");
+                            break;
+                        }
+                    }
+                }
+                finishedBuilding = true; //temporary for testing
+            }
+        }
 
     }
 
