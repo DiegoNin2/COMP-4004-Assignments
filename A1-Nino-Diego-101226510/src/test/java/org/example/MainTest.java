@@ -1169,4 +1169,22 @@ class MainTest {
         assertTrue(output.toString().contains("Cannot Quit: Stage cannot be empty."));
     }
 
+    @Test
+    @DisplayName("Check if game handles player quitting with insufficient value")
+    void RESP_21_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "Quit\n5";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should tell player that the stage value must be higher
+        game.prevQuestVal = 5;
+
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+
+        assertTrue(output.toString().contains("Cannot Quit: Insufficient values for this stage"));
+    }
+
 }

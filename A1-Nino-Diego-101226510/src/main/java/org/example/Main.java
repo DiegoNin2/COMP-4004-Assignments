@@ -20,6 +20,7 @@ public class Main {
 
     private int playerTurnIndex = 0;
     private int playerQuestIndex = 0;
+    public int prevQuestVal = 0;
 
     public void initializePlayers() {
         Player p1 = new Player("P1", 0);
