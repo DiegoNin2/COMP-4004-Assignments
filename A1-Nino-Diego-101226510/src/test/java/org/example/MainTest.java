@@ -1370,4 +1370,33 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if the game displays the selected card for the attack")
+    void RESP_25_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should display the card chosen after it was added
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+
+        assertTrue(output.toString().contains("Current Attack Cards: Dagger, value = 5"));
+    }
+
+
 }
