@@ -61,4 +61,8 @@ public class Player {
         return attackHand.get(i);
     }
 
+    public boolean isAttackHandEmpty() {
+        return attackHand.isEmpty();
+    }
+
 }

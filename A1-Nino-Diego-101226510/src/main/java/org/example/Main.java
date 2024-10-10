@@ -558,7 +558,17 @@ public class Main {
             }
 
             if (inputStr.equals("quit")) {
-                return;
+                if (playerList.get(pIndex).isAttackHandEmpty()) {
+                    output.println(currentPlayerID + " chose to not play any cards");
+                    finishedBuilding = true;
+                } else {
+                    String cardsInAttack = "";
+                    for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
+                        cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
+                    }
+                    output.println(currentPlayerID + "'s current attack: " + cardsInAttack);
+                    finishedBuilding = true;
+                }
             } else if (inputStr.isEmpty()) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
                     output.println("Rejected: Invalid position.");
@@ -577,16 +587,16 @@ public class Main {
                         }
                     }
                 }
-            }
-            if (!invalid) {
-                playerList.get(pIndex).addAttackCard(playerList.get(pIndex).getCardAt(inputNum-1));
+                if (!invalid) {
+                    playerList.get(pIndex).addAttackCard(playerList.get(pIndex).getCardAt(inputNum-1));
 
-                String cardsInAttack = "";
-                for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
-                    cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
+                    String cardsInAttack = "";
+                    for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
+                        cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
+                    }
+                    output.println("Current Attack Cards: " + cardsInAttack);
+                    finishedBuilding = true; // temporary
                 }
-                output.println("Current Attack Cards: " + cardsInAttack);
-                finishedBuilding = true;
             }
         }
     }
