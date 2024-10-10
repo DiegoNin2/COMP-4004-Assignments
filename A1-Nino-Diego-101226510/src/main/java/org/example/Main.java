@@ -579,6 +579,13 @@ public class Main {
                 }
             }
             if (!invalid) {
+                playerList.get(pIndex).addAttackCard(playerList.get(pIndex).getCardAt(inputNum-1));
+
+                String cardsInAttack = "";
+                for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
+                    cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
+                }
+                output.println("Current Attack Cards: " + cardsInAttack);
                 finishedBuilding = true;
             }
         }

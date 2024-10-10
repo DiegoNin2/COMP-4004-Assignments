@@ -1393,10 +1393,11 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Current Attack Cards: Dagger, value = 5"));
     }
+
 
 
 }
