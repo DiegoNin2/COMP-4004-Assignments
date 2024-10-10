@@ -558,7 +558,7 @@ public class Main {
             }
 
             if (inputStr.equals("quit")) {
-
+                return;
             } else if (inputStr.isEmpty()) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
                     output.println("Rejected: Invalid position.");

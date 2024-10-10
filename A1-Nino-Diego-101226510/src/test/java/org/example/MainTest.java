@@ -1398,6 +1398,39 @@ class MainTest {
         assertTrue(output.toString().contains("Current Attack Cards: Dagger, value = 5"));
     }
 
+    @Test
+    @DisplayName("Check if game displays cards if 'quit' was sent with cards")
+    void RESP_26_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "quit";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
 
+        //game should display the cards of the attack after the player quits
+        Card c = new Card("Weapon","Dagger","5");
+        game.playerList.get(0).addAttackCard(c);
+
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("P1's current attack: Dagger, value = 5"));
+    }
+
+    @Test
+    @DisplayName("Check if game displays nothing if 'quit' was sent with no cards")
+    void RESP_26_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "quit";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display no cards after the player quits
+        game.buildAttack(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("P1 chose to not play any cards"));
+    }
 
 }
