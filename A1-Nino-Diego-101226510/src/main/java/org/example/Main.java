@@ -8,6 +8,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+        //game setup functions here
+
+        //take turn function here
     }
 
     //variables
@@ -429,6 +432,45 @@ public class Main {
         }
     }
 
+    private int increaseStageVal() {
+        int newStageVal = 0;
+        for (int i = 0; i < currentStageSet.size(); i++) {
+            switch(currentStageSet.get(i).getValue()) {
+                case "5":
+                    newStageVal += 5;
+                    break;
+                case "10":
+                    newStageVal += 10;
+                    break;
+                case "15":
+                    newStageVal += 15;
+                    break;
+                case "20":
+                    newStageVal += 20;
+                    break;
+                case "25":
+                    newStageVal += 25;
+                    break;
+                case "30":
+                    newStageVal += 30;
+                    break;
+                case "35":
+                    newStageVal += 35;
+                    break;
+                case "40":
+                    newStageVal += 40;
+                    break;
+                case "50":
+                    newStageVal += 50;
+                    break;
+                case "70":
+                    newStageVal += 70;
+                    break;
+            }
+        }
+        return newStageVal;
+    }
+
     public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
         boolean questFinished = false;
 
@@ -451,12 +493,27 @@ public class Main {
                 }
             } else if (inputStr.contains("y")) {
                 output.println(playerList.get(index).getId()  + " has sponsored! Quest starting soon!");
+                //looped for the amount of stages the quest is
+                    //buildQuest call here
+                    //store previous stage values
+                //end loop
+                //while true loop (or something equivalent)
+                    //loop for the amount of players
+                        //eligible test here
+                    //end loop
+                    //for the amount of eligible players
+                        //buildAttack call here
+                    //end loop
+                //proceed attack function here
+                //determine stage winners here
+                //determine if quest end here & reward winners if so
+                    //discard & redraw here
                 questFinished = true;
             }
         }
     }
 
-    public void buildQuest(Scanner input, PrintWriter output, String currentPlayerID, String questValue) {
+    public void buildQuest(Scanner input, PrintWriter output, String currentPlayerID) {
         int pIndex = translateID(currentPlayerID);
 
         output.println(currentPlayerID + " is currently building the quest!");
@@ -465,8 +522,10 @@ public class Main {
         Collections.sort(playerList.get(pIndex).getHand());
 
         boolean finishedBuilding = false;
+        boolean invalid = false;
 
         while (!finishedBuilding) {
+            invalid = false;
             for (int i = 0; i < playerList.get(pIndex).getHandSize(); i++) {
                 output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
                 output.print(" \n");
@@ -481,7 +540,7 @@ public class Main {
                 inputStr = input.next();
             }
 
-            if (inputStr.equals("Quit")) {
+            if (inputStr.equalsIgnoreCase("Quit")) {
                 if (currentStageSet.isEmpty()) {
                     output.println("Cannot Quit: Stage cannot be empty.");
                 } else if (prevQuestVal >= currentQuestVal && prevQuestVal != 0) {
@@ -506,24 +565,32 @@ public class Main {
                     for (int i = 0; i < currentStageSet.size(); i++) {
                         if (currentStageSet.get(i).getType().equals("Foe") && playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
                             output.println("Rejected: Foe already chosen.");
+                            invalid = true;
                             break;
                         } else if (currentStageSet.get(i).getType().equals("Weapon")) {
                             if (currentStageSet.get(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
                                 output.println("Rejected: Duplicate weapon.");
+                                invalid = true;
                                 break;
                             }
                         }
                     }
-                    currentStageSet.add(playerList.get(pIndex).getCardAt(inputNum-1));
+                    if (!invalid) {
+                        currentStageSet.add(playerList.get(pIndex).getCardAt(inputNum-1));
 
-                    String cardsInStage = "";
-                    for (int i = 0; i < currentStageSet.size(); i++) {
-                        cardsInStage += currentStageSet.get(i).toString();
+                        String cardsInStage = "";
+                        for (int i = 0; i < currentStageSet.size(); i++) {
+                            if (i == currentStageSet.size()-1) {
+                                cardsInStage += currentStageSet.get(i).toString();
+                            } else {
+                                cardsInStage += currentStageSet.get(i).toString() + ", ";
+                            }
+                        }
+                        currentQuestVal = increaseStageVal();
+
+                        output.println("Current Stage: " + cardsInStage);
+
                     }
-
-                    output.println("Current Stage: " + cardsInStage);
-
-                    finishedBuilding = true; //temporary for testing
                 }
             }
         }
@@ -557,7 +624,7 @@ public class Main {
                 inputStr = input.next();
             }
 
-            if (inputStr.equals("quit")) {
+            if (inputStr.equalsIgnoreCase("quit")) {
                 if (playerList.get(pIndex).isAttackHandEmpty()) {
                     output.println(currentPlayerID + " chose to not play any cards");
                     finishedBuilding = true;
@@ -595,7 +662,6 @@ public class Main {
                         cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
                     }
                     output.println("Current Attack Cards: " + cardsInAttack);
-                    finishedBuilding = true; // temporary
                 }
             }
         }

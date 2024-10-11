@@ -988,7 +988,7 @@ class MainTest {
     @DisplayName("Check if game displays hand of sponsor with numbered positions")
     void RESP_17_test_01() {
         StringWriter output = new StringWriter();
-        String input = "4";
+        String input = "1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1007,7 +1007,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] Dagger, value = 5 \n[6] Dagger, value = 5 " +
                 "\n[7] Dagger, value = 5 \n[8] Sword, value = 10 \n[9] Horse, value = 10 \n[10] Battle-Axe, value = 15 \n[11] Lance, value = 20 \n[12] Excalibur, value = 30";
@@ -1019,14 +1019,25 @@ class MainTest {
     @DisplayName("Check if game prompts for position of card (or to quit if finished)")
     void RESP_17_test_02() {
         StringWriter output = new StringWriter();
-        String input = "4";
+        String input = "4\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should prompt player for position of card to add to the current stage (or they can quit)
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."));
     }
@@ -1035,14 +1046,25 @@ class MainTest {
     @DisplayName("Check if game reprompts if invalid position is inputted")
     void RESP_18_test_01() {
         StringWriter output = new StringWriter();
-        String input = "15\n5";
+        String input = "15\n1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "reprompt check",
@@ -1055,7 +1077,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add another foe")
     void RESP_18_test_02() {
         StringWriter output = new StringWriter();
-        String input = "1\n5";
+        String input = "1\n5\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1077,7 +1099,7 @@ class MainTest {
         Card c = new Card("Foe","F10","10");
         game.currentStageSet.add(c);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "reprompt check",
@@ -1091,7 +1113,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add a repeated weapon")
     void RESP_18_test_03() {
         StringWriter output = new StringWriter();
-        String input = "5\n1";
+        String input = "5\n1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1113,7 +1135,7 @@ class MainTest {
         Card c = new Card("Weapon","Dagger","5");
         game.currentStageSet.add(c);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "reprompt check",
@@ -1128,7 +1150,7 @@ class MainTest {
     @DisplayName("Check if the game displays the selected card for the stage")
     void RESP_19_test_01() {
         StringWriter output = new StringWriter();
-        String input = "1";
+        String input = "1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1147,7 +1169,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Current Stage: F5, value = 5"));
     }
@@ -1157,14 +1179,25 @@ class MainTest {
     @DisplayName("Check if game handles player quitting with no cards")
     void RESP_20_test_01() {
         StringWriter output = new StringWriter();
-        String input = "Quit\n5";
+        String input = "Quit\n5\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should tell the player that the stage cannot be empty
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Cannot Quit: Stage cannot be empty."));
     }
@@ -1173,18 +1206,29 @@ class MainTest {
     @DisplayName("Check if game handles player quitting with insufficient value")
     void RESP_21_test_01() {
         StringWriter output = new StringWriter();
-        String input = "Quit\n5";
+        String input = "Quit\n1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should tell player that the stage value must be higher
         game.prevQuestVal = 5;
         Card c = new Card("Weapon","Dagger","5");
         game.currentStageSet.add(c);
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Cannot Quit: Insufficient values for this stage"));
     }
@@ -1206,7 +1250,7 @@ class MainTest {
         game.currentStageSet.add(c);
         game.currentStageSet.add(c1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), "2Q");
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("The finished quest stage: F5, value = 5, Dagger, value = 5"));
     }
@@ -1215,7 +1259,7 @@ class MainTest {
     @DisplayName("Check if game prompts for position for position of card (or quit if finished)")
     void RESP_23_test_01() {
         StringWriter output = new StringWriter();
-        String input = "12";
+        String input = "12\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1244,7 +1288,7 @@ class MainTest {
     @DisplayName("Check if game displays hand of sponsor with numbered positions")
     void RESP_23_test_02() {
         StringWriter output = new StringWriter();
-        String input = "6";
+        String input = "6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1275,7 +1319,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if invalid position is inputted")
     void RESP_24_test_01() {
         StringWriter output = new StringWriter();
-        String input = "-1\n6";
+        String input = "-1\n6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1307,7 +1351,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if player tries to add a repeated weapon")
     void RESP_24_test_02() {
         StringWriter output = new StringWriter();
-        String input = "5\n8";
+        String input = "5\n8\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1342,7 +1386,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if player tries to add a foe card")
     void RESP_24_test_03() {
         StringWriter output = new StringWriter();
-        String input = "1\n6";
+        String input = "1\n6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1374,7 +1418,7 @@ class MainTest {
     @DisplayName("Check if the game displays the selected card for the attack")
     void RESP_25_test_01() {
         StringWriter output = new StringWriter();
-        String input = "6";
+        String input = "6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1432,5 +1476,7 @@ class MainTest {
 
         assertTrue(output.toString().contains("P1 chose to not play any cards"));
     }
+
+    
 
 }
