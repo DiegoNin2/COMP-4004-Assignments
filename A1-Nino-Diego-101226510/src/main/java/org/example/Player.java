@@ -8,6 +8,7 @@ public class Player {
     private String id;
     private boolean winnerStatus;
     private ArrayList<Card> attackHand;
+    private boolean eligibleStatus;
 
     public Player(String id, int shields) {
         this.id = id;
@@ -25,11 +26,13 @@ public class Player {
     public int getHandSize() {return hand.size();}
     public int getAttackHandSize() {return attackHand.size();}
     public boolean getWinnerStatus() {return winnerStatus;}
+    public boolean getEligibleStatus() {return eligibleStatus;}
 
     //setters
 
     public void setShields(int amount) {shields = amount;}
     public void setWinnerStatus(boolean status) {winnerStatus = status;}
+    public void isEligible(boolean status) {eligibleStatus = status;}
 
     //other methods
 

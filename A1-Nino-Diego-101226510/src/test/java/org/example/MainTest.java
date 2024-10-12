@@ -1477,6 +1477,25 @@ class MainTest {
         assertTrue(output.toString().contains("P1 chose to not play any cards"));
     }
 
-    
+    @Test
+    @DisplayName("Check if game displays eligible players")
+    void RESP_27_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should display all those who are eligible to play
+        //for the sake of this test we'll just have 2 eligible players (P1 will be the quest builder)
+        game.playerList.get(1).isEligible(true);
+        game.playerList.get(2).isEligible(false);
+        game.playerList.get(3).isEligible(true);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("Eligible Players: P2, P4"));
+    }
 
 }
