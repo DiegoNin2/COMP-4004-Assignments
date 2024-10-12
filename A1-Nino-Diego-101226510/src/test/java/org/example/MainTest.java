@@ -956,7 +956,7 @@ class MainTest {
     @DisplayName("Check if sponsor segment starts after player says 'yes'")
     void RESP_16_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y";
+        String input = "y\nwithdraw\nwithdraw\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -972,7 +972,7 @@ class MainTest {
     @DisplayName("Check if sponsor segment starts after a series of 'no's before a 'yes'")
     void RESP_16_test_02() {
         StringWriter output = new StringWriter();
-        String input = "n\nn\ny";
+        String input = "n\nn\ny\nwithdraw\nwithdraw\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1481,7 +1481,7 @@ class MainTest {
     @DisplayName("Check if game displays eligible players")
     void RESP_27_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y";
+        String input = "withdraw\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1493,7 +1493,7 @@ class MainTest {
         game.playerList.get(2).isEligible(false);
         game.playerList.get(3).isEligible(true);
 
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.getParticipants(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Eligible Players: P2, P4"));
     }
@@ -1502,14 +1502,14 @@ class MainTest {
     @DisplayName("Check if game prompts player to withdraw or participate")
     void RESP_28_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nwithdraw\nwithdraw\nwithdraw";
+        String input = "withdraw\nwithdraw\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
         game.dealCards();
 
         //game should prompt all eligible players
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.getParticipants(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "prompt check",
@@ -1523,14 +1523,14 @@ class MainTest {
     @DisplayName("Check if game changes player to be ineligible if they withdraw")
     void RESP_28_test_02() {
         StringWriter output = new StringWriter();
-        String input = "y\nwithdraw\nwithdraw\nwithdraw";
+        String input = "withdraw\nwithdraw\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
         game.dealCards();
 
         //game should change the player to be ineligible
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.getParticipants(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertAll(
                 "withdraw check",
@@ -1544,16 +1544,18 @@ class MainTest {
     @DisplayName("Check if game stores players who participate")
     void RESP_28_test_03() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nparticipate";
+        String input = "participate\nwithdraw\nparticipate";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
         game.dealCards();
 
         //game should change the player to be ineligible
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.getParticipants(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
         assertEquals(2, game.participantList.size());
     }
+
+    
 
 }

@@ -472,6 +472,36 @@ public class Main {
         return newStageVal;
     }
 
+    public void getParticipants(Scanner input, PrintWriter output, String currentPlayerID) {
+        String eligiblePlayers = "";
+        for (int i = 0; i < playerList.size(); i++) {
+            if (!playerList.get(i).getId().equals(currentPlayerID)) {
+                if (playerList.get(i).getEligibleStatus()) {
+                    if (i == playerList.size()-1) {
+                        eligiblePlayers += playerList.get(i).getId();
+                    } else {
+                        eligiblePlayers += playerList.get(i).getId() + ", ";
+                    }
+                }
+            }
+        }
+        output.println("Eligible Players: " + eligiblePlayers);
+
+        for (int i = 0; i < playerList.size(); i++) {
+            if (!playerList.get(i).getId().equals(currentPlayerID)) {
+                if (playerList.get(i).getEligibleStatus()) {
+                    output.println(playerList.get(i).getId() + ", would you like to participate or withdraw from the quest?");
+                    String responseStr = input.nextLine();
+                    if (responseStr.equals("withdraw")) {
+                        playerList.get(i).isEligible(false);
+                    } else {
+                        participantList.add(playerList.get(i));
+                    }
+                }
+            }
+        }
+    }
+
     public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
         boolean questFinished = false;
 
@@ -502,33 +532,7 @@ public class Main {
                     //loop for the amount of players
                         //eligible test here
                     //end loop
-                String eligiblePlayers = "";
-                for (int i = 0; i < playerList.size(); i++) {
-                    if (!playerList.get(i).getId().equals(currentPlayerID)) {
-                        if (playerList.get(i).getEligibleStatus()) {
-                            if (i == playerList.size()-1) {
-                                eligiblePlayers += playerList.get(i).getId();
-                            } else {
-                                eligiblePlayers += playerList.get(i).getId() + ", ";
-                            }
-                        }
-                    }
-                }
-                output.println("Eligible Players: " + eligiblePlayers);
-
-                for (int i = 0; i < playerList.size(); i++) {
-                    if (!playerList.get(i).getId().equals(currentPlayerID)) {
-                        if (playerList.get(i).getEligibleStatus()) {
-                            output.println(playerList.get(i).getId() + ", would you like to participate or withdraw from the quest?");
-                            String responseStr = input.nextLine();
-                            if (responseStr.equals("withdraw")) {
-                                playerList.get(i).isEligible(false);
-                            } else {
-                                participantList.add(playerList.get(i));
-                            }
-                        }
-                    }
-                }
+                    getParticipants(input, output, currentPlayerID);
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
