@@ -20,6 +20,7 @@ public class Main {
     ArrayList<Card> adventureDiscardDeck = new ArrayList<Card>();
     ArrayList<Card> currentStageSet = new ArrayList<Card>();
     ArrayList<Player> playerList = new ArrayList<Player>();
+    ArrayList<Player> participantList = new ArrayList<Player>();
 
     private int playerTurnIndex = 0;
     private int playerQuestIndex = 0;

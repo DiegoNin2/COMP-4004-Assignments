@@ -1498,4 +1498,62 @@ class MainTest {
         assertTrue(output.toString().contains("Eligible Players: P2, P4"));
     }
 
+    @Test
+    @DisplayName("Check if game prompts player to withdraw or participate")
+    void RESP_28_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nwithdraw\nwithdraw\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should prompt all eligible players
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertAll(
+                "prompt check",
+                () -> assertTrue(output.toString().contains("P2, would you like to participate or withdraw from the quest?")),
+                () -> assertTrue(output.toString().contains("P3, would you like to participate or withdraw from the quest?")),
+                () -> assertTrue(output.toString().contains("P4, would you like to participate or withdraw from the quest?"))
+        );
+    }
+
+    @Test
+    @DisplayName("Check if game changes player to be ineligible if they withdraw")
+    void RESP_28_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "y\nwithdraw\nwithdraw\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should change the player to be ineligible
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertAll(
+                "withdraw check",
+                () -> assertFalse(game.playerList.get(1).getEligibleStatus()),
+                () -> assertFalse(game.playerList.get(2).getEligibleStatus()),
+                () -> assertFalse(game.playerList.get(3).getEligibleStatus())
+        );
+    }
+
+    @Test
+    @DisplayName("Check if game stores players who participate")
+    void RESP_28_test_03() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nwithdraw\nparticipate";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should change the player to be ineligible
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertEquals(2, game.participantList.size());
+    }
+
 }
