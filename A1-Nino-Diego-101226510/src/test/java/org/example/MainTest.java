@@ -1734,4 +1734,52 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if game ends quest if there are no eligible participants after attack")
+    void RESP_35_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should quit quest if everyone loses
+        Card c = new Card("Foe","F70","70");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Dagger", "5");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("No eligible participants for next stage. Ending quest..."));
+    }
+
+    @Test
+    @DisplayName("Check if game ends quest if it was the last stage")
+    void RESP_35_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should quit quest if everyone loses
+        Card c = new Card("Foe","F70","70");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Dagger", "5");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("Last stage of quest complete. Ending quest & rewarding winner(s)..."));
+    }
+
 }
