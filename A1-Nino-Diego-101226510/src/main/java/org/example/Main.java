@@ -591,21 +591,31 @@ public class Main {
                 if (participantList.isEmpty()) {
                     output.println("No participants, quest cancelled...");
                 } else {
-                    //for the amount of eligible players
+                    for (int k = 0; k < questLength; k++) {
+                        //for the amount of eligible players
                         //buildAttack call here
-                    //end loop
-                    //proceed attack function here
-                    //determine stage winners here
-                    for (int i = 0; i < participantList.size(); i++) {
-                        for (int j = 0; j < participantList.get(i).getAttackHandSize(); j++) {
-                            adventureDiscardDeck.add(participantList.get(i).getAttackCardAt(j));
+                        //end loop
+                        //proceed attack function here
+                        attackSequence(input, output);
+                        //determine stage winners here
+                        participantList.removeIf(player -> !player.getEligibleStatus());
+                        if (participantList.isEmpty()) {
+                            output.println("No eligible participants for next stage. Ending quest...");
+                            break;
+                        } else {
+                            for (int i = 0; i < participantList.size(); i++) {
+                                for (int j = 0; j < participantList.get(i).getAttackHandSize(); j++) {
+                                    adventureDiscardDeck.add(participantList.get(i).getAttackCardAt(j));
+                                }
+                                participantList.get(i).removeAttackCards();
+                            }
                         }
-                        participantList.get(i).removeAttackCards();
-                    }
-                    //determine if quest end here & reward winners if so
-                    for (int i = 0; i < participantList.size(); i++) {
-                        if (participantList.get(i).getEligibleStatus()) {
-                            participantList.get(i).setShields(questLength);
+                        output.println("Last stage of quest complete. Ending quest & rewarding winner(s)...");
+                        //determine if quest end here & reward winners if so
+                        for (int i = 0; i < participantList.size(); i++) {
+                            if (participantList.get(i).getEligibleStatus()) {
+                                participantList.get(i).setShields(questLength);
+                            }
                         }
                     }
                 }
@@ -776,7 +786,7 @@ public class Main {
             int playerValue = getAttackVal(participantList.get(i));
             if (playerValue < stageValue) {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
-                //make player be ineligible here later im lazy & forgot for R-CODE-31 commit
+                participantList.get(i).isEligible(false);
             } else {
                 output.println("Sufficient attack. " + participantList.get(i).getId() + " Wins!");
             }

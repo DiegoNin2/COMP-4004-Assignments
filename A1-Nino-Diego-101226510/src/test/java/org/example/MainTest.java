@@ -1768,8 +1768,8 @@ class MainTest {
         game.initializePlayers();
         game.dealCards();
 
-        //game should quit quest if everyone loses
-        Card c = new Card("Foe","F70","70");
+        //game should quit quest if last stage
+        Card c = new Card("Foe","F5","5");
         game.currentStageSet.add(c);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
