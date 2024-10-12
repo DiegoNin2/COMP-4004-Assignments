@@ -533,7 +533,16 @@ public class Main {
                         //eligible test here
                     //end loop
                 getParticipants(input, output, currentPlayerID);
-                
+                for (int i = 0; i < participantList.size(); i++) {
+                    participantList.get(i).addCard(drawCard("adventure"));
+                    int amountToDelete = checkHand(participantList.get(i).getId());
+                    if (amountToDelete > 0) {
+                        output.println("Too many cards, trimming hand");
+                        for (int j = 0; j < amountToDelete; j++) {
+                            trimHand(input,output,participantList.get(i).getId());
+                        }
+                    }
+                }
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
