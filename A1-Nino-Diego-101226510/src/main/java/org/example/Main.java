@@ -750,7 +750,7 @@ public class Main {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
                 //make player be ineligible here later im lazy & forgot for R-CODE-31 commit
             } else {
-                //nothing for now
+                output.println("Sufficient attack. " + participantList.get(i).getId() + " Wins!");
             }
         }
     }
