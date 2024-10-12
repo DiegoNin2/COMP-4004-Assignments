@@ -1556,6 +1556,40 @@ class MainTest {
         assertEquals(2, game.participantList.size());
     }
 
-    
+    @Test
+    @DisplayName("Check if all eligible players draw an adventure card")
+    void RESP_29_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nwithdraw\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //player's hand should have one more card
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertEquals(13,game.playerList.get(1).getHandSize());
+    }
+
+    @Test
+    @DisplayName("Check if player goes to trim their hand if they have too many cards")
+    void RESP_29_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nwithdraw\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should activate trim hand section & the player's hand should be updated
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertAll(
+                "trim hand section",
+                () -> assertTrue(output.toString().contains("Too many cards, trimming hand")),
+                () -> assertEquals(12, game.playerList.get(1).getHandSize())
+        );
+    }
 
 }
