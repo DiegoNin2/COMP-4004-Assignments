@@ -69,4 +69,8 @@ public class Player {
         return attackHand.isEmpty();
     }
 
+    public void removeAttackCards() {
+        attackHand.clear();
+    }
+
 }

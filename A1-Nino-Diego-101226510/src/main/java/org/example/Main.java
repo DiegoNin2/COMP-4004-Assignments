@@ -596,6 +596,12 @@ public class Main {
                     //end loop
                     //proceed attack function here
                     //determine stage winners here
+                    for (int i = 0; i < participantList.size(); i++) {
+                        for (int j = 0; j < participantList.get(i).getAttackHandSize(); j++) {
+                            adventureDiscardDeck.add(participantList.get(i).getAttackCardAt(j));
+                        }
+                        participantList.get(i).removeAttackCards();
+                    }
                     //determine if quest end here & reward winners if so
                     for (int i = 0; i < participantList.size(); i++) {
                         if (participantList.get(i).getEligibleStatus()) {
