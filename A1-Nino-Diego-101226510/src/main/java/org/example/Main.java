@@ -515,6 +515,20 @@ public class Main {
                     }
                 }
                 output.println("Eligible Players: " + eligiblePlayers);
+
+                for (int i = 0; i < playerList.size(); i++) {
+                    if (!playerList.get(i).getId().equals(currentPlayerID)) {
+                        if (playerList.get(i).getEligibleStatus()) {
+                            output.println(playerList.get(i).getId() + ", would you like to participate or withdraw from the quest?");
+                            String responseStr = input.nextLine();
+                            if (responseStr.equals("withdraw")) {
+                                playerList.get(i).isEligible(false);
+                            } else {
+                                participantList.add(playerList.get(i));
+                            }
+                        }
+                    }
+                }
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
