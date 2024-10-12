@@ -1648,4 +1648,34 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if all players with greater or equal attack win")
+    void RESP_32_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should go through all participants and make those who don't have a high enough attack lose
+        Card c = new Card("Foe","F10","10");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Battle-Axe", "15");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+        game.participantList.add(game.playerList.get(1));
+        game.participantList.add(game.playerList.get(2));
+
+        game.attackSequence(new Scanner(input), new PrintWriter(output));
+
+        assertAll(
+                "battle check",
+                () -> assertTrue(output.toString().contains("Sufficient attack. P2 Wins!")),
+                () -> assertTrue(output.toString().contains("Sufficient attack. P3 Wins!"))
+        );
+    }
+
 }

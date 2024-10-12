@@ -748,6 +748,7 @@ public class Main {
             int playerValue = getAttackVal(participantList.get(i));
             if (playerValue < stageValue) {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
+                //make player be ineligible here later im lazy & forgot for R-CODE-31 commit
             } else {
                 //nothing for now
             }
