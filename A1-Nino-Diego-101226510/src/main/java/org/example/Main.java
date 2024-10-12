@@ -714,4 +714,8 @@ public class Main {
         }
     }
 
+    public void attackSequence(Scanner input, PrintWriter output) {
+
+    }
+
 }
