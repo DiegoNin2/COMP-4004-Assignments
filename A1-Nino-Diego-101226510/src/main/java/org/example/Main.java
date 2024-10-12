@@ -543,13 +543,18 @@ public class Main {
                         }
                     }
                 }
+
+                if (participantList.isEmpty()) {
+                    output.println("No participants, quest cancelled...");
+                } else {
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
-                //proceed attack function here
-                //determine stage winners here
-                //determine if quest end here & reward winners if so
-                    //discard & redraw here
+                    //proceed attack function here
+                    //determine stage winners here
+                    //determine if quest end here & reward winners if so
+                }
+                //discard & redraw here
                 questFinished = true;
             }
         }
