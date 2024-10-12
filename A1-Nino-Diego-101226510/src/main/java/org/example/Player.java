@@ -16,6 +16,7 @@ public class Player {
         this.hand = new ArrayList<Card>();
         this.winnerStatus = false;
         this.attackHand = new ArrayList<Card>();
+        this.eligibleStatus = true;
     }
 
     //getters

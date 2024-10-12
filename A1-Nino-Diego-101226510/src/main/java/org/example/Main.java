@@ -501,6 +501,19 @@ public class Main {
                     //loop for the amount of players
                         //eligible test here
                     //end loop
+                String eligiblePlayers = "";
+                for (int i = 0; i < playerList.size(); i++) {
+                    if (!playerList.get(i).getId().equals(currentPlayerID)) {
+                        if (playerList.get(i).getEligibleStatus()) {
+                            if (i == playerList.size()-1) {
+                                eligiblePlayers += playerList.get(i).getId();
+                            } else {
+                                eligiblePlayers += playerList.get(i).getId() + ", ";
+                            }
+                        }
+                    }
+                }
+                output.println("Eligible Players: " + eligiblePlayers);
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
