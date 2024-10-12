@@ -472,6 +472,33 @@ public class Main {
         return newStageVal;
     }
 
+    private int getAttackVal(Player p) {
+        int attackVal = 0;
+        for (int i = 0; i < p.getAttackHandSize(); i++) {
+            switch(p.getAttackCardAt(i).getValue()) {
+                case "5":
+                    attackVal += 5;
+                    break;
+                case "10":
+                    attackVal += 10;
+                    break;
+                case "15":
+                    attackVal += 15;
+                    break;
+                case "20":
+                    attackVal += 20;
+                    break;
+                case "25":
+                    attackVal += 25;
+                    break;
+                case "30":
+                    attackVal += 30;
+                    break;
+            }
+        }
+        return attackVal;
+    }
+
     public void getParticipants(Scanner input, PrintWriter output, String currentPlayerID) {
         String eligiblePlayers = "";
         for (int i = 0; i < playerList.size(); i++) {
@@ -715,7 +742,16 @@ public class Main {
     }
 
     public void attackSequence(Scanner input, PrintWriter output) {
+        int stageValue = increaseStageVal();
 
+        for (int i = 0; i < participantList.size(); i++) {
+            int playerValue = getAttackVal(participantList.get(i));
+            if (playerValue < stageValue) {
+                output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
+            } else {
+                //nothing for now
+            }
+        }
     }
 
 }
