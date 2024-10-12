@@ -1706,4 +1706,32 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if game discards all cards used for attack")
+    void RESP_34_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should remove all attack cards in participant's hand
+        Card c = new Card("Foe","F10","10");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Battle-Axe", "15");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertAll(
+                "attack hand check",
+                () -> assertEquals(0,game.playerList.get(1).getAttackHandSize()),
+                () -> assertEquals(0,game.playerList.get(2).getAttackHandSize())
+        );
+    }
+
 }
