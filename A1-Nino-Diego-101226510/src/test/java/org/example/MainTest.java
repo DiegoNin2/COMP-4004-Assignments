@@ -1678,4 +1678,32 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if all winners receive the shields (assuming it is last stage)")
+    void RESP_33_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should award the winners with the shields based on how many stages there were
+        Card c = new Card("Foe","F10","10");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Battle-Axe", "15");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertAll(
+                "shield check",
+                () -> assertEquals(2,game.playerList.get(1).getShields()),
+                () -> assertEquals(2,game.playerList.get(2).getShields())
+        );
+    }
+
 }
