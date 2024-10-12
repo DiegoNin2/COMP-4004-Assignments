@@ -1564,19 +1564,29 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //player's hand should have one more card
+        game.pickCard(0,"Weapon","Sword", "10", 2);
+        game.pickCard(1,"Foe","F5", "5", 2);
+        game.pickCard(2,"Weapon","Horse", "10", 2);
+        game.pickCard(3,"Foe","F10", "10", 2);
+        game.pickCard(4,"Weapon","Excalibur", "30", 2);
+        game.pickCard(5,"Weapon","Lance", "20", 2);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 2);
+        game.pickCard(7,"Weapon","Dagger", "5", 2);
+        game.pickCard(8,"Weapon","Dagger", "5", 2);
+        game.pickCard(9,"Weapon","Dagger", "5", 2);
+        game.pickCard(10,"Foe","F15", "15", 2);
         game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
 
-        assertEquals(13,game.playerList.get(1).getHandSize());
+        assertEquals(12,game.playerList.get(1).getHandSize());
     }
 
     @Test
     @DisplayName("Check if player goes to trim their hand if they have too many cards")
     void RESP_29_test_02() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nwithdraw";
+        String input = "y\nparticipate\nwithdraw\nwithdraw\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();

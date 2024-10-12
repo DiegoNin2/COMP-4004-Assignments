@@ -532,7 +532,8 @@ public class Main {
                     //loop for the amount of players
                         //eligible test here
                     //end loop
-                    getParticipants(input, output, currentPlayerID);
+                getParticipants(input, output, currentPlayerID);
+                
                     //for the amount of eligible players
                         //buildAttack call here
                     //end loop
