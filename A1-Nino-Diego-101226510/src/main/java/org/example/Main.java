@@ -499,6 +499,21 @@ public class Main {
         return attackVal;
     }
 
+    private int getQuestLength(String questVal) {
+        switch(questVal) {
+            case "Q2":
+                return 2;
+            case "Q3":
+                return 3;
+            case "Q4":
+                return 4;
+            case "Q5":
+                return 5;
+            default:
+                return 1;
+        }
+    }
+
     public void getParticipants(Scanner input, PrintWriter output, String currentPlayerID) {
         String eligiblePlayers = "";
         for (int i = 0; i < playerList.size(); i++) {
@@ -533,6 +548,8 @@ public class Main {
         boolean questFinished = false;
 
         int index = translateID(currentPlayerID);
+
+        int questLength = getQuestLength(questValue);
 
         while (!questFinished) {
             if (index >= playerList.size()) {
@@ -580,6 +597,11 @@ public class Main {
                     //proceed attack function here
                     //determine stage winners here
                     //determine if quest end here & reward winners if so
+                    for (int i = 0; i < participantList.size(); i++) {
+                        if (participantList.get(i).getEligibleStatus()) {
+                            participantList.get(i).setShields(questLength);
+                        }
+                    }
                 }
                 //discard & redraw here
                 questFinished = true;
