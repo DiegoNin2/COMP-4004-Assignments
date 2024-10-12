@@ -1602,4 +1602,20 @@ class MainTest {
         );
     }
 
+    @Test
+    @DisplayName("Check if quest ends with no participants")
+    void RESP_30_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nwithdraw\nwithdraw\nwithdraw";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should print out that the quest will be cancelled due to no participants
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        assertTrue(output.toString().contains("No participants, quest cancelled..."));
+    }
+
 }
