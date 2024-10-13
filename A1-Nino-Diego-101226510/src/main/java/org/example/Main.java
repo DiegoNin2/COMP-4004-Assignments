@@ -377,6 +377,21 @@ public class Main {
         }
     }
 
+    private int amountToGet(String playerID) {
+        switch(playerID) {
+            case "P1":
+                return 12 - playerList.get(0).getHandSize();
+            case "P2":
+                return 12 - playerList.get(1).getHandSize();
+            case "P3":
+                return 12 - playerList.get(2).getHandSize();
+            case "P4":
+                return 12 - playerList.get(3).getHandSize();
+            default:
+                return -1; //something went wrong :)
+        }
+    }
+
     public void trimHand(Scanner input, PrintWriter output, String currentPlayerID) {
         int amountToDelete = checkHand(currentPlayerID);
         int pIndex = translateID(currentPlayerID);
@@ -618,8 +633,20 @@ public class Main {
                             }
                         }
                     }
+                    //discard & redraw here
+                    currentStageSet.clear();
+                    int amountToGet = (amountToGet(currentPlayerID) + questLength);
+                    for (int i = 0; i < amountToGet; i++) {
+                        playerList.get(translateID(currentPlayerID)).addCard(drawCard("adventure"));
+                    }
+                    int amountToDelete = checkHand(currentPlayerID);
+                    if (amountToDelete > 0) {
+                        output.println("Too many cards, trimming hand");
+                        for (int i = 0; i < amountToDelete; i++) {
+                            trimHand(input,output,currentPlayerID);
+                        }
+                    }
                 }
-                //discard & redraw here
                 questFinished = true;
             }
         }

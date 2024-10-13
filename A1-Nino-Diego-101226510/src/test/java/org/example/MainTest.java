@@ -1560,7 +1560,7 @@ class MainTest {
     @DisplayName("Check if all eligible players draw an adventure card")
     void RESP_29_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nwithdraw";
+        String input = "y\nparticipate\nwithdraw\nwithdraw\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1586,7 +1586,7 @@ class MainTest {
     @DisplayName("Check if player goes to trim their hand if they have too many cards")
     void RESP_29_test_02() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nwithdraw\n6";
+        String input = "y\nparticipate\nwithdraw\nwithdraw\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1682,7 +1682,7 @@ class MainTest {
     @DisplayName("Check if all winners receive the shields (assuming it is last stage)")
     void RESP_33_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1710,7 +1710,7 @@ class MainTest {
     @DisplayName("Check if game discards all cards used for attack")
     void RESP_34_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1738,7 +1738,7 @@ class MainTest {
     @DisplayName("Check if game ends quest if there are no eligible participants after attack")
     void RESP_35_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1762,7 +1762,7 @@ class MainTest {
     @DisplayName("Check if game ends quest if it was the last stage")
     void RESP_35_test_02() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1786,7 +1786,7 @@ class MainTest {
     @DisplayName("Check if game discards all cards used to build quest")
     void RESP_36_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1844,23 +1844,23 @@ class MainTest {
     @DisplayName("Check if player trims hand after redrawing")
     void RESP_36_test_03() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6\n6";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
 
         //builder should trim hand back to 12
-        game.pickCard(0,"Weapon","Sword", "10", 2);
-        game.pickCard(1,"Foe","F5", "5", 2);
-        game.pickCard(2,"Weapon","Horse", "10", 2);
-        game.pickCard(3,"Foe","F10", "10", 2);
-        game.pickCard(4,"Weapon","Excalibur", "30", 2);
-        game.pickCard(5,"Weapon","Lance", "20", 2);
-        game.pickCard(6,"Weapon","Battle-Axe", "15", 2);
-        game.pickCard(7,"Weapon","Dagger", "5", 2);
-        game.pickCard(8,"Weapon","Dagger", "5", 2);
-        game.pickCard(9,"Weapon","Dagger", "5", 2);
-        game.pickCard(10,"Foe","F15", "15", 2);
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
 
         Card c = new Card("Foe","F5","5");
         game.currentStageSet.add(c);
@@ -1875,7 +1875,7 @@ class MainTest {
         assertAll(
                 "trim hand section",
                 () -> assertTrue(output.toString().contains("Too many cards, trimming hand")),
-                () -> assertEquals(12, game.playerList.get(1).getHandSize())
+                () -> assertEquals(12, game.playerList.get(0).getHandSize())
         );
     }
 
