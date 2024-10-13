@@ -1007,7 +1007,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         String expectedOutput = "[1] F5, value = 5 \n[2] F10, value = 10 \n[3] F15, value = 15 \n[4] F20, value = 20 \n[5] Dagger, value = 5 \n[6] Dagger, value = 5 " +
                 "\n[7] Dagger, value = 5 \n[8] Sword, value = 10 \n[9] Horse, value = 10 \n[10] Battle-Axe, value = 15 \n[11] Lance, value = 20 \n[12] Excalibur, value = 30";
@@ -1037,7 +1037,7 @@ class MainTest {
         game.pickCard(9,"Weapon","Dagger", "5", 1);
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertTrue(output.toString().contains("Select position of card to add to current stage. Type 'Quit' when you are finished."));
     }
@@ -1064,7 +1064,7 @@ class MainTest {
         game.pickCard(9,"Weapon","Dagger", "5", 1);
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertAll(
                 "reprompt check",
@@ -1077,7 +1077,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add another foe")
     void RESP_18_test_02() {
         StringWriter output = new StringWriter();
-        String input = "1\n5\nQuit";
+        String input = "1\n1\n3\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1096,10 +1096,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        Card c = new Card("Foe","F10","10");
-        game.currentStageSet.add(c);
-
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertAll(
                 "reprompt check",
@@ -1113,7 +1110,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if the player tries to add a repeated weapon")
     void RESP_18_test_03() {
         StringWriter output = new StringWriter();
-        String input = "5\n1\nQuit";
+        String input = "6\n5\n1\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1132,10 +1129,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        Card c = new Card("Weapon","Dagger","5");
-        game.currentStageSet.add(c);
-
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertAll(
                 "reprompt check",
@@ -1169,7 +1163,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertTrue(output.toString().contains("Current Stage: F5, value = 5"));
     }
@@ -1197,7 +1191,7 @@ class MainTest {
         game.pickCard(9,"Weapon","Dagger", "5", 1);
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertTrue(output.toString().contains("Cannot Quit: Stage cannot be empty."));
     }
@@ -1206,15 +1200,17 @@ class MainTest {
     @DisplayName("Check if game handles player quitting with insufficient value")
     void RESP_21_test_01() {
         StringWriter output = new StringWriter();
-        String input = "Quit\n1\nQuit";
+        String input = "1\nQuit\n11\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
 
         //game should tell player that the stage value must be higher
-        game.prevQuestVal = 5;
+        Quest q = new Quest();
         Card c = new Card("Weapon","Dagger","5");
-        game.currentStageSet.add(c);
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1228,7 +1224,7 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
         game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertTrue(output.toString().contains("Cannot Quit: Insufficient values for this stage"));
     }
@@ -1237,20 +1233,27 @@ class MainTest {
     @DisplayName("Check if the game displays the cards being used when a valid Quit is sent")
     void RESP_22_test_01() {
         StringWriter output = new StringWriter();
-        String input = "Quit";
+        String input = "1\n4\nQuit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-        game.dealCards();
 
         //game should display the cards used for the stage
         //we're just gonna pretend these cards were from the player's deck
-        Card c = new Card("Weapon","Dagger","5");
-        Card c1 = new Card("Foe", "F5", "5");
-        game.currentStageSet.add(c);
-        game.currentStageSet.add(c1);
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+        game.pickCard(10,"Foe","F15", "15", 1);
+        game.pickCard(11,"Foe","F20", "20", 1);
 
-        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
+        game.buildQuest(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId(), 0);
 
         assertTrue(output.toString().contains("The finished quest stage: F5, value = 5, Dagger, value = 5"));
     }
@@ -1577,7 +1580,14 @@ class MainTest {
         game.pickCard(8,"Weapon","Dagger", "5", 2);
         game.pickCard(9,"Weapon","Dagger", "5", 2);
         game.pickCard(10,"Foe","F15", "15", 2);
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+
+        Card c = new Card("Foe", "F5", "5");
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertEquals(12,game.playerList.get(1).getHandSize());
     }
@@ -1593,7 +1603,13 @@ class MainTest {
         game.dealCards();
 
         //game should activate trim hand section & the player's hand should be updated
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        Card c = new Card("Foe", "F5", "5");
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertAll(
                 "trim hand section",
@@ -1630,7 +1646,10 @@ class MainTest {
 
         //game should go through all participants and make those who don't have a high enough attack lose
         Card c = new Card("Foe","F70","70");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1639,7 +1658,7 @@ class MainTest {
         game.participantList.add(game.playerList.get(1));
         game.participantList.add(game.playerList.get(2));
 
-        game.attackSequence(new Scanner(input), new PrintWriter(output));
+        game.attackSequence(new PrintWriter(output), 0);
 
         assertAll(
                 "battle check",
@@ -1650,7 +1669,7 @@ class MainTest {
 
     @Test
     @DisplayName("Check if all players with greater or equal attack win")
-    void RESP_32_test_02() {
+    void RESP_32_test_01() {
         StringWriter output = new StringWriter();
         String input = "y\nparticipate\nparticipate\nwithdraw";
         Main game = new Main();
@@ -1660,7 +1679,10 @@ class MainTest {
 
         //game should go through all participants and make those who don't have a high enough attack lose
         Card c = new Card("Foe","F10","10");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Battle-Axe", "15");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1669,7 +1691,7 @@ class MainTest {
         game.participantList.add(game.playerList.get(1));
         game.participantList.add(game.playerList.get(2));
 
-        game.attackSequence(new Scanner(input), new PrintWriter(output));
+        game.attackSequence(new PrintWriter(output), 0);
 
         assertAll(
                 "battle check",
@@ -1690,19 +1712,22 @@ class MainTest {
 
         //game should award the winners with the shields based on how many stages there were
         Card c = new Card("Foe","F10","10");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Battle-Axe", "15");
         Card c2 = new Card("Weapon", "Horse", "10");
         game.playerList.get(1).addAttackCard(c1);
         game.playerList.get(2).addAttackCard(c2);
 
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertAll(
                 "shield check",
-                () -> assertEquals(2,game.playerList.get(1).getShields()),
-                () -> assertEquals(2,game.playerList.get(2).getShields())
+                () -> assertEquals(1,game.playerList.get(1).getShields()),
+                () -> assertEquals(1,game.playerList.get(2).getShields())
         );
     }
 
@@ -1718,14 +1743,17 @@ class MainTest {
 
         //game should remove all attack cards in participant's hand
         Card c = new Card("Foe","F10","10");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Battle-Axe", "15");
         Card c2 = new Card("Weapon", "Horse", "10");
         game.playerList.get(1).addAttackCard(c1);
         game.playerList.get(2).addAttackCard(c2);
 
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertAll(
                 "attack hand check",
@@ -1746,7 +1774,10 @@ class MainTest {
 
         //game should quit quest if everyone loses
         Card c = new Card("Foe","F70","70");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1770,7 +1801,10 @@ class MainTest {
 
         //game should quit quest if last stage
         Card c = new Card("Foe","F5","5");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1794,7 +1828,10 @@ class MainTest {
 
         //game should remove all cards in quest
         Card c = new Card("Foe","F5","5");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1803,7 +1840,7 @@ class MainTest {
 
         game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
-        assertEquals(0, game.currentStageSet.size());
+        assertEquals(0, game.questStageList.size());
     }
 
     @Test
@@ -1828,7 +1865,9 @@ class MainTest {
         game.pickCard(9,"Weapon","Dagger", "5", 1);
 
         Card c = new Card("Foe","F5","5");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
@@ -1863,7 +1902,9 @@ class MainTest {
         game.pickCard(10,"Foe","F15", "15", 1);
 
         Card c = new Card("Foe","F5","5");
-        game.currentStageSet.add(c);
+        Quest q = new Quest();
+        q.addCard(c);
+        game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
         Card c2 = new Card("Weapon", "Horse", "10");
