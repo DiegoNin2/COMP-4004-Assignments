@@ -1782,4 +1782,101 @@ class MainTest {
         assertTrue(output.toString().contains("Last stage of quest complete. Ending quest & rewarding winner(s)..."));
     }
 
+    @Test
+    @DisplayName("Check if game discards all cards used to build quest")
+    void RESP_36_test_01() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //game should remove all cards in quest
+        Card c = new Card("Foe","F5","5");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Dagger", "5");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
+
+        assertEquals(0, game.currentStageSet.size());
+    }
+
+    @Test
+    @DisplayName("Check if player redraws the same number of cards + the number of stages")
+    void RESP_36_test_02() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //game should draw 2 more cards for the builder
+        game.pickCard(0,"Weapon","Sword", "10", 1);
+        game.pickCard(1,"Foe","F5", "5", 1);
+        game.pickCard(2,"Weapon","Horse", "10", 1);
+        game.pickCard(3,"Foe","F10", "10", 1);
+        game.pickCard(4,"Weapon","Excalibur", "30", 1);
+        game.pickCard(5,"Weapon","Lance", "20", 1);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 1);
+        game.pickCard(7,"Weapon","Dagger", "5", 1);
+        game.pickCard(8,"Weapon","Dagger", "5", 1);
+        game.pickCard(9,"Weapon","Dagger", "5", 1);
+
+        Card c = new Card("Foe","F5","5");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Dagger", "5");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
+
+        assertEquals(12, game.playerList.get(0).getHandSize());
+    }
+
+    @Test
+    @DisplayName("Check if player trims hand after redrawing")
+    void RESP_36_test_03() {
+        StringWriter output = new StringWriter();
+        String input = "y\nparticipate\nparticipate\nwithdraw\n6\n6";
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+
+        //builder should trim hand back to 12
+        game.pickCard(0,"Weapon","Sword", "10", 2);
+        game.pickCard(1,"Foe","F5", "5", 2);
+        game.pickCard(2,"Weapon","Horse", "10", 2);
+        game.pickCard(3,"Foe","F10", "10", 2);
+        game.pickCard(4,"Weapon","Excalibur", "30", 2);
+        game.pickCard(5,"Weapon","Lance", "20", 2);
+        game.pickCard(6,"Weapon","Battle-Axe", "15", 2);
+        game.pickCard(7,"Weapon","Dagger", "5", 2);
+        game.pickCard(8,"Weapon","Dagger", "5", 2);
+        game.pickCard(9,"Weapon","Dagger", "5", 2);
+        game.pickCard(10,"Foe","F15", "15", 2);
+
+        Card c = new Card("Foe","F5","5");
+        game.currentStageSet.add(c);
+
+        Card c1 = new Card("Weapon", "Dagger", "5");
+        Card c2 = new Card("Weapon", "Horse", "10");
+        game.playerList.get(1).addAttackCard(c1);
+        game.playerList.get(2).addAttackCard(c2);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
+
+        assertAll(
+                "trim hand section",
+                () -> assertTrue(output.toString().contains("Too many cards, trimming hand")),
+                () -> assertEquals(12, game.playerList.get(1).getHandSize())
+        );
+    }
+
 }
