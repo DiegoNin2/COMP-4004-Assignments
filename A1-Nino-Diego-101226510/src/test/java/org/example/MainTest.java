@@ -655,8 +655,13 @@ class MainTest {
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
+        String flushTest = "";
+        for (int i = 0; i < 50; i++) {
+            flushTest += "\n";
+        }
+
         //apparently this string text should work to clear the screen
-        assertTrue(output.toString().contains("\033[H\033[2J"));
+        assertTrue(output.toString().contains(flushTest));
     }
 
     @Test
@@ -1336,7 +1341,7 @@ class MainTest {
     @DisplayName("Check if game reprompts if invalid position is inputted")
     void RESP_24_test_01() {
         StringWriter output = new StringWriter();
-        String input = "-1\n6\nquit";
+        String input = "16\n6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();

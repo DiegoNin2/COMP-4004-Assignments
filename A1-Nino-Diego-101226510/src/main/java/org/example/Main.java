@@ -7,10 +7,24 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("COMP 4004 A1");
 
         //game setup functions here
+        Scanner input = new Scanner(System.in);
+        PrintWriter output = new PrintWriter(System.out);
+
+        Main game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        System.out.println("Starting game...");
 
         //take turn function here
+        while (!game.gameEnd) {
+            System.out.println("Taking turn...");
+            game.takeTurn(input,output);
+        }
     }
 
     //variables
@@ -25,6 +39,12 @@ public class Main {
     private int playerTurnIndex = 0;
     private int playerQuestIndex = 0;
     private boolean gameEnd = false;
+
+    private void flushDisplay(PrintWriter output) {
+        for (int i = 0; i < 50; i++) {
+            output.print("\n");
+        }
+    }
 
     public void initializePlayers() {
         Player p1 = new Player("P1", 0);
@@ -261,6 +281,7 @@ public class Main {
     }
 
     //this will be changed to just checking the scores probably whenever i get around to that
+    //never mind i didn't do that
     public void checkForWinners() {
         if (playerList.get(0).getShields() >= 7) { playerList.get(0).setWinnerStatus(true); }
         if (playerList.get(1).getShields() >= 7) { playerList.get(1).setWinnerStatus(true); }
@@ -314,6 +335,7 @@ public class Main {
         output.println("drawing from event deck: ");
         Card c = drawCard("event");
         output.println(c.toString());
+        output.flush();
 
         if (c.getType().equals("Event")) {
             if (c.getName().equals("Plague")) {
@@ -326,6 +348,16 @@ public class Main {
                 for (int i = 0; i < 2; i++) {
                     playerList.get(playerTurnIndex).addCard(drawCard("adventure"));
                 }
+                int amountToDelete = checkHand(playerList.get(playerTurnIndex).getId());
+                if (amountToDelete > 0) {
+                    output.println("Too many cards, trimming hand");
+                    output.flush();
+                    for (int i = 0; i < amountToDelete; i++) {
+                        trimHand(input, output, playerList.get(playerTurnIndex).getId());
+                    }
+                }
+                output.println("continuing...");
+                output.flush();
             } else {
                 //this is the prosperity card
                 for (int i = 0; i < 2; i++) {
@@ -334,13 +366,34 @@ public class Main {
                     playerList.get(2).addCard(drawCard("adventure"));
                     playerList.get(3).addCard(drawCard("adventure"));
                 }
+
+                for (int i = 0; i < playerList.size(); i++) {
+                    int amountToDelete = checkHand(playerList.get(i).getId());
+                    if (amountToDelete > 0) {
+                        output.println("Too many cards, trimming hand");
+                        output.flush();
+                        for (int j = 0; j < amountToDelete; j++) {
+                            trimHand(input, output, playerList.get(i).getId());
+                        }
+                    }
+                }
+                output.println("continuing...");
+                output.flush();
+
             }
         } else if (c.getType().equals("Quest")) {
             output.println("A " + c.getName() + " will start!");
             questEvent(input, output, c.getValue(), playerList.get(playerTurnIndex).getId());
+            output.println("Displaying Shields: ");
+            output.flush();
+            for (int i = 0; i < playerList.size(); i++) {
+                output.println(playerList.get(i).getId() + "'s Shields: " + playerList.get(i).getShields());
+                output.flush();
+            }
         }
 
         displayWinner(output);
+        output.flush();
 
         eventDiscardDeck.add(c);
 
@@ -349,10 +402,14 @@ public class Main {
         } else {
             output.println("Turn End. Please move out of hot seat for next player.");
             output.println("Press Enter key if you are the next player");
+            output.flush();
             String inputStr = input.nextLine();
             if (inputStr.isEmpty()) {
                 output.println("Clearing output for next player...");
-                output.print("\033[H\033[2J");
+                output.flush();
+                flushDisplay(output);
+                output.flush();
+                output.println("Moving on to next player...");
                 output.flush();
             }
             if (playerTurnIndex >= playerList.size()) {
@@ -419,6 +476,8 @@ public class Main {
     public void trimHand(Scanner input, PrintWriter output, String currentPlayerID) {
         int pIndex = translateID(currentPlayerID);
 
+        output.println("Currently trimming: " + currentPlayerID);
+
         output.println("Displaying hand: ");
         Collections.sort(playerList.get(pIndex).getHand());
 
@@ -430,13 +489,13 @@ public class Main {
         }
 
         output.println("Select the position of the card to remove: ");
+        output.flush();
         int inputNum = -1;
         if (input.hasNextInt()) {
             inputNum = input.nextInt();
         } else {
             return;
         }
-
 
         adventureDiscardDeck.add(playerList.get(pIndex).removeCardAt(inputNum -1));
 
@@ -447,7 +506,7 @@ public class Main {
             output.print("[" + Integer.toString(i+1) + "] " + playerList.get(pIndex).getCardAt(i).toString());
             output.print(" \n");
         }
-
+        output.flush();
     }
 
     private int translateID(String currentPlayerID) {
@@ -508,12 +567,15 @@ public class Main {
             if (!playerList.get(i).getId().equals(currentPlayerID)) {
                 if (playerList.get(i).getEligibleStatus()) {
                     output.println(playerList.get(i).getId() + ", would you like to participate or withdraw from the quest?");
+                    output.flush();
                     String responseStr = input.nextLine();
                     if (responseStr.equals("withdraw")) {
                         playerList.get(i).setEligibleStatus(false);
                     } else {
                         participantList.add(playerList.get(i));
                     }
+                    output.println("Please hot seat for next player...");
+                    output.flush();
                 }
             }
         }
@@ -533,23 +595,34 @@ public class Main {
             }
 
             output.println("Do you, " + playerList.get(index).getId() + ", want to sponsor this quest? (y/n)");
+            output.flush();
             String inputStr = input.nextLine();
             if (inputStr.contains("n")) {
                 output.println(playerList.get(index).getId() + " declined, asking next player...");
+                output.flush();
                 playerQuestIndex++;
                 index++;
                 if (playerQuestIndex >= playerList.size()) {
                     output.println("All players have declined. Ending turn...");
+                    output.flush();
                     questFinished = true;
                 }
             } else if (inputStr.contains("y")) {
                 output.println(playerList.get(index).getId() + " has sponsored! Quest starting soon!");
+                output.flush();
                 //i know this check will never happen but i don't feel like setting up some dummy data to pass
                 if (questStageList.isEmpty()) {
                     for (int i = 0; i < questLength; i++) {
+                        output.println("Building for quest stage: " + (i + 1));
+                        output.flush();
                         buildQuest(input, output, playerList.get(index).getId(), i - 1);
                     }
                 }
+
+                output.println("Clearing output for participants...");
+                flushDisplay(output);
+                output.flush();
+
                 for (int k = 0; k < questStageList.size(); k++) {
                     getParticipants(input, output, playerList.get(index).getId());
                     for (int i = 0; i < participantList.size(); i++) {
@@ -557,9 +630,14 @@ public class Main {
                         int amountToDelete = checkHand(participantList.get(i).getId());
                         if (amountToDelete > 0) {
                             output.println("Too many cards, trimming hand");
+                            output.flush();
                             for (int j = 0; j < amountToDelete; j++) {
                                 trimHand(input, output, participantList.get(i).getId());
                             }
+                            output.println("Please move hot seat for next player.");
+                            output.println("Clearing output for next player...");
+                            flushDisplay(output);
+                            output.flush();
                         }
                     }
 
@@ -570,12 +648,19 @@ public class Main {
                         for (int i = 0; i < participantList.size(); i++) {
                             //this check will never happen but i don't feel like setting up more dummy data
                             if (participantList.get(i).isAttackHandEmpty()) {
+                                output.println("Building for attack for quest stage: " + (k + 1));
+                                output.flush();
                                 buildAttack(input, output, participantList.get(i).getId());
                             }
+                            output.println("Please move hot seat for next player.");
+                            output.println("Clearing output for next player...");
+                            flushDisplay(output);
+                            output.flush();
                         }
                         attackSequence(output, k);
                         if (!noEligibleParticipants()) {
                             output.println("No eligible participants for next stage. Ending quest...");
+                            output.flush();
                             break;
                         } else {
                             for (int i = 0; i < participantList.size(); i++) {
@@ -591,6 +676,7 @@ public class Main {
                     }
                 }
                 output.println("Last stage of quest complete. Ending quest & rewarding winner(s)...");
+                output.flush();
                 for (int i = 0; i < participantList.size(); i++) {
                     if (participantList.get(i).getEligibleStatus()) {
                         int shieldAward = participantList.get(i).getShields() + questLength;
@@ -608,6 +694,7 @@ public class Main {
                 int amountToDelete = checkHand(playerList.get(index).getId());
                 if (amountToDelete > 0) {
                     output.println("Too many cards, trimming hand");
+                    output.flush();
                     for (int i = 0; i < amountToDelete; i++) {
                         trimHand(input, output, playerList.get(index).getId());
                     }
@@ -622,6 +709,7 @@ public class Main {
         Quest quest = new Quest();
 
         output.println(currentPlayerID + " is currently building the quest!");
+        output.flush();
 
         output.println("Displaying current hand: ");
         Collections.sort(playerList.get(pIndex).getHand());
@@ -637,6 +725,7 @@ public class Main {
             }
 
             output.println("Select position of card to add to current stage. Type 'Quit' when you are finished.");
+            output.flush();
             int inputNum = -1;
             String inputStr = "";
             if (input.hasNextInt()) {
@@ -665,18 +754,21 @@ public class Main {
                     questStageList.add(quest);
                     finishedBuilding = true;
                 }
-            } else if (inputStr.isEmpty()) {
+            } else if (inputNum != -1) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
                     output.println("Rejected: Invalid position.");
+                    output.flush();
                 } else {
                     for (int i = 0; i < quest.getStageSize(); i++) {
                         if (quest.getCardAt(i).getType().equals("Foe") && playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
                             output.println("Rejected: Foe already chosen.");
+                            output.flush();
                             invalid = true;
                             break;
                         } else if (quest.getCardAt(i).getType().equals("Weapon")) {
                             if (quest.getCardAt(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
                                 output.println("Rejected: Duplicate weapon.");
+                                output.flush();
                                 invalid = true;
                                 break;
                             }
@@ -689,7 +781,7 @@ public class Main {
                         quest.increaseValue();
 
                         output.println("Current Stage: " + cardsInStage);
-
+                        output.flush();
                     }
                 }
             }
@@ -700,6 +792,7 @@ public class Main {
         int pIndex = translateID(currentPlayerID);
 
         output.println("Building attack for " + currentPlayerID);
+        output.flush();
 
         output.println("Displaying current hand: ");
         Collections.sort(playerList.get(pIndex).getHand());
@@ -716,6 +809,7 @@ public class Main {
             }
 
             output.println("Select position of card to add to your attack. Type 'quit' when you are finished.");
+            output.flush();
             int inputNum = -1;
             String inputStr = "";
             if (input.hasNextInt()) {
@@ -727,24 +821,29 @@ public class Main {
             if (inputStr.equalsIgnoreCase("quit")) {
                 if (playerList.get(pIndex).isAttackHandEmpty()) {
                     output.println(currentPlayerID + " chose to not play any cards");
+                    output.flush();
                     finishedBuilding = true;
                 } else {
                     String cardsInAttack = playerList.get(pIndex).displayAttackHand();
                     output.println(currentPlayerID + "'s current attack: " + cardsInAttack);
+                    output.flush();
                     finishedBuilding = true;
                 }
-            } else if (inputStr.isEmpty()) {
+            } else if (inputNum != -1) {
                 if (inputNum > playerList.get(pIndex).getHandSize() || inputNum < 0) {
                     output.println("Rejected: Invalid position.");
+                    output.flush();
                     invalid = true;
                 } else {
                     if (playerList.get(pIndex).getCardAt(inputNum-1).getType().equals("Foe")) {
                         output.println("Rejected: Foe cannot be selected.");
+                        output.flush();
                         invalid = true;
                     } else {
                         for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
                             if (playerList.get(pIndex).getAttackCardAt(i).getName().equals(playerList.get(pIndex).getCardAt(inputNum-1).getName())) {
                                 output.println("Rejected: Duplicate weapon.");
+                                output.flush();
                                 invalid = true;
                                 break;
                             }
@@ -756,6 +855,7 @@ public class Main {
 
                     String cardsInAttack = playerList.get(pIndex).displayAttackHand();
                     output.println("Current Attack Cards: " + cardsInAttack);
+                    output.flush();
                 }
             }
         }
@@ -766,11 +866,15 @@ public class Main {
 
         for (int i = 0; i < participantList.size(); i++) {
             int playerValue = participantList.get(i).getAttackValue();
+            output.println(participantList.get(i).getId() + " value: " + playerValue + " vs Stage value: " + stageValue);
+            output.flush();
             if (playerValue < stageValue) {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
+                output.flush();
                 participantList.get(i).setEligibleStatus(false);
             } else {
                 output.println("Sufficient attack. " + participantList.get(i).getId() + " Wins!");
+                output.flush();
             }
         }
     }
