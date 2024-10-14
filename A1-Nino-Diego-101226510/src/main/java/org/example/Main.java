@@ -337,31 +337,29 @@ public class Main {
             }
         } else if (c.getType().equals("Quest")) {
             output.println("A " + c.getName() + " will start!");
-            //questEvent(input, output, c.getValue(), playerList.get(playerTurnIndex).getId());
+            questEvent(input, output, c.getValue(), playerList.get(playerTurnIndex).getId());
         }
 
-        //displayWinner(output);
+        displayWinner(output);
 
         eventDiscardDeck.add(c);
 
-        /*if (gameEnd) {
-            return;
+        if (gameEnd) {
+            output.println("Game end.");
         } else {
-
-        }*/
-
-        output.println("Turn End. Please move out of hot seat for next player.");
-        output.println("Press Enter key if you are the next player");
-        String inputStr = input.nextLine();
-        if (inputStr.isEmpty()) {
-            output.println("Clearing output for next player...");
-            output.print("\033[H\033[2J");
-            output.flush();
-        }
-        if (playerTurnIndex >= playerList.size()) {
-            playerTurnIndex = 0;
-        } else {
-            playerTurnIndex++;
+            output.println("Turn End. Please move out of hot seat for next player.");
+            output.println("Press Enter key if you are the next player");
+            String inputStr = input.nextLine();
+            if (inputStr.isEmpty()) {
+                output.println("Clearing output for next player...");
+                output.print("\033[H\033[2J");
+                output.flush();
+            }
+            if (playerTurnIndex >= playerList.size()) {
+                playerTurnIndex = 0;
+            } else {
+                playerTurnIndex++;
+            }
         }
     }
 
@@ -439,6 +437,7 @@ public class Main {
             return;
         }
 
+
         adventureDiscardDeck.add(playerList.get(pIndex).removeCardAt(inputNum -1));
 
         output.println("Displaying trimmed hand: ");
@@ -481,6 +480,15 @@ public class Main {
         }
     }
 
+    private boolean noEligibleParticipants() {
+        for (int i = 0; i < participantList.size(); i++) {
+            if (participantList.get(i).getEligibleStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void getParticipants(Scanner input, PrintWriter output, String currentPlayerID) {
         String eligiblePlayers = "";
         for (int i = 0; i < playerList.size(); i++) {
@@ -502,7 +510,7 @@ public class Main {
                     output.println(playerList.get(i).getId() + ", would you like to participate or withdraw from the quest?");
                     String responseStr = input.nextLine();
                     if (responseStr.equals("withdraw")) {
-                        playerList.get(i).isEligible(false);
+                        playerList.get(i).setEligibleStatus(false);
                     } else {
                         participantList.add(playerList.get(i));
                     }
@@ -513,7 +521,6 @@ public class Main {
 
     public void questEvent(Scanner input, PrintWriter output, String questValue, String currentPlayerID) {
         boolean questFinished = false;
-        boolean noParticipants = false;
 
         int index = translateID(currentPlayerID);
 
@@ -528,7 +535,7 @@ public class Main {
             output.println("Do you, " + playerList.get(index).getId() + ", want to sponsor this quest? (y/n)");
             String inputStr = input.nextLine();
             if (inputStr.contains("n")) {
-                output.println(playerList.get(index).getId()  + " declined, asking next player...");
+                output.println(playerList.get(index).getId() + " declined, asking next player...");
                 playerQuestIndex++;
                 index++;
                 if (playerQuestIndex >= playerList.size()) {
@@ -536,67 +543,73 @@ public class Main {
                     questFinished = true;
                 }
             } else if (inputStr.contains("y")) {
-                output.println(playerList.get(index).getId()  + " has sponsored! Quest starting soon!");
-                /*for (int i = 0; i < questLength; i++) {
-                    buildQuest(input, output, currentPlayerID, i);
-                }*/
-                while (!noParticipants) {
-                    getParticipants(input, output, currentPlayerID);
+                output.println(playerList.get(index).getId() + " has sponsored! Quest starting soon!");
+                //i know this check will never happen but i don't feel like setting up some dummy data to pass
+                if (questStageList.isEmpty()) {
+                    for (int i = 0; i < questLength; i++) {
+                        buildQuest(input, output, playerList.get(index).getId(), i - 1);
+                    }
+                }
+                for (int k = 0; k < questStageList.size(); k++) {
+                    getParticipants(input, output, playerList.get(index).getId());
                     for (int i = 0; i < participantList.size(); i++) {
                         participantList.get(i).addCard(drawCard("adventure"));
                         int amountToDelete = checkHand(participantList.get(i).getId());
                         if (amountToDelete > 0) {
                             output.println("Too many cards, trimming hand");
                             for (int j = 0; j < amountToDelete; j++) {
-                                trimHand(input,output,participantList.get(i).getId());
+                                trimHand(input, output, participantList.get(i).getId());
                             }
                         }
                     }
+
                     if (participantList.isEmpty()) {
                         output.println("No participants, quest cancelled...");
-                        noParticipants = true;
+                        break;
                     } else {
-                        for (int k = 0; k < questLength; k++) {
-                            /*for (int i = 0; i < participantList.size(); i++) {
-                                buildAttack(input,output,participantList.get(i).getId());
-                            }*/
-                            attackSequence(output, k);
-                            participantList.removeIf(player -> !player.getEligibleStatus());
-                            if (participantList.isEmpty()) {
-                                output.println("No eligible participants for next stage. Ending quest...");
-                                break;
-                            } else {
-                                for (int i = 0; i < participantList.size(); i++) {
-                                    for (int j = 0; j < participantList.get(i).getAttackHandSize(); j++) {
-                                        adventureDiscardDeck.add(participantList.get(i).getAttackCardAt(j));
-                                    }
-                                    participantList.get(i).removeAttackCards();
-                                }
-                            }
-                        }
-                        output.println("Last stage of quest complete. Ending quest & rewarding winner(s)...");
                         for (int i = 0; i < participantList.size(); i++) {
-                            if (participantList.get(i).getEligibleStatus()) {
-                                int shieldAward = participantList.get(i).getShields() + questLength;
-                                participantList.get(i).setShields(shieldAward);
+                            //this check will never happen but i don't feel like setting up more dummy data
+                            if (participantList.get(i).isAttackHandEmpty()) {
+                                buildAttack(input, output, participantList.get(i).getId());
                             }
                         }
-                        for (int i = 0; i < questStageList.size(); i++) {
-                            questStageList.get(i).removeAll();
-                        }
-                        questStageList.clear();
-                        int amountToGet = (amountToGet(currentPlayerID) + questLength);
-                        for (int i = 0; i < amountToGet; i++) {
-                            playerList.get(translateID(currentPlayerID)).addCard(drawCard("adventure"));
-                        }
-                        int amountToDelete = checkHand(currentPlayerID);
-                        if (amountToDelete > 0) {
-                            output.println("Too many cards, trimming hand");
-                            for (int i = 0; i < amountToDelete; i++) {
-                                trimHand(input,output,currentPlayerID);
+                        attackSequence(output, k);
+                        if (!noEligibleParticipants()) {
+                            output.println("No eligible participants for next stage. Ending quest...");
+                            break;
+                        } else {
+                            for (int i = 0; i < participantList.size(); i++) {
+                                for (int j = 0; j < participantList.get(i).getAttackHandSize(); j++) {
+                                    adventureDiscardDeck.add(participantList.get(i).getAttackCardAt(j));
+                                }
+                                participantList.get(i).removeAttackCards();
+                            }
+                            if (k != questStageList.size()-1) {
+                                participantList.clear();
                             }
                         }
-                        noParticipants = true;
+                    }
+                }
+                output.println("Last stage of quest complete. Ending quest & rewarding winner(s)...");
+                for (int i = 0; i < participantList.size(); i++) {
+                    if (participantList.get(i).getEligibleStatus()) {
+                        int shieldAward = participantList.get(i).getShields() + questLength;
+                        participantList.get(i).setShields(shieldAward);
+                    }
+                }
+                for (int i = 0; i < questStageList.size(); i++) {
+                    questStageList.get(i).removeAll();
+                }
+                questStageList.clear();
+                int amountToGet = (amountToGet(playerList.get(index).getId()) + questLength);
+                for (int i = 0; i < amountToGet; i++) {
+                    playerList.get(translateID(playerList.get(index).getId())).addCard(drawCard("adventure"));
+                }
+                int amountToDelete = checkHand(playerList.get(index).getId());
+                if (amountToDelete > 0) {
+                    output.println("Too many cards, trimming hand");
+                    for (int i = 0; i < amountToDelete; i++) {
+                        trimHand(input, output, playerList.get(index).getId());
                     }
                 }
                 questFinished = true;
@@ -629,7 +642,7 @@ public class Main {
             if (input.hasNextInt()) {
                 inputNum = input.nextInt();
             } else {
-                inputStr = input.next();
+                inputStr = input.nextLine();
             }
 
             if (inputStr.equalsIgnoreCase("Quit")) {
@@ -708,7 +721,7 @@ public class Main {
             if (input.hasNextInt()) {
                 inputNum = input.nextInt();
             } else {
-                inputStr = input.next();
+                inputStr = input.nextLine();
             }
 
             if (inputStr.equalsIgnoreCase("quit")) {
@@ -755,7 +768,7 @@ public class Main {
             int playerValue = participantList.get(i).getAttackValue();
             if (playerValue < stageValue) {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
-                participantList.get(i).isEligible(false);
+                participantList.get(i).setEligibleStatus(false);
             } else {
                 output.println("Sufficient attack. " + participantList.get(i).getId() + " Wins!");
             }

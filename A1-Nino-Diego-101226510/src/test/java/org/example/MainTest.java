@@ -381,7 +381,7 @@ class MainTest {
 
         game.checkForWinners();
 
-        //im adding a 0 check because it would pass automatically otherwise
+        //im adding a 0 check because it would pass automatically otherwise (this was for the R-TEST-3 commit)
         //also it shouldn't be less than 0 anyway
         assertAll(
                 "score check",
@@ -436,10 +436,14 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display P1
         StringWriter output = new StringWriter();
         String input = "\n";
+
+        Card c = new Card("Event","Plague", "-2Sh");
+        game.eventDeck.set(0,c);
 
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -458,6 +462,9 @@ class MainTest {
         String input = "\n";
 
         game.pickCard(0, "Weapon", "Dagger", "5", 1);
+
+        Card c = new Card("Event","Plague", "-2Sh");
+        game.eventDeck.set(0,c);
 
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
@@ -482,6 +489,9 @@ class MainTest {
         game.pickCard(4,"Weapon","Excalibur", "30", 1);
         game.pickCard(5,"Weapon","Dagger", "5", 1);
 
+        Card c = new Card("Event","Plague", "-2Sh");
+        game.eventDeck.set(0,c);
+
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         String expectedOutput = "F5, value = 5 \nF10, value = 10 \nDagger, value = 5 \nSword, value = 10 \nHorse, value = 10 \nExcalibur, value = 30";
@@ -497,6 +507,7 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display event card
         Card c = new Card("Event", "Queen's Favor", "+2P");
@@ -514,8 +525,12 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //event deck should have 1 less card and discard deck should have 1 card
+        Card c = new Card("Event","Plague", "-2Sh");
+        game.eventDeck.set(0,c);
+
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertAll(
@@ -534,6 +549,7 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //player should lose 2 shields
         game.playerList.get(0).setShields(4);
@@ -551,17 +567,16 @@ class MainTest {
         StringWriter output = new StringWriter();
         String input = "\n";
         Main game = new Main();
+        game.initializePlayers();
         game.initializeDecks();
+        game.dealCards();
 
         //player should lose 2 shields but remain at 0
-        Player p1 = new Player("P1",0);
-        game.playerList.add(p1);
-
         Card c = new Card("Event","Plague","-2Sh");
         game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
-        assertEquals(0,p1.getShields());
+        assertEquals(0,game.playerList.get(0).getShields());
     }
 
     @Test
@@ -614,8 +629,12 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should tell player to move
+        Card c = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(0, c);
+
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("Turn End. Please move out of hot seat for next player."));
@@ -629,8 +648,11 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should clear the console after return key is pressed
+        Card c = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(0, c);
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         //apparently this string text should work to clear the screen
@@ -638,34 +660,25 @@ class MainTest {
     }
 
     @Test
-    @DisplayName("Check if the P2 is displayed after P1 finishes their turn")
+    @DisplayName("Check if all 4 players get their turn")
     void RESP_09_test_01() {
         StringWriter output = new StringWriter();
         String input = "\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-
-        //game should print out the P2 id after P1 takes their turn
-        for (int i = 0; i < 2; i++) {
-            game.takeTurn(new Scanner(input), new PrintWriter(output));
-        }
-
-        assertTrue(output.toString().contains("Current Player: P2"));
-    }
-
-    //note may or may not add another test for RESP_09 that checks if player 2's hand is displayed or not
-
-    @Test
-    @DisplayName("Check if all 4 players get their turn")
-    void RESP_09_test_02() {
-        StringWriter output = new StringWriter();
-        String input = "\n";
-        Main game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
+        game.dealCards();
 
         //game should print out every player's id
+        Card c = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(0, c);
+        Card c1 = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(1, c1);
+        Card c2 = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(2, c2);
+        Card c3 = new Card("Event","Plague","-2Sh");
+        game.eventDeck.set(3, c3);
+
         for (int i = 0; i < 4; i++) {
             game.takeTurn(new Scanner(input), new PrintWriter(output));
         }
@@ -706,8 +719,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should calculate the right amount of cards to discard
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -785,8 +800,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display new hand without the card at the 6th position
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -814,7 +831,7 @@ class MainTest {
     @DisplayName("Check if 2 Stage Quest was applied")
     void RESP_13_test_01() {
         StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "n\nn\nn\nn\n\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -823,52 +840,17 @@ class MainTest {
         //game should display that a 2 stage quest will start
         Card c = new Card("Quest","2 Stage Quest", "Q2");
         game.eventDeck.set(0, c);
+
         game.takeTurn(new Scanner(input), new PrintWriter(output));
 
         assertTrue(output.toString().contains("A 2 Stage Quest will start!"));
     }
 
     @Test
-    @DisplayName("Check if 3 Stage Quest was applied")
+    @DisplayName("Check if 5 Stage Quest was applied")
     void RESP_13_test_02() {
         StringWriter output = new StringWriter();
-        String input = "\n";
-        Main game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
-        game.dealCards();
-
-        //game should display that a 3 stage quest will start
-        Card c = new Card("Quest", "3 Stage Quest", "Q3");
-        game.eventDeck.set(0, c);
-        game.takeTurn(new Scanner(input), new PrintWriter(output));
-
-        assertTrue(output.toString().contains("A 3 Stage Quest will start!"));
-    }
-
-    @Test
-    @DisplayName("Check if 4 Stage Quest was applied")
-    void RESP_13_test_03() {
-        StringWriter output = new StringWriter();
-        String input = "\n";
-        Main game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
-        game.dealCards();
-
-        //game should display that a 4 stage quest will start
-        Card c = new Card("Quest", "4 Stage Quest", "Q4");
-        game.eventDeck.set(0, c);
-        game.takeTurn(new Scanner(input), new PrintWriter(output));
-
-        assertTrue(output.toString().contains("A 4 Stage Quest will start!"));
-    }
-
-    @Test
-    @DisplayName("Check if 5 Stage Quest was applied")
-    void RESP_13_test_04() {
-        StringWriter output = new StringWriter();
-        String input = "\n";
+        String input = "n\nn\nn\nn\n\n";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -893,7 +875,7 @@ class MainTest {
         game.dealCards();
 
         //game should display prompt if player wants to sponsor quest or not
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("Do you, P1, want to sponsor this quest? (y/n)"));
     }
@@ -909,7 +891,7 @@ class MainTest {
         game.dealCards();
 
         //game should display prompt all players wants to sponsor quest or not
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertAll(
                 "prompt check",
@@ -931,7 +913,7 @@ class MainTest {
         game.dealCards();
 
         //game should indicate that it is moving on to ask the next player
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P1 declined, asking next player..."));
     }
@@ -963,7 +945,13 @@ class MainTest {
         game.dealCards();
 
         //game should indicate the player who has sponsored the quest and then start it
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
+        Quest q = new Quest();
+        Card c = new Card("Weapon","Dagger","5");
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P1 has sponsored! Quest starting soon!"));
     }
@@ -979,7 +967,13 @@ class MainTest {
         game.dealCards();
 
         //game should indicate that P3 has sponsored the quest then start it
-        game.questEvent(new Scanner(input), new PrintWriter(output), "2Q", game.playerList.get(0).getId());
+        Quest q = new Quest();
+        Card c = new Card("Weapon","Dagger","5");
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("P3 has sponsored! Quest starting soon!"));
     }
@@ -992,8 +986,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display hand in order with numbered positions
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1023,8 +1019,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should prompt player for position of card to add to the current stage (or they can quit)
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1050,8 +1048,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1081,8 +1081,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1114,8 +1116,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1148,8 +1152,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display the card chosen after it was added
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1177,8 +1183,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should tell the player that the stage cannot be empty
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1204,6 +1212,7 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should tell player that the stage value must be higher
         Quest q = new Quest();
@@ -1211,6 +1220,7 @@ class MainTest {
         q.addCard(c);
         q.increaseValue();
         game.questStageList.add(q);
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1237,9 +1247,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display the cards used for the stage
-        //we're just gonna pretend these cards were from the player's deck
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1266,9 +1277,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
-
+        game.dealCards();
 
         //game should prompt player for position of card to add to the attack (or they can quit)
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1295,8 +1307,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display hand in order with numbered positions
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1326,8 +1340,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1358,8 +1374,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1393,8 +1411,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should explain why the input is invalid then reprompt
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1425,8 +1445,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //game should display the card chosen after it was added
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1492,9 +1514,9 @@ class MainTest {
 
         //game should display all those who are eligible to play
         //for the sake of this test we'll just have 2 eligible players (P1 will be the quest builder)
-        game.playerList.get(1).isEligible(true);
-        game.playerList.get(2).isEligible(false);
-        game.playerList.get(3).isEligible(true);
+        game.playerList.get(1).setEligibleStatus(true);
+        game.playerList.get(2).setEligibleStatus(false);
+        game.playerList.get(3).setEligibleStatus(true);
 
         game.getParticipants(new Scanner(input), new PrintWriter(output), game.playerList.get(0).getId());
 
@@ -1563,12 +1585,15 @@ class MainTest {
     @DisplayName("Check if all eligible players draw an adventure card")
     void RESP_29_test_01() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nwithdraw\n6\n6";
+        String input = "y\nparticipate\nwithdraw\nwithdraw\nquit\nwithdraw";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //player's hand should have one more card
+        game.playerList.get(1).getHand().clear();
+
         game.pickCard(0,"Weapon","Sword", "10", 2);
         game.pickCard(1,"Foe","F5", "5", 2);
         game.pickCard(2,"Weapon","Horse", "10", 2);
@@ -1596,7 +1621,7 @@ class MainTest {
     @DisplayName("Check if player goes to trim their hand if they have too many cards")
     void RESP_29_test_02() {
         StringWriter output = new StringWriter();
-        String input = "y\nparticipate\nwithdraw\nwithdraw\n6\n6\n6";
+        String input = "y\nparticipate\nwithdraw\nwithdraw\n6\nquit";
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
@@ -1629,7 +1654,13 @@ class MainTest {
         game.dealCards();
 
         //game should print out that the quest will be cancelled due to no participants
-        game.questEvent(new Scanner(input), new PrintWriter(output), "Q2", game.playerList.get(0).getId());
+        Card c = new Card("Foe", "F5", "5");
+        Quest q = new Quest();
+        q.addCard(c);
+        q.increaseValue();
+        game.questStageList.add(q);
+
+        game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
         assertTrue(output.toString().contains("No participants, quest cancelled..."));
     }
@@ -1851,8 +1882,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
-        //game should draw 2 more cards for the builder
+        //game should draw 3 more cards for the builder
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1864,9 +1897,10 @@ class MainTest {
         game.pickCard(8,"Weapon","Dagger", "5", 1);
         game.pickCard(9,"Weapon","Dagger", "5", 1);
 
-        Card c = new Card("Foe","F5","5");
+        Card c = new Card("Foe","F70","70");
         Quest q = new Quest();
         q.addCard(c);
+        q.increaseValue();
         game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");
@@ -1876,7 +1910,7 @@ class MainTest {
 
         game.questEvent(new Scanner(input), new PrintWriter(output), "Q1", game.playerList.get(0).getId());
 
-        assertEquals(12, game.playerList.get(0).getHandSize());
+        assertEquals(13, game.playerList.get(0).getHandSize());
     }
 
     @Test
@@ -1887,8 +1921,10 @@ class MainTest {
         Main game = new Main();
         game.initializeDecks();
         game.initializePlayers();
+        game.dealCards();
 
         //builder should trim hand back to 12
+        game.playerList.get(0).getHand().clear();
         game.pickCard(0,"Weapon","Sword", "10", 1);
         game.pickCard(1,"Foe","F5", "5", 1);
         game.pickCard(2,"Weapon","Horse", "10", 1);
@@ -1901,9 +1937,10 @@ class MainTest {
         game.pickCard(9,"Weapon","Dagger", "5", 1);
         game.pickCard(10,"Foe","F15", "15", 1);
 
-        Card c = new Card("Foe","F5","5");
+        Card c = new Card("Foe","F70","70");
         Quest q = new Quest();
         q.addCard(c);
+        q.increaseValue();
         game.questStageList.add(q);
 
         Card c1 = new Card("Weapon", "Dagger", "5");

@@ -18,6 +18,7 @@ public class Quest {
 
     public void addCard(Card c) {
         stageSet.add(c);
+        increaseValue();
     }
 
     public void removeCard(Card c) {

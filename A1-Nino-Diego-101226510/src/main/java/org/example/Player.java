@@ -34,7 +34,7 @@ public class Player {
 
     public void setShields(int amount) {shields = amount;}
     public void setWinnerStatus(boolean status) {winnerStatus = status;}
-    public void isEligible(boolean status) {eligibleStatus = status;}
+    public void setEligibleStatus(boolean status) {eligibleStatus = status;}
 
     //other methods
 
