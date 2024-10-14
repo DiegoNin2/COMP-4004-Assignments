@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Player {
     private int shields;
@@ -71,6 +72,53 @@ public class Player {
 
     public void removeAttackCards() {
         attackHand.clear();
+    }
+
+    public String displayHand() {
+        String cardsInHand = "";
+        Collections.sort(hand);
+        for (int i = 0; i < hand.size(); i++) {
+            cardsInHand += hand.get(i).toString();
+            cardsInHand += " \n";
+        }
+        return cardsInHand;
+    }
+
+    public String displayAttackHand() {
+        String cardsInHand = "";
+        Collections.sort(attackHand);
+        for (int i = 0; i < attackHand.size(); i++) {
+            cardsInHand += attackHand.get(i).toString();
+            cardsInHand += " \n";
+        }
+        return cardsInHand;
+    }
+
+    public int getAttackValue() {
+        int attackVal = 0;
+        for (int i = 0; i < attackHand.size(); i++) {
+            switch(attackHand.get(i).getValue()) {
+                case "5":
+                    attackVal += 5;
+                    break;
+                case "10":
+                    attackVal += 10;
+                    break;
+                case "15":
+                    attackVal += 15;
+                    break;
+                case "20":
+                    attackVal += 20;
+                    break;
+                case "25":
+                    attackVal += 25;
+                    break;
+                case "30":
+                    attackVal += 30;
+                    break;
+            }
+        }
+        return attackVal;
     }
 
 }

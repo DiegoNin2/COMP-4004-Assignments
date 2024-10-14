@@ -75,4 +75,16 @@ public class Quest {
         stageValue = newStageVal;
     }
 
+    public String displaySet() {
+        String cardsInSet = "";
+        for (int i = 0; i < stageSet.size(); i++) {
+            if (i == stageSet.size()-1) {
+                cardsInSet += stageSet.get(i).toString();
+            } else {
+                cardsInSet += stageSet.get(i).toString() + ", ";
+            }
+        }
+        return cardsInSet;
+    }
+
 }

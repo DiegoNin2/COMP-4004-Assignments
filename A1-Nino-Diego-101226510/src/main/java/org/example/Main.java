@@ -309,10 +309,7 @@ public class Main {
 
         Collections.sort(playerList.get(playerTurnIndex).getHand());
 
-        for (int i = 0; i < playerList.get(playerTurnIndex).getHandSize(); i++) {
-            output.print(playerList.get(playerTurnIndex).getCardAt(i).toString());
-            output.print(" \n");
-        }
+        output.print(playerList.get(playerTurnIndex).displayHand());
 
         output.println("drawing from event deck: ");
         Card c = drawCard("event");
@@ -348,7 +345,7 @@ public class Main {
         eventDiscardDeck.add(c);
 
         /*if (gameEnd) {
-
+            return;
         } else {
 
         }*/
@@ -467,33 +464,6 @@ public class Main {
             default:
                 return -1;
         }
-    }
-
-    private int getAttackVal(Player p) {
-        int attackVal = 0;
-        for (int i = 0; i < p.getAttackHandSize(); i++) {
-            switch(p.getAttackCardAt(i).getValue()) {
-                case "5":
-                    attackVal += 5;
-                    break;
-                case "10":
-                    attackVal += 10;
-                    break;
-                case "15":
-                    attackVal += 15;
-                    break;
-                case "20":
-                    attackVal += 20;
-                    break;
-                case "25":
-                    attackVal += 25;
-                    break;
-                case "30":
-                    attackVal += 30;
-                    break;
-            }
-        }
-        return attackVal;
     }
 
     private int getQuestLength(String questVal) {
@@ -670,28 +640,14 @@ public class Main {
                         output.println("Cannot Quit: Insufficient values for this stage");
                     } else {
                         Collections.sort(quest.getStageSet());
-                        String cardsInStage = "";
-                        for (int i = 0; i < quest.getStageSize(); i++) {
-                            if (i == quest.getStageSize()-1) {
-                                cardsInStage += quest.getCardAt(i).toString();
-                            } else {
-                                cardsInStage += quest.getCardAt(i).toString() + ", ";
-                            }
-                        }
+                        String cardsInStage = quest.displaySet();
                         output.println("The finished quest stage: " + cardsInStage);
                         questStageList.add(quest);
                         finishedBuilding = true;
                     }
                 } else {
                     Collections.sort(quest.getStageSet());
-                    String cardsInStage = "";
-                    for (int i = 0; i < quest.getStageSize(); i++) {
-                        if (i == quest.getStageSize()-1) {
-                            cardsInStage += quest.getCardAt(i).toString();
-                        } else {
-                            cardsInStage += quest.getCardAt(i).toString() + ", ";
-                        }
-                    }
+                    String cardsInStage = quest.displaySet();
                     output.println("The finished quest stage: " + cardsInStage);
                     questStageList.add(quest);
                     finishedBuilding = true;
@@ -716,14 +672,7 @@ public class Main {
                     if (!invalid) {
                         quest.addCard(playerList.get(pIndex).removeCardAt(inputNum-1));
 
-                        String cardsInStage = "";
-                        for (int i = 0; i < quest.getStageSize(); i++) {
-                            if (i == quest.getStageSize()-1) {
-                                cardsInStage += quest.getCardAt(i).toString();
-                            } else {
-                                cardsInStage += quest.getCardAt(i).toString() + ", ";
-                            }
-                        }
+                        String cardsInStage = quest.displaySet();
                         quest.increaseValue();
 
                         output.println("Current Stage: " + cardsInStage);
@@ -767,10 +716,7 @@ public class Main {
                     output.println(currentPlayerID + " chose to not play any cards");
                     finishedBuilding = true;
                 } else {
-                    String cardsInAttack = "";
-                    for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
-                        cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
-                    }
+                    String cardsInAttack = playerList.get(pIndex).displayAttackHand();
                     output.println(currentPlayerID + "'s current attack: " + cardsInAttack);
                     finishedBuilding = true;
                 }
@@ -795,10 +741,7 @@ public class Main {
                 if (!invalid) {
                     playerList.get(pIndex).addAttackCard(playerList.get(pIndex).removeCardAt(inputNum-1));
 
-                    String cardsInAttack = "";
-                    for (int i = 0; i < playerList.get(pIndex).getAttackHandSize(); i++) {
-                        cardsInAttack += playerList.get(pIndex).getAttackCardAt(i).toString();
-                    }
+                    String cardsInAttack = playerList.get(pIndex).displayAttackHand();
                     output.println("Current Attack Cards: " + cardsInAttack);
                 }
             }
@@ -809,7 +752,7 @@ public class Main {
         int stageValue = questStageList.get(currentStage).getValue();
 
         for (int i = 0; i < participantList.size(); i++) {
-            int playerValue = getAttackVal(participantList.get(i));
+            int playerValue = participantList.get(i).getAttackValue();
             if (playerValue < stageValue) {
                 output.println("Insufficient attack. " + participantList.get(i).getId() + " Loses!");
                 participantList.get(i).isEligible(false);
