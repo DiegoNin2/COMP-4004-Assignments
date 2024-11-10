@@ -26,3 +26,14 @@ Feature: Card Game
     And Player 2 should have 5 shields
     And Player 4 should have 4 shields
     And Player 3 is declared as a Winner
+
+  Scenario: 0_winner_quest
+    Given a new game starts with 0_winner
+    When a "2 Stage Quest" card is drawn with Player 1 sponsoring
+    Then Player 2 should have 0 shields
+    And Player 3 should have 0 shields
+    And Player 4 should have 0 shields
+    And Player 2 should have 9 cards in hand
+    And Player 3 should have 10 cards in hand
+    And Player 4 should have 11 cards in hand
+    And Player 1 should have 12 cards in hand
