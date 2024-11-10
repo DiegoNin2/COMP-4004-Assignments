@@ -178,6 +178,82 @@ public class GameSteps {
         }
     }
 
+    @Given("a new game starts with events")
+    public void a_new_game_starts_events() {
+        game = new Main();
+        game.initializeDecks();
+        game.initializePlayers();
+        game.dealCards();
+
+        //card rigging
+        for (int i = 0; i < game.playerList.size(); i++) {
+            game.playerList.get(i).getHand().clear();
+        }
+
+        //P1 Hand
+        game.pickCard(0,"Foe","F5","5",1);
+        game.pickCard(1,"Foe","F5","5",1);
+        game.pickCard(2,"Foe","F10","10",1);
+        game.pickCard(3,"Foe","F15","15",1);
+        game.pickCard(4,"Foe","F15","15",1);
+        game.pickCard(5,"Foe","F20","20",1);
+        game.pickCard(6,"Weapon","Sword","10",1);
+        game.pickCard(7,"Weapon","Sword","10",1);
+        game.pickCard(8,"Weapon","Horse","10",1);
+        game.pickCard(9,"Weapon","Battle-Axe","15",1);
+        game.pickCard(10,"Weapon","Sword","10",1);
+        game.pickCard(11,"Foe","F20","20",1);
+
+        //P2 Hand
+        game.pickCard(0,"Weapon","Dagger","5",2);
+        game.pickCard(1,"Weapon","Dagger","5",2);
+        game.pickCard(2,"Weapon","Horse","10",2);
+        game.pickCard(3,"Weapon","Horse","10",2);
+        game.pickCard(4,"Weapon","Sword","10",2);
+        game.pickCard(5,"Weapon","Battle-Axe","15",2);
+        game.pickCard(6,"Weapon","Battle-Axe","15",2);
+        game.pickCard(7,"Weapon","Lance","20",2);
+        game.pickCard(8,"Weapon","Lance","20",2);
+        game.pickCard(9, "Foe","F10","10",2);
+        game.pickCard(10,"Foe","F25","25",2);
+        game.pickCard(11,"Foe","F40","40",2);
+
+        //P3 Hand
+        game.pickCard(0,"Weapon","Dagger","5",3);
+        game.pickCard(1,"Weapon","Dagger","5",3);
+        game.pickCard(2,"Weapon","Sword","10",3);
+        game.pickCard(3,"Weapon","Horse","10",3);
+        game.pickCard(4,"Weapon","Horse","10",3);
+        game.pickCard(5,"Weapon","Battle-Axe","15",3);
+        game.pickCard(6,"Weapon","Battle-Axe","15",3);
+        game.pickCard(7,"Weapon","Lance","20",3);
+        game.pickCard(8,"Weapon","Excalibur","30",3);
+        game.pickCard(9, "Foe","F10","10",3);
+        game.pickCard(10,"Foe","F25","25",3);
+        game.pickCard(11,"Foe","F35","35",3);
+
+        //P4 Hand
+        game.pickCard(0,"Weapon","Dagger","5",4);
+        game.pickCard(1,"Weapon","Dagger","5",4);
+        game.pickCard(2,"Weapon","Sword","10",4);
+        game.pickCard(3,"Weapon","Sword","10",4);
+        game.pickCard(4,"Weapon","Horse","10",4);
+        game.pickCard(5,"Weapon","Lance","20",4);
+        game.pickCard(6,"Foe","F50","50",4);
+        game.pickCard(7,"Weapon","Sword","10",4);
+        game.pickCard(8,"Foe","F40","40",4);
+        game.pickCard(9, "Foe","F10","10",4);
+        game.pickCard(10,"Foe","F25","25",4);
+        game.pickCard(11,"Foe","F35","35",4);
+
+        //adventure deck rigging
+        //same rigging as the 2 winner one except more of them
+        for (int i = 0; i < 40; i++) {
+            Card c = new Card("Foe" , "F5", "5");
+            game.adventureDeck.set(i,c);
+        }
+    }
+
     //drawing steps
     @When("a {string} card is drawn with Player 2 sponsoring")
     public void single_quest_card_drawn(String questCard) {
@@ -239,6 +315,51 @@ public class GameSteps {
                 "\nparticipate\nparticipate" + //stage 3 participation
                 "\n9\n8\nquit\n9\nquit" + //stage 3 attack
                 "\n1\n1\n\n"; //P3 card trimming
+
+        game.takeTurn(new Scanner(input), new PrintWriter(output));
+    }
+
+    @When("a {string} card is drawn with Player 1 sponsoring and a {string} card is drawn and a {string} card is drawn and a {string} card is drawn and a {string} card is drawn with Player 1 Sponsoring")
+    public void quest_cards_drawn_with_events(String questCard1, String eventCard1, String eventCard2, String eventCard3, String questCard2) {
+        for (int i = 0; i < game.getEventDeckSize(); i++) {
+            if (game.eventDeck.get(i).getName().equals(questCard1)) {
+                game.eventDeck.set(0, game.eventDeck.get(i));
+            } else if (game.eventDeck.get(i).getName().equals(questCard2)) {
+                game.eventDeck.set(4, game.eventDeck.get(i));
+            } else if (game.eventDeck.get(i).getName().equals(eventCard1)) {
+                game.eventDeck.set(1, game.eventDeck.get(i));
+            } else if (game.eventDeck.get(i).getName().equals(eventCard2)) {
+                game.eventDeck.set(2, game.eventDeck.get(i));
+            } else if (game.eventDeck.get(i).getName().equals(eventCard3)) {
+                game.eventDeck.set(3, game.eventDeck.get(i));
+            }
+        }
+
+        String input = "y" + //sponsoring for Q4
+                "\n1\nQuit\n2\nQuit\n2\nQuit\n3\nQuit" + //Q4 stage building
+                "\nparticipate\nparticipate\nparticipate" + //stage 1 participation
+                "\n1\n1\n1" + //card trimming
+                "\n4\nquit\n4\nquit\n6\nquit" + //stage 1 attack
+                "\nparticipate\nparticipate\nparticipate" + //stage 2 participation
+                "\n7\nquit\n8\nquit\n9\nquit" + //stage 2 attack
+                "\nparticipate\nparticipate\nparticipate" + //stage 3 participation
+                "\n7\n6\nquit\n10\nquit\n9\n8\nquit" + //stage 3 attack
+                "\nparticipate\nparticipate\nparticipate" + //stage 4 participation
+                "\n11\nquit\n11\nquit\n11\nquit" + //stage 4 attack
+                "\n1\n1\n1\n1\n\n" + //trimming for P1
+                "\n1\n1\n\n" + //trimming for P1 after Prosperity
+                "\n1\n\n" + //trimming for P3 after Prosperity
+                "\n1\n1\n\n" + //trimming for P4 after Queen's Favor
+                "y" + //sponsoring for Q3
+                "\n1\n7\nQuit\n5\nQuit\n5\nQuit" + //Q3 stage building
+                "\nparticipate\nparticipate\nparticipate" + //stage 1 participation
+                "\n1\n1\n1" + //card trimming
+                "\n11\nquit\n11\nquit\n11\nquit" + //stage 1 attack
+                "\nparticipate\nparticipate" + //stage 2 participation
+                "\n12\nquit\n11\n10\nquit" + //stage 2 attack
+                "\nparticipate\nparticipate" + //stage 3 participation
+                "\n12\n11\nquit\n11\nquit" + //stage 3 attack
+                "\n1\n1\n1\n\n"; //trimming for P1
 
         game.takeTurn(new Scanner(input), new PrintWriter(output));
     }

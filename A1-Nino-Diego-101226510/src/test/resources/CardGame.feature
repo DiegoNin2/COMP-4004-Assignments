@@ -18,3 +18,11 @@ Feature: Card Game
     And Player 4 should have 7 shields
     And Player 2 is declared as a Winner
     And Player 4 is declared as a Winner
+
+  Scenario: 1winner_game_with_events
+    Given a new game starts with events
+    When a "4 Stage Quest" card is drawn with Player 1 sponsoring and a "Plague" card is drawn and a "Prosperity" card is drawn and a "Queen's Favor" card is drawn and a "3 Stage Quest" card is drawn with Player 1 Sponsoring
+    Then Player 3 should have 7 shields
+    And Player 2 should have 5 shields
+    And Player 4 should have 4 shields
+    And Player 3 is declared as a Winner
