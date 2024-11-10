@@ -13,318 +13,300 @@ public class GameSteps {
     StringWriter output = new StringWriter();
 
     //game starting steps
-    //TODO: see if i can make this reusable later
-    @Given("a new game starts with A1_Scenario")
-    public void a_new_game_starts_A1_Scenario() {
-        //i literally just ripped the code from the MainAcceptanceTest
+    @Given("a new game starts with {string}")
+    public void a_new_game_starts_with(String scenario) {
         game = new Main();
         game.initializeDecks();
         game.initializePlayers();
         game.dealCards();
 
-        //card rigging
-        for (int i = 0; i < game.playerList.size(); i++) {
-            game.playerList.get(i).getHand().clear();
-        }
-
-        //P1 Hand
-        game.pickCard(0,"Foe","F5","5",1);
-        game.pickCard(1,"Weapon","Dagger","5",1);
-        game.pickCard(2,"Weapon","Horse","10",1);
-        game.pickCard(3,"Foe","F5","5",1);
-        game.pickCard(4,"Weapon","Sword","10",1);
-        game.pickCard(5,"Weapon","Battle-Axe","15",1);
-        game.pickCard(6,"Foe","F15","15",1);
-        game.pickCard(7,"Weapon","Sword","10",1);
-        game.pickCard(8,"Weapon","Battle-Axe","15",1);
-        game.pickCard(9,"Foe","F15","15",1);
-        game.pickCard(10,"Weapon","Horse","10",1);
-        game.pickCard(11,"Weapon","Lance","20",1);
-        //P2 Hand
-        game.pickCard(0,"Foe","F5","5",2);
-        game.pickCard(1,"Foe","F40","40",2);
-        game.pickCard(2,"Weapon","Horse","10",2);
-        game.pickCard(3,"Foe","F5","5",2);
-        game.pickCard(4,"Weapon","Dagger","5",2);
-        game.pickCard(5,"Weapon","Battle-Axe","15",2);
-        game.pickCard(6,"Foe","F15","15",2);
-        game.pickCard(7,"Weapon","Sword","10",2);
-        game.pickCard(8,"Weapon","Battle-Axe","15",2);
-        game.pickCard(9,"Foe","F15","15",2);
-        game.pickCard(10,"Weapon","Horse","10",2);
-        game.pickCard(11,"Weapon","Excalibur","30",2);
-        //P3 Hand
-        game.pickCard(0,"Foe","F5","5",3);
-        game.pickCard(1,"Weapon","Dagger","5",3);
-        game.pickCard(2,"Weapon","Horse","10",3);
-        game.pickCard(3,"Foe","F5","5",3);
-        game.pickCard(4,"Weapon","Sword","10",3);
-        game.pickCard(5,"Weapon","Horse","10",3);
-        game.pickCard(6,"Foe","F5","5",3);
-        game.pickCard(7,"Weapon","Sword","10",3);
-        game.pickCard(8,"Weapon","Battle-Axe","15",3);
-        game.pickCard(9,"Foe","F15","15",3);
-        game.pickCard(10,"Weapon","Sword","10",3);
-        game.pickCard(11,"Weapon","Lance","20",3);
-        //P4 Hand
-        game.pickCard(0,"Foe","F5","5",4);
-        game.pickCard(1,"Weapon","Dagger","5",4);
-        game.pickCard(2,"Weapon","Horse","10",4);
-        game.pickCard(3,"Foe","F15","15",4);
-        game.pickCard(4,"Weapon","Dagger","5",4);
-        game.pickCard(5,"Weapon","Battle-Axe","15",4);
-        game.pickCard(6,"Foe","F15","15",4);
-        game.pickCard(7,"Weapon","Sword","10",4);
-        game.pickCard(8,"Weapon","Lance","20",4);
-        game.pickCard(9,"Foe","F40","40",4);
-        game.pickCard(10,"Weapon","Horse","10",4);
-        game.pickCard(11,"Weapon","Excalibur","30",4);
-
-        //other cards that are picked up are rigged here (im just fixing input)
-        Card c1 = new Card("Foe","F30","30");
-        game.adventureDeck.set(0,c1);
-        Card c2 = new Card("Weapon","Sword","10");
-        game.adventureDeck.set(1,c2);
-        Card c3 = new Card("Weapon","Battle-Axe","15");
-        game.adventureDeck.set(2,c3);
-        Card c4 = new Card("Foe","F10","10");
-        game.adventureDeck.set(3,c4);
-        Card c5 = new Card("Weapon","Lance","20");
-        game.adventureDeck.set(4,c5);
-        Card c6 = new Card("Weapon","Lance","20");
-        game.adventureDeck.set(5,c6);
-        Card c7 = new Card("Weapon","Battle-Axe","15");
-        game.adventureDeck.set(6,c7);
-        Card c8 = new Card("Weapon","Sword","10");
-        game.adventureDeck.set(7,c8);
-        Card c9 = new Card("Foe","F30","30");
-        game.adventureDeck.set(8,c9);
-        Card c10 = new Card("Weapon","Lance","20");
-        game.adventureDeck.set(9,c10);
+        //sets up scenario
+        scenario_selector(scenario);
     }
 
-    @Given("a new game starts with 2winner_game")
-    public void a_new_game_starts_2winner_game() {
-        game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
-        game.dealCards();
+    //helper function for given
+    private void scenario_selector(String scenario) {
+        //Note: all scenarios should be set up here
 
         //card rigging
         for (int i = 0; i < game.playerList.size(); i++) {
             game.playerList.get(i).getHand().clear();
         }
 
-        //P1 Hand
-        game.pickCard(0, "Foe", "F10", "10", 1);
-        game.pickCard(1, "Foe", "F15", "15", 1);
-        game.pickCard(2, "Foe", "F20", "20", 1);
-        game.pickCard(3, "Foe", "F25", "25", 1);
-        game.pickCard(4, "Foe", "F5", "5", 1);
-        game.pickCard(5, "Foe", "F5", "5", 1);
-        game.pickCard(6, "Weapon", "Lance", "20", 1);
-        game.pickCard(7, "Weapon", "Lance", "20", 1);
-        game.pickCard(8, "Weapon", "Lance", "20", 1);
-        game.pickCard(9, "Weapon", "Lance", "20", 1);
-        game.pickCard(10, "Foe", "F50", "50", 1);
-        game.pickCard(11, "Foe", "F50", "50", 1);
+        switch (scenario) {
+            case "A1_Scenario":
+                //rigging for A1 scenario
 
-        //P2 Hand
-        game.pickCard(0, "Weapon", "Sword", "10", 2);
-        game.pickCard(1, "Weapon", "Battle-Axe", "15", 2);
-        game.pickCard(2, "Weapon", "Horse", "10", 2);
-        game.pickCard(3, "Weapon", "Lance", "20", 2);
-        game.pickCard(4, "Weapon", "Lance", "20", 2);
-        game.pickCard(5, "Weapon", "Dagger", "5", 2);
-        game.pickCard(6, "Weapon", "Dagger", "5", 2);
-        game.pickCard(7, "Weapon", "Sword", "10", 2);
-        game.pickCard(8, "Weapon", "Horse", "10", 2);
-        game.pickCard(9, "Weapon", "Dagger", "5", 2);
-        game.pickCard(10, "Foe", "F10", "10", 2);
-        game.pickCard(11, "Foe", "F5", "5", 2);
+                //P1 Hand
+                game.pickCard(0,"Foe","F5","5",1);
+                game.pickCard(1,"Weapon","Dagger","5",1);
+                game.pickCard(2,"Weapon","Horse","10",1);
+                game.pickCard(3,"Foe","F5","5",1);
+                game.pickCard(4,"Weapon","Sword","10",1);
+                game.pickCard(5,"Weapon","Battle-Axe","15",1);
+                game.pickCard(6,"Foe","F15","15",1);
+                game.pickCard(7,"Weapon","Sword","10",1);
+                game.pickCard(8,"Weapon","Battle-Axe","15",1);
+                game.pickCard(9,"Foe","F15","15",1);
+                game.pickCard(10,"Weapon","Horse","10",1);
+                game.pickCard(11,"Weapon","Lance","20",1);
+                //P2 Hand
+                game.pickCard(0,"Foe","F5","5",2);
+                game.pickCard(1,"Foe","F40","40",2);
+                game.pickCard(2,"Weapon","Horse","10",2);
+                game.pickCard(3,"Foe","F5","5",2);
+                game.pickCard(4,"Weapon","Dagger","5",2);
+                game.pickCard(5,"Weapon","Battle-Axe","15",2);
+                game.pickCard(6,"Foe","F15","15",2);
+                game.pickCard(7,"Weapon","Sword","10",2);
+                game.pickCard(8,"Weapon","Battle-Axe","15",2);
+                game.pickCard(9,"Foe","F15","15",2);
+                game.pickCard(10,"Weapon","Horse","10",2);
+                game.pickCard(11,"Weapon","Excalibur","30",2);
+                //P3 Hand
+                game.pickCard(0,"Foe","F5","5",3);
+                game.pickCard(1,"Weapon","Dagger","5",3);
+                game.pickCard(2,"Weapon","Horse","10",3);
+                game.pickCard(3,"Foe","F5","5",3);
+                game.pickCard(4,"Weapon","Sword","10",3);
+                game.pickCard(5,"Weapon","Horse","10",3);
+                game.pickCard(6,"Foe","F5","5",3);
+                game.pickCard(7,"Weapon","Sword","10",3);
+                game.pickCard(8,"Weapon","Battle-Axe","15",3);
+                game.pickCard(9,"Foe","F15","15",3);
+                game.pickCard(10,"Weapon","Sword","10",3);
+                game.pickCard(11,"Weapon","Lance","20",3);
+                //P4 Hand
+                game.pickCard(0,"Foe","F5","5",4);
+                game.pickCard(1,"Weapon","Dagger","5",4);
+                game.pickCard(2,"Weapon","Horse","10",4);
+                game.pickCard(3,"Foe","F15","15",4);
+                game.pickCard(4,"Weapon","Dagger","5",4);
+                game.pickCard(5,"Weapon","Battle-Axe","15",4);
+                game.pickCard(6,"Foe","F15","15",4);
+                game.pickCard(7,"Weapon","Sword","10",4);
+                game.pickCard(8,"Weapon","Lance","20",4);
+                game.pickCard(9,"Foe","F40","40",4);
+                game.pickCard(10,"Weapon","Horse","10",4);
+                game.pickCard(11,"Weapon","Excalibur","30",4);
 
-        //P3 Hand
-        game.pickCard(0, "Weapon", "Dagger", "5", 3);
-        game.pickCard(1, "Foe", "F5", "5", 3);
-        game.pickCard(2, "Foe", "F10", "10", 3);
-        game.pickCard(3, "Foe", "F15", "15", 3);
-        game.pickCard(4, "Foe", "F70", "70", 3);
-        game.pickCard(5, "Weapon", "Sword", "10", 3);
-        game.pickCard(6, "Weapon", "Sword", "10", 3);
-        game.pickCard(7, "Weapon", "Sword", "10", 3);
-        game.pickCard(8, "Weapon", "Horse", "10", 3);
-        game.pickCard(9, "Weapon", "Horse", "10", 3);
-        game.pickCard(10, "Weapon", "Horse", "10", 3);
-        game.pickCard(11, "Foe", "F20", "20", 3);
+                //other cards that are picked up are rigged here (im just fixing input)
+                Card c1 = new Card("Foe","F30","30");
+                game.adventureDeck.set(0,c1);
+                Card c2 = new Card("Weapon","Sword","10");
+                game.adventureDeck.set(1,c2);
+                Card c3 = new Card("Weapon","Battle-Axe","15");
+                game.adventureDeck.set(2,c3);
+                Card c4 = new Card("Foe","F10","10");
+                game.adventureDeck.set(3,c4);
+                Card c5 = new Card("Weapon","Lance","20");
+                game.adventureDeck.set(4,c5);
+                Card c6 = new Card("Weapon","Lance","20");
+                game.adventureDeck.set(5,c6);
+                Card c7 = new Card("Weapon","Battle-Axe","15");
+                game.adventureDeck.set(6,c7);
+                Card c8 = new Card("Weapon","Sword","10");
+                game.adventureDeck.set(7,c8);
+                Card c9 = new Card("Foe","F30","30");
+                game.adventureDeck.set(8,c9);
+                Card c10 = new Card("Weapon","Lance","20");
+                game.adventureDeck.set(9,c10);
+                break;
+            case "2winner_game":
+                //rigging for 2winner_game
 
-        //P4 Hand
-        game.pickCard(0, "Weapon", "Horse", "10", 4);
-        game.pickCard(1, "Weapon", "Battle-Axe", "15", 4);
-        game.pickCard(2, "Weapon", "Horse", "10", 4);
-        game.pickCard(3, "Weapon", "Sword", "10", 4);
-        game.pickCard(4, "Weapon", "Excalibur", "30", 4);
-        game.pickCard(5, "Weapon", "Dagger", "5", 4);
-        game.pickCard(6, "Weapon", "Sword", "10", 4);
-        game.pickCard(7, "Weapon", "Sword", "10", 4);
-        game.pickCard(8, "Weapon", "Battle-Axe", "15", 4);
-        game.pickCard(9, "Foe", "F5", "5", 4);
-        game.pickCard(10, "Foe", "F10", "10", 4);
-        game.pickCard(11, "Foe", "F15", "15", 4);
+                //P1 Hand
+                game.pickCard(0, "Foe", "F10", "10", 1);
+                game.pickCard(1, "Foe", "F15", "15", 1);
+                game.pickCard(2, "Foe", "F20", "20", 1);
+                game.pickCard(3, "Foe", "F25", "25", 1);
+                game.pickCard(4, "Foe", "F5", "5", 1);
+                game.pickCard(5, "Foe", "F5", "5", 1);
+                game.pickCard(6, "Weapon", "Lance", "20", 1);
+                game.pickCard(7, "Weapon", "Lance", "20", 1);
+                game.pickCard(8, "Weapon", "Lance", "20", 1);
+                game.pickCard(9, "Weapon", "Lance", "20", 1);
+                game.pickCard(10, "Foe", "F50", "50", 1);
+                game.pickCard(11, "Foe", "F50", "50", 1);
 
-        //rig adventure deck with F5 foe cards because im lazy and don't want to deal with randomness
-        for (int i = 0; i < 23; i++) {
-            Card c = new Card("Foe" , "F5", "5");
-            game.adventureDeck.set(i,c);
-        }
-    }
+                //P2 Hand
+                game.pickCard(0, "Weapon", "Sword", "10", 2);
+                game.pickCard(1, "Weapon", "Battle-Axe", "15", 2);
+                game.pickCard(2, "Weapon", "Horse", "10", 2);
+                game.pickCard(3, "Weapon", "Lance", "20", 2);
+                game.pickCard(4, "Weapon", "Lance", "20", 2);
+                game.pickCard(5, "Weapon", "Dagger", "5", 2);
+                game.pickCard(6, "Weapon", "Dagger", "5", 2);
+                game.pickCard(7, "Weapon", "Sword", "10", 2);
+                game.pickCard(8, "Weapon", "Horse", "10", 2);
+                game.pickCard(9, "Weapon", "Dagger", "5", 2);
+                game.pickCard(10, "Foe", "F10", "10", 2);
+                game.pickCard(11, "Foe", "F5", "5", 2);
 
-    @Given("a new game starts with events")
-    public void a_new_game_starts_events() {
-        game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
-        game.dealCards();
+                //P3 Hand
+                game.pickCard(0, "Weapon", "Dagger", "5", 3);
+                game.pickCard(1, "Foe", "F5", "5", 3);
+                game.pickCard(2, "Foe", "F10", "10", 3);
+                game.pickCard(3, "Foe", "F15", "15", 3);
+                game.pickCard(4, "Foe", "F70", "70", 3);
+                game.pickCard(5, "Weapon", "Sword", "10", 3);
+                game.pickCard(6, "Weapon", "Sword", "10", 3);
+                game.pickCard(7, "Weapon", "Sword", "10", 3);
+                game.pickCard(8, "Weapon", "Horse", "10", 3);
+                game.pickCard(9, "Weapon", "Horse", "10", 3);
+                game.pickCard(10, "Weapon", "Horse", "10", 3);
+                game.pickCard(11, "Foe", "F20", "20", 3);
 
-        //card rigging
-        for (int i = 0; i < game.playerList.size(); i++) {
-            game.playerList.get(i).getHand().clear();
-        }
+                //P4 Hand
+                game.pickCard(0, "Weapon", "Horse", "10", 4);
+                game.pickCard(1, "Weapon", "Battle-Axe", "15", 4);
+                game.pickCard(2, "Weapon", "Horse", "10", 4);
+                game.pickCard(3, "Weapon", "Sword", "10", 4);
+                game.pickCard(4, "Weapon", "Excalibur", "30", 4);
+                game.pickCard(5, "Weapon", "Dagger", "5", 4);
+                game.pickCard(6, "Weapon", "Sword", "10", 4);
+                game.pickCard(7, "Weapon", "Sword", "10", 4);
+                game.pickCard(8, "Weapon", "Battle-Axe", "15", 4);
+                game.pickCard(9, "Foe", "F5", "5", 4);
+                game.pickCard(10, "Foe", "F10", "10", 4);
+                game.pickCard(11, "Foe", "F15", "15", 4);
 
-        //P1 Hand
-        game.pickCard(0,"Foe","F5","5",1);
-        game.pickCard(1,"Foe","F5","5",1);
-        game.pickCard(2,"Foe","F10","10",1);
-        game.pickCard(3,"Foe","F15","15",1);
-        game.pickCard(4,"Foe","F15","15",1);
-        game.pickCard(5,"Foe","F20","20",1);
-        game.pickCard(6,"Weapon","Sword","10",1);
-        game.pickCard(7,"Weapon","Sword","10",1);
-        game.pickCard(8,"Weapon","Horse","10",1);
-        game.pickCard(9,"Weapon","Battle-Axe","15",1);
-        game.pickCard(10,"Weapon","Sword","10",1);
-        game.pickCard(11,"Foe","F20","20",1);
+                //rig adventure deck with F5 foe cards because im lazy and don't want to deal with randomness
+                for (int i = 0; i < 23; i++) {
+                    Card c = new Card("Foe" , "F5", "5");
+                    game.adventureDeck.set(i,c);
+                }
+                break;
+            case "events":
+                //rigging for 1 winner with events
 
-        //P2 Hand
-        game.pickCard(0,"Weapon","Dagger","5",2);
-        game.pickCard(1,"Weapon","Dagger","5",2);
-        game.pickCard(2,"Weapon","Horse","10",2);
-        game.pickCard(3,"Weapon","Horse","10",2);
-        game.pickCard(4,"Weapon","Sword","10",2);
-        game.pickCard(5,"Weapon","Battle-Axe","15",2);
-        game.pickCard(6,"Weapon","Battle-Axe","15",2);
-        game.pickCard(7,"Weapon","Lance","20",2);
-        game.pickCard(8,"Weapon","Lance","20",2);
-        game.pickCard(9, "Foe","F10","10",2);
-        game.pickCard(10,"Foe","F25","25",2);
-        game.pickCard(11,"Foe","F40","40",2);
+                //P1 Hand
+                game.pickCard(0,"Foe","F5","5",1);
+                game.pickCard(1,"Foe","F5","5",1);
+                game.pickCard(2,"Foe","F10","10",1);
+                game.pickCard(3,"Foe","F15","15",1);
+                game.pickCard(4,"Foe","F15","15",1);
+                game.pickCard(5,"Foe","F20","20",1);
+                game.pickCard(6,"Weapon","Sword","10",1);
+                game.pickCard(7,"Weapon","Sword","10",1);
+                game.pickCard(8,"Weapon","Horse","10",1);
+                game.pickCard(9,"Weapon","Battle-Axe","15",1);
+                game.pickCard(10,"Weapon","Sword","10",1);
+                game.pickCard(11,"Foe","F20","20",1);
 
-        //P3 Hand
-        game.pickCard(0,"Weapon","Dagger","5",3);
-        game.pickCard(1,"Weapon","Dagger","5",3);
-        game.pickCard(2,"Weapon","Sword","10",3);
-        game.pickCard(3,"Weapon","Horse","10",3);
-        game.pickCard(4,"Weapon","Horse","10",3);
-        game.pickCard(5,"Weapon","Battle-Axe","15",3);
-        game.pickCard(6,"Weapon","Battle-Axe","15",3);
-        game.pickCard(7,"Weapon","Lance","20",3);
-        game.pickCard(8,"Weapon","Excalibur","30",3);
-        game.pickCard(9, "Foe","F10","10",3);
-        game.pickCard(10,"Foe","F25","25",3);
-        game.pickCard(11,"Foe","F35","35",3);
+                //P2 Hand
+                game.pickCard(0,"Weapon","Dagger","5",2);
+                game.pickCard(1,"Weapon","Dagger","5",2);
+                game.pickCard(2,"Weapon","Horse","10",2);
+                game.pickCard(3,"Weapon","Horse","10",2);
+                game.pickCard(4,"Weapon","Sword","10",2);
+                game.pickCard(5,"Weapon","Battle-Axe","15",2);
+                game.pickCard(6,"Weapon","Battle-Axe","15",2);
+                game.pickCard(7,"Weapon","Lance","20",2);
+                game.pickCard(8,"Weapon","Lance","20",2);
+                game.pickCard(9, "Foe","F10","10",2);
+                game.pickCard(10,"Foe","F25","25",2);
+                game.pickCard(11,"Foe","F40","40",2);
 
-        //P4 Hand
-        game.pickCard(0,"Weapon","Dagger","5",4);
-        game.pickCard(1,"Weapon","Dagger","5",4);
-        game.pickCard(2,"Weapon","Sword","10",4);
-        game.pickCard(3,"Weapon","Sword","10",4);
-        game.pickCard(4,"Weapon","Horse","10",4);
-        game.pickCard(5,"Weapon","Lance","20",4);
-        game.pickCard(6,"Foe","F50","50",4);
-        game.pickCard(7,"Weapon","Sword","10",4);
-        game.pickCard(8,"Foe","F40","40",4);
-        game.pickCard(9, "Foe","F10","10",4);
-        game.pickCard(10,"Foe","F25","25",4);
-        game.pickCard(11,"Foe","F35","35",4);
+                //P3 Hand
+                game.pickCard(0,"Weapon","Dagger","5",3);
+                game.pickCard(1,"Weapon","Dagger","5",3);
+                game.pickCard(2,"Weapon","Sword","10",3);
+                game.pickCard(3,"Weapon","Horse","10",3);
+                game.pickCard(4,"Weapon","Horse","10",3);
+                game.pickCard(5,"Weapon","Battle-Axe","15",3);
+                game.pickCard(6,"Weapon","Battle-Axe","15",3);
+                game.pickCard(7,"Weapon","Lance","20",3);
+                game.pickCard(8,"Weapon","Excalibur","30",3);
+                game.pickCard(9, "Foe","F10","10",3);
+                game.pickCard(10,"Foe","F25","25",3);
+                game.pickCard(11,"Foe","F35","35",3);
 
-        //adventure deck rigging
-        //same rigging as the 2 winner one except more of them
-        for (int i = 0; i < 40; i++) {
-            Card c = new Card("Foe" , "F5", "5");
-            game.adventureDeck.set(i,c);
-        }
-    }
+                //P4 Hand
+                game.pickCard(0,"Weapon","Dagger","5",4);
+                game.pickCard(1,"Weapon","Dagger","5",4);
+                game.pickCard(2,"Weapon","Sword","10",4);
+                game.pickCard(3,"Weapon","Sword","10",4);
+                game.pickCard(4,"Weapon","Horse","10",4);
+                game.pickCard(5,"Weapon","Lance","20",4);
+                game.pickCard(6,"Foe","F50","50",4);
+                game.pickCard(7,"Weapon","Sword","10",4);
+                game.pickCard(8,"Foe","F40","40",4);
+                game.pickCard(9, "Foe","F10","10",4);
+                game.pickCard(10,"Foe","F25","25",4);
+                game.pickCard(11,"Foe","F35","35",4);
 
-    @Given("a new game starts with 0_winner")
-    public void a_new_game_starts_0_winner() {
-        game = new Main();
-        game.initializeDecks();
-        game.initializePlayers();
-        game.dealCards();
+                //adventure deck rigging
+                //same rigging as the 2 winner one except more of them
+                for (int i = 0; i < 40; i++) {
+                    Card c = new Card("Foe" , "F5", "5");
+                    game.adventureDeck.set(i,c);
+                }
+                break;
+            case "0_winner":
+                //rigging for 0 winner
 
-        //card rigging
-        for (int i = 0; i < game.playerList.size(); i++) {
-            game.playerList.get(i).getHand().clear();
-        }
+                //this is just the cards from the A1 scenario, only require P1 to use high enemy cards because P1 is evil
+                //P1 Hand
+                game.pickCard(0,"Foe","F5","5",1);
+                game.pickCard(1,"Weapon","Dagger","5",1);
+                game.pickCard(2,"Weapon","Horse","10",1);
+                game.pickCard(3,"Foe","F50","50",1);
+                game.pickCard(4,"Weapon","Sword","10",1);
+                game.pickCard(5,"Weapon","Battle-Axe","15",1);
+                game.pickCard(6,"Foe","F15","15",1);
+                game.pickCard(7,"Weapon","Sword","10",1);
+                game.pickCard(8,"Weapon","Battle-Axe","15",1);
+                game.pickCard(9,"Foe","F70","70",1);
+                game.pickCard(10,"Weapon","Horse","10",1);
+                game.pickCard(11,"Weapon","Lance","20",1);
+                //P2 Hand
+                game.pickCard(0,"Foe","F5","5",2);
+                game.pickCard(1,"Foe","F40","40",2);
+                game.pickCard(2,"Weapon","Horse","10",2);
+                game.pickCard(3,"Foe","F5","5",2);
+                game.pickCard(4,"Weapon","Dagger","5",2);
+                game.pickCard(5,"Weapon","Battle-Axe","15",2);
+                game.pickCard(6,"Foe","F15","15",2);
+                game.pickCard(7,"Weapon","Sword","10",2);
+                game.pickCard(8,"Weapon","Battle-Axe","15",2);
+                game.pickCard(9,"Foe","F15","15",2);
+                game.pickCard(10,"Weapon","Horse","10",2);
+                game.pickCard(11,"Weapon","Excalibur","30",2);
+                //P3 Hand
+                game.pickCard(0,"Foe","F5","5",3);
+                game.pickCard(1,"Weapon","Dagger","5",3);
+                game.pickCard(2,"Weapon","Horse","10",3);
+                game.pickCard(3,"Foe","F5","5",3);
+                game.pickCard(4,"Weapon","Sword","10",3);
+                game.pickCard(5,"Weapon","Horse","10",3);
+                game.pickCard(6,"Foe","F5","5",3);
+                game.pickCard(7,"Weapon","Sword","10",3);
+                game.pickCard(8,"Weapon","Battle-Axe","15",3);
+                game.pickCard(9,"Foe","F15","15",3);
+                game.pickCard(10,"Weapon","Sword","10",3);
+                game.pickCard(11,"Weapon","Lance","20",3);
+                //P4 Hand
+                game.pickCard(0,"Foe","F5","5",4);
+                game.pickCard(1,"Weapon","Dagger","5",4);
+                game.pickCard(2,"Weapon","Horse","10",4);
+                game.pickCard(3,"Foe","F15","15",4);
+                game.pickCard(4,"Weapon","Dagger","5",4);
+                game.pickCard(5,"Weapon","Battle-Axe","15",4);
+                game.pickCard(6,"Foe","F15","15",4);
+                game.pickCard(7,"Weapon","Sword","10",4);
+                game.pickCard(8,"Weapon","Lance","20",4);
+                game.pickCard(9,"Foe","F40","40",4);
+                game.pickCard(10,"Weapon","Horse","10",4);
+                game.pickCard(11,"Weapon","Excalibur","30",4);
 
-        //this is just the cards from the A1 scenario, only require P1 to use high enemy cards because P1 is evil
-        //P1 Hand
-        game.pickCard(0,"Foe","F5","5",1);
-        game.pickCard(1,"Weapon","Dagger","5",1);
-        game.pickCard(2,"Weapon","Horse","10",1);
-        game.pickCard(3,"Foe","F50","50",1);
-        game.pickCard(4,"Weapon","Sword","10",1);
-        game.pickCard(5,"Weapon","Battle-Axe","15",1);
-        game.pickCard(6,"Foe","F15","15",1);
-        game.pickCard(7,"Weapon","Sword","10",1);
-        game.pickCard(8,"Weapon","Battle-Axe","15",1);
-        game.pickCard(9,"Foe","F70","70",1);
-        game.pickCard(10,"Weapon","Horse","10",1);
-        game.pickCard(11,"Weapon","Lance","20",1);
-        //P2 Hand
-        game.pickCard(0,"Foe","F5","5",2);
-        game.pickCard(1,"Foe","F40","40",2);
-        game.pickCard(2,"Weapon","Horse","10",2);
-        game.pickCard(3,"Foe","F5","5",2);
-        game.pickCard(4,"Weapon","Dagger","5",2);
-        game.pickCard(5,"Weapon","Battle-Axe","15",2);
-        game.pickCard(6,"Foe","F15","15",2);
-        game.pickCard(7,"Weapon","Sword","10",2);
-        game.pickCard(8,"Weapon","Battle-Axe","15",2);
-        game.pickCard(9,"Foe","F15","15",2);
-        game.pickCard(10,"Weapon","Horse","10",2);
-        game.pickCard(11,"Weapon","Excalibur","30",2);
-        //P3 Hand
-        game.pickCard(0,"Foe","F5","5",3);
-        game.pickCard(1,"Weapon","Dagger","5",3);
-        game.pickCard(2,"Weapon","Horse","10",3);
-        game.pickCard(3,"Foe","F5","5",3);
-        game.pickCard(4,"Weapon","Sword","10",3);
-        game.pickCard(5,"Weapon","Horse","10",3);
-        game.pickCard(6,"Foe","F5","5",3);
-        game.pickCard(7,"Weapon","Sword","10",3);
-        game.pickCard(8,"Weapon","Battle-Axe","15",3);
-        game.pickCard(9,"Foe","F15","15",3);
-        game.pickCard(10,"Weapon","Sword","10",3);
-        game.pickCard(11,"Weapon","Lance","20",3);
-        //P4 Hand
-        game.pickCard(0,"Foe","F5","5",4);
-        game.pickCard(1,"Weapon","Dagger","5",4);
-        game.pickCard(2,"Weapon","Horse","10",4);
-        game.pickCard(3,"Foe","F15","15",4);
-        game.pickCard(4,"Weapon","Dagger","5",4);
-        game.pickCard(5,"Weapon","Battle-Axe","15",4);
-        game.pickCard(6,"Foe","F15","15",4);
-        game.pickCard(7,"Weapon","Sword","10",4);
-        game.pickCard(8,"Weapon","Lance","20",4);
-        game.pickCard(9,"Foe","F40","40",4);
-        game.pickCard(10,"Weapon","Horse","10",4);
-        game.pickCard(11,"Weapon","Excalibur","30",4);
-
-        //adventure deck rigging
-        //the F5 cards strike again
-        for (int i = 0; i < 4; i++) {
-            Card c = new Card("Foe" , "F5", "5");
-            game.adventureDeck.set(i,c);
+                //adventure deck rigging
+                //the F5 cards strike again
+                for (int i = 0; i < 4; i++) {
+                    Card c = new Card("Foe" , "F5", "5");
+                    game.adventureDeck.set(i,c);
+                }
+                break;
         }
     }
 
