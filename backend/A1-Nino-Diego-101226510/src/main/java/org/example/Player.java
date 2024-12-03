@@ -38,6 +38,8 @@ public class Player {
 
     //other methods
 
+    public void sortHand() { Collections.sort(hand); }
+
     public void addCard(Card c) {
         hand.add(c);
     }
