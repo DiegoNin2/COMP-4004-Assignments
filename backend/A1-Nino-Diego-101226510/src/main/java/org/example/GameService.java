@@ -43,6 +43,11 @@ public class GameService {
 
     //the rest of the game (divided by sections)
     //because it makes it easier to work with the frontend
+
+    public void reset() {
+        gameState = new GameState();
+    }
+
     //displayWinner section
     public void displayWinner(PrintWriter output) {
         checkForWinners();
@@ -116,7 +121,7 @@ public class GameService {
           "success",
                 message,
                 id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).getHand(),
+                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
                 gameState.getPlayerList(),
                 null
         );
@@ -159,10 +164,11 @@ public class GameService {
         output.flush();
     }
 
-    public GameResponse trimHand(String id, int cardIndex) {
+    public GameResponse trimHand(String id, String cardIndex) {
         Player currentPlayer = gameState.getPlayerList().get(gameState.getPlayerTurnIndex());
 
-        currentPlayer.removeCardAt(cardIndex);
+        int index = Integer.parseInt(cardIndex);
+        currentPlayer.removeCardAt(index);
 
         int amountToDelete = checkHand(currentPlayer.getId());
         if (amountToDelete > 0) {
@@ -170,7 +176,7 @@ public class GameService {
                     "success",
                     "need to trim more...",
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -189,7 +195,7 @@ public class GameService {
                     "success",
                     message,
                     nextPlayer.getId(),
-                    nextPlayer.getHand(),
+                    nextPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -202,7 +208,7 @@ public class GameService {
                     "success",
                     "trimming complete",
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -263,7 +269,7 @@ public class GameService {
           "success",
                 message,
                 id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).getHand(),
+                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
                 gameState.getPlayerList(),
                 c
         );
@@ -287,7 +293,7 @@ public class GameService {
                 "success",
                 message,
                 id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).getHand(),
+                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
                 gameState.getPlayerList(),
                 c
         );
@@ -436,7 +442,7 @@ public class GameService {
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -464,7 +470,7 @@ public class GameService {
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 null
         );
@@ -585,7 +591,7 @@ public class GameService {
               "success",
                     message.toString(),
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -602,7 +608,7 @@ public class GameService {
                             "error",
                             message.toString(),
                             id,
-                            currentPlayer.getHand(),
+                            currentPlayer.displayHand(),
                             gameState.getPlayerList(),
                             null
                     );
@@ -613,7 +619,7 @@ public class GameService {
                                 "error",
                                 message.toString(),
                                 id,
-                                currentPlayer.getHand(),
+                                currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
                                 null
                         );
@@ -627,7 +633,7 @@ public class GameService {
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 null
         );
@@ -768,7 +774,7 @@ public class GameService {
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     null
             );
@@ -780,7 +786,7 @@ public class GameService {
                         "success",
                         message.toString(),
                         id,
-                        currentPlayer.getHand(),
+                        currentPlayer.displayHand(),
                         gameState.getPlayerList(),
                         null
                 );
@@ -791,7 +797,7 @@ public class GameService {
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 null
         );
@@ -820,7 +826,7 @@ public class GameService {
               "success",
                     message.toString(),
                     id,
-                    currentPlayer.getHand(),
+                    currentPlayer.displayHand(),
                     gameState.getPlayerList(),
                     c
             );
@@ -831,7 +837,7 @@ public class GameService {
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 c
         );
@@ -942,7 +948,7 @@ public class GameService {
                 "success",
                 "Current Player: " + currentPlayer.getId(),
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 null
         );
@@ -982,7 +988,7 @@ public class GameService {
                             "success",
                             message,
                             id,
-                            currentPlayer.getHand(),
+                            currentPlayer.displayHand(),
                             gameState.getPlayerList(),
                             c
                     );
@@ -1001,7 +1007,7 @@ public class GameService {
                           "success",
                                 message,
                                 id,
-                                currentPlayer.getHand(),
+                                currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
                                 c
                         );
@@ -1012,7 +1018,7 @@ public class GameService {
                                 "success",
                                 message,
                                 id,
-                                currentPlayer.getHand(),
+                                currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
                                 c
                         );
@@ -1045,7 +1051,7 @@ public class GameService {
                           "success",
                                 message,
                                 firstPlayer.getId(),
-                                firstPlayer.getHand(),
+                                firstPlayer.displayHand(),
                                 gameState.getPlayerList(),
                                 c
                         );
@@ -1056,7 +1062,7 @@ public class GameService {
                                 "success",
                                 message,
                                 id,
-                                currentPlayer.getHand(),
+                                currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
                                 c
                         );
@@ -1070,13 +1076,15 @@ public class GameService {
                 "success",
                 message,
                 id,
-                currentPlayer.getHand(),
+                currentPlayer.displayHand(),
                 gameState.getPlayerList(),
                 c
         );
     }
 
     public GameResponse endTurn(String id) {
+
+
         if (gameState.getPlayerTurnIndex() >= gameState.getPlayerList().size()) {
             gameState.setPlayerTurnIndex(0);
         } else {

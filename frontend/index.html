@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMP 4004 A3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <h1>COMP 4004 A3</h1>
+</header>
+
+<main>
+    <section id="player-stats-section">
+        <h2>Player Stats</h2>
+        <div id="player-stats"></div>
+    </section>
+
+    <section id="player-hand-section">
+        <h2>Player Hand</h2>
+        <div id="player-hand"></div>
+    </section>
+
+    <section id="game-log-section">
+        <h2>Game Log</h2>
+        <div id="game-log"></div>
+    </section>
+
+    <section id="controls-section">
+        <h2>Game Controls</h2>
+        <button id="start-game-btn" onclick="startGame()">Start Game</button>
+    </section>
+
+    <section id="player-input-section">
+        <h2>Player Input</h2>
+        <textarea id="player-input" placeholder="Type your response here"></textarea>
+        <button id="submit-input-btn" onclick="submitPlayerInput()">Submit</button>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

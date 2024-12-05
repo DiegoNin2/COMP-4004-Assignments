@@ -1,0 +1,91 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Section Containers */
+#player-stats, #game-log, #player-hand {
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#player-stats h3, #game-log h3, #player-hand h3 {
+    margin: 0 0 10px 0;
+}
+
+/* Player Stats */
+#stats-list {
+    list-style: none;
+    padding: 0;
+}
+
+#stats-list li {
+    margin: 5px 0;
+}
+
+/* Player Hand */
+#hand-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#hand-list div {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #eef;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+/* Game Log */
+#game-log {
+    height: 200px;
+    overflow-y: auto;
+    background-color: #eef8ff;
+    border: 1px solid #bcd;
+    font-size: 14px;
+}
+
+#log-entries div {
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #e8f3ff;
+    border-left: 4px solid #88b;
+}
+
+/* Button Styles */
+button {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #3e8e41;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

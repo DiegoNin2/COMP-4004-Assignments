@@ -3,7 +3,7 @@ package org.example;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://127.0.0.1:8081")
 public class Controller {
 
     private GameService gameService;
@@ -14,6 +14,7 @@ public class Controller {
 
     @PostMapping("/start-game")
     public String startGame() {
+        gameService.reset();
         gameService.initalizeDecks();
         gameService.initalizePlayers();
         gameService.dealCards();
@@ -78,5 +79,10 @@ public class Controller {
     @PostMapping("/end-turn")
     public GameResponse endTurn(@RequestBody GameRequest request) {
         return gameService.endTurn(request.getPlayerID());
+    }
+
+    @PostMapping("/trim-hand")
+    public GameResponse trimHand(@RequestBody GameRequest request) {
+        return gameService.trimHand(request.getPlayerID(), request.getInput());
     }
 }

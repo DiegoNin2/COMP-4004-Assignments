@@ -7,11 +7,11 @@ public class GameResponse {
     private String status;
     private String message;
     private String currentPlayerID;
-    private ArrayList<Card> currentHand;
+    private String currentHand;
     private ArrayList<Player> playerList;
     private Card eventCard;
 
-    public GameResponse(String status, String message, String currentID, ArrayList<Card> hand, ArrayList<Player> playerList, Card event) {
+    public GameResponse(String status, String message, String currentID, String hand, ArrayList<Player> playerList, Card event) {
         this.status = status;
         this.message = message;
         currentPlayerID = currentID;
@@ -32,9 +32,9 @@ public class GameResponse {
 
     public void setCurrentPlayerId(String currentPlayerId) { this.currentPlayerID = currentPlayerId; }
 
-    public ArrayList<Card> getCurrentHand() { return currentHand; }
+    public String getCurrentHand() { return currentHand; }
 
-    public void setCurrentHand(ArrayList<Card> currentHand) { this.currentHand = currentHand; }
+    public void setCurrentHand(String currentHand) { this.currentHand = currentHand; }
 
     public ArrayList<Player> getPlayerList() { return playerList; }
 
