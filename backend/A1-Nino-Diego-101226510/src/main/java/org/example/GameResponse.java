@@ -10,14 +10,18 @@ public class GameResponse {
     private String currentHand;
     private ArrayList<Player> playerList;
     private Card eventCard;
+    private boolean requiredInput;
+    private boolean finishedQuest;
 
-    public GameResponse(String status, String message, String currentID, String hand, ArrayList<Player> playerList, Card event) {
+    public GameResponse(String status, String message, String currentID, String hand, ArrayList<Player> playerList, Card event, boolean inputRequired, boolean questFinished) {
         this.status = status;
         this.message = message;
         currentPlayerID = currentID;
         currentHand = hand;
         this.playerList = playerList;
         eventCard = event;
+        requiredInput = inputRequired;
+        finishedQuest = questFinished;
     }
 
     public String getStatus() { return status; }
@@ -43,4 +47,12 @@ public class GameResponse {
     public Card getEventCard() { return eventCard; }
 
     public void setEventCard(Card eventCard) { this.eventCard = eventCard; }
+
+    public boolean isRequiredInput() { return requiredInput; }
+
+    public void setRequiredInput(boolean requiredInput) { this.requiredInput = requiredInput; }
+
+    public boolean isFinishedQuest() { return finishedQuest; }
+
+    public void setFinishedQuest(boolean finishedQuest) { this.finishedQuest = finishedQuest; }
 }

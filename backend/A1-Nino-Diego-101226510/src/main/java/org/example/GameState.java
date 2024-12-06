@@ -14,6 +14,7 @@ public class GameState {
     private ArrayList<Player> playerList;
     private ArrayList<Player> participantList;
     private ArrayList<Quest> questStageList;
+    private ArrayList<Player> eligiblePlayersList;
 
     private int playerTurnIndex;
     private int playerQuestIndex;
@@ -24,6 +25,9 @@ public class GameState {
     private ArrayList<Player> trimQueue;
 
     private String builderID;
+    private String eligiblePlayerID;
+
+    private boolean finishedQuest;
 
     //constructor
     public GameState() {
@@ -42,6 +46,8 @@ public class GameState {
         trimQueue = new ArrayList<Player>();
 
         builderID = "N/A";
+
+        finishedQuest = false;
     }
 
     //getters
@@ -85,6 +91,12 @@ public class GameState {
 
     public String getBuilderID() { return builderID; }
 
+    public boolean isFinishedQuest() { return finishedQuest; }
+
+    public ArrayList<Player> getEligiblePlayersList() { return eligiblePlayersList; }
+
+    public String getEligiblePlayerID() { return eligiblePlayerID; }
+
     //setters
     public void setGameEnd(boolean gameEnd) {
         this.gameEnd = gameEnd;
@@ -105,6 +117,10 @@ public class GameState {
     public void setTrimQueue(ArrayList<Player> trimQueue) { this.trimQueue = trimQueue; }
 
     public void setBuilderID(String builderID) { this.builderID = builderID; }
+
+    public void setFinishedQuest(boolean finishedQuest) { this.finishedQuest = finishedQuest; }
+
+    public void setEligiblePlayerID(String eligiblePlayerID) { this.eligiblePlayerID = eligiblePlayerID; }
 
     //initalization functions
     public void initializePlayers() {

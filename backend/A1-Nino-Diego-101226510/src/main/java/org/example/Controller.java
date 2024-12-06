@@ -21,7 +21,7 @@ public class Controller {
         return "Starting Game...";
     }
 
-    @GetMapping("/display-winners")
+    @PostMapping("/display-winners")
     public GameResponse displayWinner(@RequestBody GameRequest request) {
         return gameService.displayWinners(request.getPlayerID());
     }
@@ -73,7 +73,7 @@ public class Controller {
 
     @PostMapping("/handle-event")
     public GameResponse handleEvent(@RequestBody GameRequest request) {
-        return gameService.handleEvent(request.getPlayerID(), request.getEventCard(), request.getInput());
+        return gameService.handleEvent(request.getPlayerID(), request.getEventCard());
     }
 
     @PostMapping("/end-turn")
@@ -84,5 +84,15 @@ public class Controller {
     @PostMapping("/trim-hand")
     public GameResponse trimHand(@RequestBody GameRequest request) {
         return gameService.trimHand(request.getPlayerID(), request.getInput());
+    }
+
+    @PostMapping("/prepare-participants")
+    public GameResponse prepareParticipants(@RequestBody GameRequest request) {
+        return gameService.prepareParticipants(request.getPlayerID());
+    }
+
+    @PostMapping("/prepare-next-stage")
+    public GameResponse prepareNextStage(@RequestBody GameRequest request) {
+        return gameService.prepareNextStage(request.getPlayerID(), request.getCurrentStage(), request.getEventCard());
     }
 }

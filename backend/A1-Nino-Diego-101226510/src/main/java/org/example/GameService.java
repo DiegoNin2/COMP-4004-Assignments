@@ -38,6 +38,8 @@ public class GameService {
 
     public boolean isGameEnd() { return gameState.isGameEnd(); }
 
+    public boolean isFinishedQuest() { return gameState.isFinishedQuest(); }
+
     //use only for testing purposes
     public void pickCard(int index, String type, String name, String value, int playerID) { gameState.pickCard(index, type, name, value, playerID);}
 
@@ -123,7 +125,9 @@ public class GameService {
                 id,
                 gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
                 gameState.getPlayerList(),
-                null
+                null,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
@@ -178,7 +182,9 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    true,
+                    gameState.isFinishedQuest()
             );
         }
 
@@ -197,7 +203,9 @@ public class GameService {
                     nextPlayer.getId(),
                     nextPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    true,
+                    gameState.isFinishedQuest()
             );
         } else {
             gameState.setTrimmingID(null);
@@ -210,7 +218,9 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
             );
         }
     }
@@ -251,9 +261,11 @@ public class GameService {
 
     public GameResponse findEligiblePlayers(String id, Card c) {
         String eligiblePlayers = "";
+        gameState.getEligiblePlayersList().clear();
         for (int i = 0; i < gameState.getPlayerList().size(); i++) {
             if (!gameState.getPlayerList().get(i).getId().equals(id)) {
                 if (gameState.getPlayerList().get(i).getEligibleStatus()) {
+                    gameState.getEligiblePlayersList().add(gameState.getPlayerList().get(i));
                     if (i == gameState.getPlayerList().size()-1) {
                         eligiblePlayers += gameState.getPlayerList().get(i).getId();
                     } else {
@@ -263,6 +275,8 @@ public class GameService {
             }
         }
 
+        gameState.setEligiblePlayerID(gameState.getEligiblePlayersList().get(0).getId());
+
         String message = "Eligible Players: " + eligiblePlayers;
 
         return new GameResponse (
@@ -271,32 +285,57 @@ public class GameService {
                 id,
                 gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
                 gameState.getPlayerList(),
-                c
+                c,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
     public GameResponse getParticipants(String id, String decision, Card c) {
-        int currentPlayer = gameState.translateID(id);
         String message = "";
 
-        if (gameState.getPlayerList().get(currentPlayer).getEligibleStatus()) {
+        ArrayList<Player> eligiblePlayers = gameState.getEligiblePlayersList();
+
+        if (gameState.getEligiblePlayerID().equals(eligiblePlayers.get(0).getId())) {
             if (decision.equals("withdraw")) {
-                gameState.getPlayerList().get(currentPlayer).setEligibleStatus(false);
-                message = "Player " + currentPlayer + " decided to not participate.";
+                eligiblePlayers.get(0).setEligibleStatus(false);
+                message = "Player " + gameState.getEligiblePlayerID() + " decided to not participate.";
             } else {
-                gameState.getParticipantList().add(gameState.getPlayerList().get(currentPlayer));
-                message = "Player " + currentPlayer + " decided to participate.";
+                gameState.getParticipantList().add(eligiblePlayers.get(0));
+                message = "Player " + gameState.getEligiblePlayerID() + " decided to participate.";
             }
         }
 
-        return new GameResponse(
-                "success",
-                message,
-                id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
-                gameState.getPlayerList(),
-                c
-        );
+        eligiblePlayers.remove(0);
+
+        if (!eligiblePlayers.isEmpty()) {
+            Player nextPlayer = eligiblePlayers.get(0);
+            gameState.setEligiblePlayerID(nextPlayer.getId());
+            message = message + " asking next player...";
+            return new GameResponse(
+                    "success",
+                    message,
+                    id,
+                    gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                    gameState.getPlayerList(),
+                    c,
+                    true,
+                    gameState.isFinishedQuest()
+            );
+        } else {
+            gameState.setEligiblePlayerID(null);
+            message = message + " all eligible players asked.";
+            return new GameResponse(
+                    "success",
+                    message,
+                    id,
+                    gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                    gameState.getPlayerList(),
+                    c,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        }
     }
 
     //attackSequence section
@@ -349,7 +388,10 @@ public class GameService {
                 null,
                 null,
                 gameState.getPlayerList(),
-                c
+                c,
+                false,
+                gameState.isFinishedQuest()
+
         );
     }
 
@@ -444,7 +486,9 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
             );
         }
 
@@ -461,6 +505,7 @@ public class GameService {
                 }
             }
         } else {
+            gameState.getAdventureDeck().addToDiscard(currentPlayer.getCardAt(inputNum-1));
             currentPlayer.addAttackCard(currentPlayer.removeCardAt(inputNum-1));
 
             message.append(currentPlayer.getCardAt(inputNum-1).getName()).append(" added.");
@@ -472,7 +517,9 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                null
+                null,
+                true,
+                gameState.isFinishedQuest()
         );
     }
 
@@ -593,7 +640,9 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
             );
         }
 
@@ -610,7 +659,9 @@ public class GameService {
                             id,
                             currentPlayer.displayHand(),
                             gameState.getPlayerList(),
-                            null
+                            null,
+                            true,
+                            gameState.isFinishedQuest()
                     );
                 } else if (quest.getCardAt(i).getType().equals("Weapon")) {
                     if (quest.getCardAt(i).getName().equals(currentPlayer.getCardAt(inputNum-1).getName())) {
@@ -621,12 +672,15 @@ public class GameService {
                                 id,
                                 currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
-                                null
+                                null,
+                                true,
+                                gameState.isFinishedQuest()
                         );
                     }
                 }
             }
             quest.addCard(currentPlayer.getCardAt(inputNum-1));
+            gameState.getAdventureDeck().addToDiscard(currentPlayer.removeCardAt(inputNum-1));
             message.append(currentPlayer.getCardAt(inputNum-1).getName()).append(" added.");
         }
         return new GameResponse(
@@ -635,7 +689,9 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                null
+                null,
+                true,
+                gameState.isFinishedQuest()
         );
     }
 
@@ -776,7 +832,9 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    null
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
             );
         } else {
             gameState.setPlayerQuestIndex(gameState.getPlayerQuestIndex()+1);
@@ -788,7 +846,9 @@ public class GameService {
                         id,
                         currentPlayer.displayHand(),
                         gameState.getPlayerList(),
-                        null
+                        null,
+                        false,
+                        gameState.isFinishedQuest()
                 );
             }
         }
@@ -799,8 +859,129 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                null
+                null,
+                true,
+                gameState.isFinishedQuest()
         );
+    }
+
+    public GameResponse prepareParticipants(String id) {
+        StringBuilder message = new StringBuilder();
+        Player currentPlayer = gameState.getPlayerList().get(translateID(id));
+
+        if (gameState.getParticipantList().isEmpty()) {
+            message.append("No participants, quest cancelled...");
+            gameState.setFinishedQuest(true);
+
+            return new GameResponse(
+                    "success",
+                    message.toString(),
+                    id,
+                    currentPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        }
+
+        for (int i = 0; i < gameState.getParticipantList().size(); i++) {
+            gameState.getParticipantList().get(i).addCard(gameState.getAdventureDeck().drawCard());
+        }
+
+        ArrayList<Player> toTrim = new ArrayList<Player>();
+        for (int i = 0; i < gameState.getPlayerList().size(); i++) {
+            int amountToDelete = checkHand(gameState.getPlayerList().get(i).getId());
+            if (amountToDelete > 0) {
+                toTrim.add(gameState.getPlayerList().get(i));
+            }
+        }
+
+        if (!toTrim.isEmpty()) {
+            Player firstPlayer = toTrim.get(0);
+            gameState.setTrimmingID(firstPlayer.getId());
+            gameState.setAmountToDelete(checkHand(firstPlayer.getId()));
+            gameState.setTrimQueue(toTrim);
+
+            message.append("Too many cards, trimming hand for player ").append(firstPlayer.getId());
+
+            return new GameResponse(
+                    "success",
+                    message.toString(),
+                    firstPlayer.getId(),
+                    firstPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    null,
+                    true,
+                    gameState.isFinishedQuest()
+            );
+        } else {
+            message.append("All participants ready to build attack.");
+            return new GameResponse(
+                    "success",
+                    message.toString(),
+                    id,
+                    currentPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    null,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        }
+    }
+
+    public GameResponse prepareNextStage(String id, int currentStage, Card c) {
+        int finalStage = getQuestLength(c.getType());
+        StringBuilder message = new StringBuilder();
+        Player currentPlayer = gameState.getPlayerList().get(translateID(id));
+
+        if (!noEligibleParticipants()) {
+            message.append("No eligible participants for next stage. Ending quest...");
+            gameState.setFinishedQuest(true);
+
+            return new GameResponse(
+              "failure",
+                    message.toString(),
+                    id,
+                    currentPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    c,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        }
+
+        for (int i = 0; i < gameState.getParticipantList().size(); i++) {
+            gameState.getParticipantList().get(i).removeAttackCards();
+        }
+
+        if (currentStage < finalStage) {
+            message.append("Prepare for next stage...");
+            return new GameResponse(
+                    "success",
+                    message.toString(),
+                    id,
+                    currentPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    c,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        } else {
+            message.append("Final stage of quest complete. Ending quest & rewarding winner(s)...");
+            gameState.setFinishedQuest(true);
+
+            return new GameResponse(
+                    "success",
+                    message.toString(),
+                    id,
+                    currentPlayer.displayHand(),
+                    gameState.getPlayerList(),
+                    c,
+                    false,
+                    gameState.isFinishedQuest()
+            );
+        }
     }
 
     public GameResponse rewardPlayers(String id, Card c) {
@@ -815,6 +996,7 @@ public class GameService {
             }
         }
         clearQuestStages();
+        clearParticipants();
         int amountToGet = (amountToGet(gameState.getBuilderID()) + questLength);
         for (int i = 0; i < amountToGet; i++) {
             gameState.getPlayerList().get(translateID(gameState.getBuilderID())).addCard(gameState.getAdventureDeck().drawCard());
@@ -828,10 +1010,11 @@ public class GameService {
                     id,
                     currentPlayer.displayHand(),
                     gameState.getPlayerList(),
-                    c
+                    c,
+                    true,
+                    gameState.isFinishedQuest()
             );
         }
-        clearParticipants();
         message.append("Eligible players have been rewarded!");
         return new GameResponse(
                 "success",
@@ -839,7 +1022,9 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                c
+                c,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
@@ -950,7 +1135,9 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                null
+                null,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
@@ -964,11 +1151,13 @@ public class GameService {
                 id,
                 null,
                 gameState.getPlayerList(),
-                c
+                c,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
-    public GameResponse handleEvent(String id, Card c, String input) {
+    public GameResponse handleEvent(String id, Card c) {
         Player currentPlayer = gameState.getPlayerList().get(gameState.getPlayerTurnIndex());
         String message = "unhandled card";
 
@@ -990,7 +1179,9 @@ public class GameService {
                             id,
                             currentPlayer.displayHand(),
                             gameState.getPlayerList(),
-                            c
+                            c,
+                            false,
+                            gameState.isFinishedQuest()
                     );
                 case "Queen's Favor":
                     for (int i = 0; i < 2; i++) {
@@ -1009,7 +1200,9 @@ public class GameService {
                                 id,
                                 currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
-                                c
+                                c,
+                                true,
+                                gameState.isFinishedQuest()
                         );
                     } else {
                         message = "Player " + id + " draws 2 cards!";
@@ -1020,7 +1213,9 @@ public class GameService {
                                 id,
                                 currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
-                                c
+                                c,
+                                false,
+                                gameState.isFinishedQuest()
                         );
                     }
                 case "Prosperity":
@@ -1053,7 +1248,9 @@ public class GameService {
                                 firstPlayer.getId(),
                                 firstPlayer.displayHand(),
                                 gameState.getPlayerList(),
-                                c
+                                c,
+                                true,
+                                gameState.isFinishedQuest()
                         );
                     } else {
                         message = "All players draw 2 cards!";
@@ -1064,12 +1261,15 @@ public class GameService {
                                 id,
                                 currentPlayer.displayHand(),
                                 gameState.getPlayerList(),
-                                c
+                                c,
+                                false,
+                                gameState.isFinishedQuest()
                         );
                     }
             }
         } else if (c.getType().equals("Quest")) {
-            message = "A " + c.getName() + " will start!";
+            message = "A quest will start!";
+            gameState.setFinishedQuest(false);
         }
 
         return new GameResponse(
@@ -1078,13 +1278,13 @@ public class GameService {
                 id,
                 currentPlayer.displayHand(),
                 gameState.getPlayerList(),
-                c
+                c,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
     public GameResponse endTurn(String id) {
-
-
         if (gameState.getPlayerTurnIndex() >= gameState.getPlayerList().size()) {
             gameState.setPlayerTurnIndex(0);
         } else {
@@ -1094,10 +1294,12 @@ public class GameService {
         return new GameResponse(
           "success",
           "Moving on to next player...",
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).getId(),
+                id,
                 null,
                 gameState.getPlayerList(),
-                null
+                null,
+                false,
+                gameState.isFinishedQuest()
         );
     }
 
