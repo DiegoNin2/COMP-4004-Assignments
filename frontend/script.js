@@ -26,9 +26,8 @@ function updateStats(players) {
     });
 }
 
-function updateHand(hand) {
-    const handSection = document.getElementById("player-hand")
-    handSection.innerHTML = hand;
+function updateHand(hands) {
+    //update to get all hands
 }
 
 function enableInput(placeHolderText) {
@@ -410,6 +409,31 @@ async function prepareNextStage(playerID, currentStage, eventCard) {
 
 function selectCard(index) {
     updateLog(`Card at position ${index} selected.`);
+}
+
+//test functions
+async function rigScene1(driver) {
+    await driver.executeScript(async () => {
+        await fetch(`/${apiBaseUrl}/rig-scene1`, { method: 'POST' });
+    });
+}
+
+async function rigScene2(driver) {
+    await driver.executeScript(async () => {
+        await fetch(`/${apiBaseUrl}/rig-scene2`, { method: 'POST' });
+    });
+}
+
+async function rigScene3(driver) {
+    await driver.executeScript(async () => {
+        await fetch(`/${apiBaseUrl}/rig-scene3`, { method: 'POST' });
+    });
+}
+
+async function rigScene4(driver) {
+    await driver.executeScript(async () => {
+        await fetch(`/${apiBaseUrl}/rig-scene4`, { method: 'POST' });
+    });
 }
 
 document.getElementById("start-game-btn").addEventListener("click", startGame);

@@ -8,9 +8,11 @@ import java.util.Scanner;
 public class GameService {
 
     private GameState gameState;
+    private boolean riggingGame;
 
     public GameService() {
         gameState = new GameState();
+        riggingGame = false;
     }
 
     //all gameState methods (for ease of access)
@@ -40,8 +42,244 @@ public class GameService {
 
     public boolean isFinishedQuest() { return gameState.isFinishedQuest(); }
 
+    public boolean isRiggingGame() { return riggingGame; }
+
     //use only for testing purposes
     public void pickCard(int index, String type, String name, String value, int playerID) { gameState.pickCard(index, type, name, value, playerID);}
+
+    //two winner
+    public void rigScene1() {
+        riggingGame = true;
+
+        //P1 Hand
+
+        //event deck rigging
+        Card c = new Card("Quest", "4 Stage Quest", "Q4");
+        gameState.getEventDeck().setCardAt(c,0);
+        Card c1 = new Card("Quest", "3 Stage Quest", "Q3");
+        gameState.getEventDeck().setCardAt(c1,1);
+
+        //adventure deck rigging
+
+    }
+
+    //one winner
+    public void rigScene2() {
+        riggingGame = true;
+
+        //P1 Hand
+
+        //event deck rigging
+        Card c = new Card("Quest", "4 Stage Quest", "Q4");
+        gameState.getEventDeck().setCardAt(c,0);
+        Card c1 = new Card("Event", "Plague", "-2Sh");
+        gameState.getEventDeck().setCardAt(c1,1);
+        Card c2 = new Card("Event", "Prosperity", "+2All");
+        gameState.getEventDeck().setCardAt(c2,2);
+        Card c3 = new Card("Event", "Queen's Favor", "+2P");
+        gameState.getEventDeck().setCardAt(c3,3);
+        Card c4 = new Card("Quest", "3 Stage Quest", "Q3");
+        gameState.getEventDeck().setCardAt(c4,4);
+
+        //adventure deck rigging
+
+    }
+
+    //0 winner
+    public void rigScene3() {
+        riggingGame = true;
+
+        //P1 Hand
+        pickCard(0,"Foe","F50","50",1);
+        pickCard(1,"Weapon","Dagger","5",1);
+        pickCard(2,"Weapon","Horse","10",1);
+        pickCard(3,"Foe","F70","70",1);
+        pickCard(4,"Weapon","Sword","10",1);
+        pickCard(5,"Weapon","Battle-Axe","15",1);
+        pickCard(6,"Weapon","Dagger","5",1);
+        pickCard(7,"Weapon","Sword","10",1);
+        pickCard(8,"Weapon","Battle-Axe","15",1);
+        pickCard(9,"Weapon","Lance","20",1);
+        pickCard(10,"Weapon","Horse","10",1);
+        pickCard(11,"Weapon","Lance","20",1);
+
+        //P2 Hand
+        pickCard(0,"Foe","F5","5",2);
+        pickCard(1,"Foe","F5","5",2);
+        pickCard(2,"Foe","F10","10",2);
+        pickCard(3,"Foe","F40","40",2);
+        pickCard(4,"Foe","F15","15",2);
+        pickCard(5,"Foe","F15","15",2);
+        pickCard(6,"Foe","F20","20",2);
+        pickCard(7,"Foe","F20","20",2);
+        pickCard(8,"Foe","F25","25",2);
+        pickCard(9,"Foe","F30","30",2);
+        pickCard(10,"Foe","F30","30",2);
+        pickCard(11,"Weapon","Excalibur","30",2);
+
+        //P3 Hand
+        pickCard(0,"Foe","F5","5",3);
+        pickCard(1,"Foe","F5","5",3);
+        pickCard(2,"Foe","F10","10",3);
+        pickCard(3,"Foe","F40","40",3);
+        pickCard(4,"Foe","F15","15",3);
+        pickCard(5,"Foe","F15","15",3);
+        pickCard(6,"Foe","F20","20",3);
+        pickCard(7,"Foe","F20","20",3);
+        pickCard(8,"Foe","F25","25",3);
+        pickCard(9,"Foe","F25","25",3);
+        pickCard(10,"Foe","F30","30",3);
+        pickCard(11,"Weapon","Lance","20",3);
+
+        //P4 Hand
+        pickCard(0,"Foe","F5","5",4);
+        pickCard(1,"Foe","F5","5",4);
+        pickCard(2,"Foe","F10","10",4);
+        pickCard(3,"Foe","F50","50",4);
+        pickCard(4,"Foe","F15","15",4);
+        pickCard(5,"Foe","F15","15",4);
+        pickCard(6,"Foe","F20","20",4);
+        pickCard(7,"Foe","F20","20",4);
+        pickCard(8,"Foe","F25","25",4);
+        pickCard(9,"Foe","F25","25",4);
+        pickCard(10,"Foe","F30","30",4);
+        pickCard(11,"Weapon","Excalibur","30",4);
+
+        //event deck rigging
+        Card c = new Card("Quest", "2 Stage Quest", "Q2");
+        gameState.getEventDeck().setCardAt(c,0);
+
+        //adventure deck rigging
+        Card c1 = new Card("Foe", "F5", "5");
+        gameState.getAdventureDeck().setCardAt(c1,0);
+        Card c2 = new Card("Foe", "F15", "15");
+        gameState.getAdventureDeck().setCardAt(c2,1);
+        Card c3 = new Card("Foe", "F10", "10");
+        gameState.getAdventureDeck().setCardAt(c3,2);
+        Card c4 = new Card("Foe", "F5", "5");
+        gameState.getAdventureDeck().setCardAt(c4,3);
+        Card c5 = new Card("Foe", "F10", "10");
+        gameState.getAdventureDeck().setCardAt(c5,4);
+        Card c6 = new Card("Foe", "F15", "15");
+        gameState.getAdventureDeck().setCardAt(c6,5);
+        Card c7 = new Card("Weapon", "Dagger", "5");
+        gameState.getAdventureDeck().setCardAt(c7,6);
+        Card c8 = new Card("Weapon", "Dagger", "5");
+        gameState.getAdventureDeck().setCardAt(c8,7);
+        Card c9 = new Card("Weapon", "Dagger", "5");
+        gameState.getAdventureDeck().setCardAt(c9,8);
+        Card c10 = new Card("Weapon", "Dagger", "5");
+        gameState.getAdventureDeck().setCardAt(c10,9);
+        Card c11 = new Card("Weapon", "Horse", "10");
+        gameState.getAdventureDeck().setCardAt(c11,10);
+        Card c12 = new Card("Weapon", "Horse", "10");
+        gameState.getAdventureDeck().setCardAt(c12,11);
+        Card c13 = new Card("Weapon", "Horse", "10");
+        gameState.getAdventureDeck().setCardAt(c13,12);
+        Card c14 = new Card("Weapon", "Horse", "10");
+        gameState.getAdventureDeck().setCardAt(c14,13);
+        Card c15 = new Card("Weapon", "Sword", "10");
+        gameState.getAdventureDeck().setCardAt(c15,14);
+        Card c16 = new Card("Weapon", "Sword", "10");
+        gameState.getAdventureDeck().setCardAt(c16,15);
+        Card c17 = new Card("Weapon", "Sword", "10");
+        gameState.getAdventureDeck().setCardAt(c17,16);
+    }
+
+    //A1 scenario
+    public void rigScene4() {
+        riggingGame = true;
+
+        //P1 Hand
+        pickCard(0,"Foe","F5","5",1);
+        pickCard(1,"Weapon","Dagger","5",1);
+        pickCard(2,"Weapon","Horse","10",1);
+        pickCard(3,"Foe","F5","5",1);
+        pickCard(4,"Weapon","Sword","10",1);
+        pickCard(5,"Weapon","Battle-Axe","15",1);
+        pickCard(6,"Foe","F15","15",1);
+        pickCard(7,"Weapon","Sword","10",1);
+        pickCard(8,"Weapon","Battle-Axe","15",1);
+        pickCard(9,"Foe","F15","15",1);
+        pickCard(10,"Weapon","Horse","10",1);
+        pickCard(11,"Weapon","Lance","20",1);
+
+        //P2 Hand
+        pickCard(0,"Foe","F5","5",2);
+        pickCard(1,"Foe","F40","40",2);
+        pickCard(2,"Weapon","Horse","10",2);
+        pickCard(3,"Foe","F5","5",2);
+        pickCard(4,"Weapon","Dagger","5",2);
+        pickCard(5,"Weapon","Battle-Axe","15",2);
+        pickCard(6,"Foe","F15","15",2);
+        pickCard(7,"Weapon","Sword","10",2);
+        pickCard(8,"Weapon","Battle-Axe","15",2);
+        pickCard(9,"Foe","F15","15",2);
+        pickCard(10,"Weapon","Horse","10",2);
+        pickCard(11,"Weapon","Excalibur","30",2);
+
+        //P3 Hand
+        pickCard(0,"Foe","F5","5",3);
+        pickCard(1,"Weapon","Dagger","5",3);
+        pickCard(2,"Weapon","Horse","10",3);
+        pickCard(3,"Foe","F5","5",3);
+        pickCard(4,"Weapon","Sword","10",3);
+        pickCard(5,"Weapon","Horse","10",3);
+        pickCard(6,"Foe","F5","5",3);
+        pickCard(7,"Weapon","Sword","10",3);
+        pickCard(8,"Weapon","Battle-Axe","15",3);
+        pickCard(9,"Foe","F15","15",3);
+        pickCard(10,"Weapon","Sword","10",3);
+        pickCard(11,"Weapon","Lance","20",3);
+
+        //P4 Hand
+        pickCard(0,"Foe","F5","5",4);
+        pickCard(1,"Weapon","Dagger","5",4);
+        pickCard(2,"Weapon","Horse","10",4);
+        pickCard(3,"Foe","F15","15",4);
+        pickCard(4,"Weapon","Dagger","5",4);
+        pickCard(5,"Weapon","Battle-Axe","15",4);
+        pickCard(6,"Foe","F15","15",4);
+        pickCard(7,"Weapon","Sword","10",4);
+        pickCard(8,"Weapon","Lance","20",4);
+        pickCard(9,"Foe","F40","40",4);
+        pickCard(10,"Weapon","Horse","10",4);
+        pickCard(11,"Weapon","Excalibur","30",4);
+
+        //event deck rigging
+        Card c = new Card("Quest", "4 Stage Quest", "Q4");
+        gameState.getEventDeck().setCardAt(c,0);
+
+        //adventure deck rigging
+        Card c1 = new Card("Foe","F30","30");
+        gameState.getAdventureDeck().setCardAt(c1,0);
+        Card c2 = new Card("Weapon","Sword","10");
+        gameState.getAdventureDeck().setCardAt(c2,1);
+        Card c3 = new Card("Weapon","Battle-Axe","15");
+        gameState.getAdventureDeck().setCardAt(c3,2);
+        Card c4 = new Card("Foe","F10","10");
+        gameState.getAdventureDeck().setCardAt(c4,3);
+        Card c5 = new Card("Weapon","Lance","20");
+        gameState.getAdventureDeck().setCardAt(c5,4);
+        Card c6 = new Card("Weapon","Lance","20");
+        gameState.getAdventureDeck().setCardAt(c6,5);
+        Card c7 = new Card("Weapon","Battle-Axe","15");
+        gameState.getAdventureDeck().setCardAt(c7,6);
+        Card c8 = new Card("Weapon","Sword","10");
+        gameState.getAdventureDeck().setCardAt(c8,7);
+        Card c9 = new Card("Foe","F30","30");
+        gameState.getAdventureDeck().setCardAt(c9,8);
+        Card c10 = new Card("Weapon","Lance","20");
+        gameState.getAdventureDeck().setCardAt(c10,9);
+        Card c11 = new Card("Foe","F5","5");
+        gameState.getAdventureDeck().setCardAt(c11,10);
+
+        //im too lazy to think about rigging p2's hand post quest
+        for (int i = 10; i < 23; i++) {
+            Card c12 = new Card("Foe" , "F5", "5");
+            gameState.getAdventureDeck().setCardAt(c12,i);
+        }
+    }
 
     //the rest of the game (divided by sections)
     //because it makes it easier to work with the frontend

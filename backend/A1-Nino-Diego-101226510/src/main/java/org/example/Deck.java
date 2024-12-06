@@ -24,6 +24,11 @@ public class Deck {
         }
     }
 
+    //testing purposes only
+    public void setCardAt(Card c, int index) {
+        deck.set(index, c);
+    }
+
     private void initializeAdventureDeck() {
         //Weapon cards
         for (int i = 0; i < 6; i++) {

@@ -14,11 +14,15 @@ public class Controller {
 
     @PostMapping("/start-game")
     public String startGame() {
-        gameService.reset();
-        gameService.initalizeDecks();
-        gameService.initalizePlayers();
-        gameService.dealCards();
-        return "Starting Game...";
+        if (gameService.isRiggingGame()) {
+            return "Starting Game...";
+        } else {
+            gameService.reset();
+            gameService.initalizeDecks();
+            gameService.initalizePlayers();
+            gameService.dealCards();
+            return "Starting Game...";
+        }
     }
 
     @PostMapping("/display-winners")
@@ -94,5 +98,26 @@ public class Controller {
     @PostMapping("/prepare-next-stage")
     public GameResponse prepareNextStage(@RequestBody GameRequest request) {
         return gameService.prepareNextStage(request.getPlayerID(), request.getCurrentStage(), request.getEventCard());
+    }
+
+    //test functions
+    @PostMapping("/rig-scene1")
+    public void rigScene1() {
+        gameService.rigScene1();
+    }
+
+    @PostMapping("/rig-scene2")
+    public void rigScene2() {
+        gameService.rigScene2();
+    }
+
+    @PostMapping("/rig-scene3")
+    public void rigScene3() {
+        gameService.rigScene3();
+    }
+
+    @PostMapping("/rig-scene4")
+    public void rigScene4() {
+        gameService.rigScene4();
     }
 }
