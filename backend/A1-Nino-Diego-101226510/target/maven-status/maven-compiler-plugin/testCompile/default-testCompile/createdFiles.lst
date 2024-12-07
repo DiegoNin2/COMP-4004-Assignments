@@ -1,0 +1,4 @@
+org\example\MainAcceptanceTest.class
+org\example\RunCucumberTest.class
+org\example\GameSteps.class
+org\example\MainTest.class
