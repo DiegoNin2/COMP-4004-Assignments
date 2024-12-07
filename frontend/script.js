@@ -444,4 +444,8 @@ async function rigScene4(driver) {
     });
 }
 
-document.getElementById("start-game-btn").addEventListener("click", startGame);
+module.exports = { rigScene1, rigScene2, rigScene3, rigScene4 };
+
+if (typeof document !== 'undefined') {
+    document.getElementById("start-game-btn").addEventListener("click", startGame);
+}
