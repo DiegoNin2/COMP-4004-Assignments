@@ -11,7 +11,10 @@ const gameState = {
 
 function updateLog(message) {
     const log = document.getElementById("game-log");
-    log.innerHTML = `<div>${message}</div>`;
+    const logEntry = document.createElement("div");
+    logEntry.textContent = message;
+
+    log.appendChild(logEntry);
     log.scrollTop = log.scrollHeight;
 }
 
@@ -27,7 +30,11 @@ function updateStats(players) {
 }
 
 function updateHand(hands) {
-    //update to get all hands
+    hands.forEach((hand, index) => {
+        const pID = `player${index + 1}-hand`;
+        const handSection = document.getElementById(pID);
+        handSection.innerHTML = hand;
+    })
 }
 
 function enableInput(placeHolderText) {
@@ -90,23 +97,23 @@ async function nextGameStep() {
             await handleEvent(gameState.currentPlayer, gameState.currentEventCard);
             break;
         case "trimHand":
-            enableInput("Trim your hand to the correct size, select a card to discard");
+            enableInput("Select a card to discard.");
             break;
         case "selectBuilder":
-            enableInput("Picking a builder for the quest, would you like to build for it? (y/n)");
+            enableInput("Would you like to build the quest? (y/n)");
             gameState.currentState = "buildQuest";
             break;
         case "buildQuest":
-            enableInput("Build the quest, select a card to add to the stage or quit");
+            enableInput("select a card to add to the stage or quit");
             break;
         case "findEligiblePlayers":
             await findEligiblePlayers(gameState.currentPlayer, gameState.currentEventCard);
             break;
         case "getParticipants":
-            enableInput("Getting participants for quest, would you like to participate in it? (participate/withdraw)");
+            enableInput("do you want to participate in the quest? (participate/withdraw)");
             break;
         case "buildAttack":
-            enableInput("Build the attack for the stage, select a card for your attack or quit");
+            enableInput("select a card for your attack or quit");
             break;
         case "attackSequence":
             await attackSequence(gameState.currentPlayer, gameState.currentStage, gameState.currentEventCard);
@@ -153,7 +160,7 @@ async function startTurn(playerID) {
 
     updateLog(data.message);
     updateStats(data.playerList);
-    updateHand(data.currentHand);
+    updateHand(data.allPlayerHands);
 
     gameState.currentState = "drawEvent";
     await nextGameStep();
@@ -256,7 +263,7 @@ async function buildQuest(playerID, input, eventCard) {
     });
     const data = await response.json();
     updateLog(data.message);
-    updateHand(data.currentHand);
+    updateHand(data.allPlayerHands);
 
     if (data.requiredInput) {
         enableInput("select a card to add to the stage or quit")
@@ -274,7 +281,7 @@ async function buildAttack(playerID, input) {
     });
     const data = await response.json();
     updateLog(data.message);
-    updateHand(data.currentHand);
+    updateHand(data.allPlayerHands);
 
     if (data.requiredInput) {
         enableInput("select a card for your attack or quit")
@@ -319,6 +326,7 @@ async function displayWinners(playerID) {
     });
     const data = await response.json();
     updateLog(data.message);
+    updateHand(data.allPlayerHands)
 
     if (data.message.includes("no winners yet")) {
         gameState.currentState = "endTurn";
@@ -347,7 +355,7 @@ async function trimHand(playerID, input) {
     });
     const data = await response.json();
     updateLog(data.message);
-    updateHand(data.currentHand);
+    updateHand(data.allPlayerHands);
 
     if (!data.requiredInput) {
         disableInput();

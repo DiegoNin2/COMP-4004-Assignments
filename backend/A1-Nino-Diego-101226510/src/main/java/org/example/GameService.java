@@ -553,6 +553,15 @@ public class GameService {
         gameState = new GameState();
     }
 
+    private ArrayList<String> getAllPlayerHands() {
+        ArrayList<String> allPlayerHands = new ArrayList<String>();
+        for (int i = 0; i < gameState.getPlayerList().size(); i++) {
+            Collections.sort(gameState.getPlayerList().get(i).getHand());
+            allPlayerHands.add(gameState.getPlayerList().get(i).displayHand());
+        }
+        return allPlayerHands;
+    }
+
     //displayWinner section
     public void displayWinner(PrintWriter output) {
         checkForWinners();
@@ -622,11 +631,13 @@ public class GameService {
                 break;
         }
 
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
+
         return new GameResponse(
           "success",
                 message,
                 id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 null,
                 false,
@@ -679,11 +690,13 @@ public class GameService {
 
         int amountToDelete = checkHand(currentPlayer.getId());
         if (amountToDelete > 0) {
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
+
             return new GameResponse(
                     "success",
                     "need to trim more...",
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     true,
@@ -699,12 +712,13 @@ public class GameService {
             gameState.setTrimmingID(nextPlayer.getId());
             gameState.setAmountToDelete(checkHand(nextPlayer.getId()));
             String message = "trimming done for " + id + ". moving on to player " + nextPlayer.getId();
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
 
             return new GameResponse(
                     "success",
                     message,
                     nextPlayer.getId(),
-                    nextPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     true,
@@ -714,12 +728,13 @@ public class GameService {
             gameState.setTrimmingID(null);
             gameState.setAmountToDelete(0);
             gameState.setTrimQueue(null);
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
 
             return new GameResponse(
                     "success",
                     "trimming complete",
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     false,
@@ -781,12 +796,13 @@ public class GameService {
         gameState.setEligiblePlayerID(gameState.getEligiblePlayersList().get(0).getId());
 
         String message = "Eligible Players: " + eligiblePlayers;
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
 
         return new GameResponse (
           "success",
                 message,
                 id,
-                gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 c,
                 false,
@@ -805,6 +821,7 @@ public class GameService {
                 message = "Player " + gameState.getEligiblePlayerID() + " decided to not participate.";
             } else {
                 gameState.getParticipantList().add(eligiblePlayers.get(0));
+                gameState.getAttackBuildersList().add(eligiblePlayers.get(0));
                 message = "Player " + gameState.getEligiblePlayerID() + " decided to participate.";
             }
         }
@@ -815,11 +832,12 @@ public class GameService {
             Player nextPlayer = eligiblePlayers.get(0);
             gameState.setEligiblePlayerID(nextPlayer.getId());
             message = message + " asking next player...";
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message,
                     id,
-                    gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     true,
@@ -827,12 +845,14 @@ public class GameService {
             );
         } else {
             gameState.setEligiblePlayerID(null);
+            gameState.setAttackBuilderID(gameState.getAttackBuildersList().get(0).getId());
             message = message + " all eligible players asked.";
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message,
                     id,
-                    gameState.getPlayerList().get(gameState.getPlayerTurnIndex()).displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     false,
@@ -973,7 +993,7 @@ public class GameService {
     }
 
     public GameResponse buildAttack(String id, String decision) {
-        Player currentPlayer = gameState.getPlayerList().get(translateID(id));
+        Player currentPlayer = gameState.getPlayerList().get(translateID(gameState.getAttackBuilderID()));
         StringBuilder message = new StringBuilder();
 
         if (decision.equalsIgnoreCase("quit")) {
@@ -983,16 +1003,33 @@ public class GameService {
                 String cardsInAttack = currentPlayer.displayAttackHand();
                 message.append("Player ").append(id).append("'s current attack: ").append(cardsInAttack);
             }
-            return new GameResponse(
-                    "success",
-                    message.toString(),
-                    id,
-                    currentPlayer.displayHand(),
-                    gameState.getPlayerList(),
-                    null,
-                    false,
-                    gameState.isFinishedQuest()
-            );
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
+            gameState.getAttackBuildersList().remove(0);
+
+            if (!gameState.getAttackBuildersList().isEmpty()) {
+                gameState.setAttackBuilderID(gameState.getAttackBuildersList().get(0).getId());
+                return new GameResponse(
+                        "success",
+                        message.toString(),
+                        gameState.getAttackBuilderID(),
+                        allPlayerHands,
+                        gameState.getPlayerList(),
+                        null,
+                        true,
+                        gameState.isFinishedQuest()
+                );
+            } else {
+                return new GameResponse(
+                        "success",
+                        message.toString(),
+                        gameState.getAttackBuilderID(),
+                        allPlayerHands,
+                        gameState.getPlayerList(),
+                        null,
+                        false,
+                        gameState.isFinishedQuest()
+                );
+            }
         }
 
         int inputNum = Integer.parseInt(decision);
@@ -1009,16 +1046,16 @@ public class GameService {
             }
         } else {
             gameState.getAdventureDeck().addToDiscard(currentPlayer.getCardAt(inputNum-1));
-            currentPlayer.addAttackCard(currentPlayer.removeCardAt(inputNum-1));
-
             message.append(currentPlayer.getCardAt(inputNum-1).getName()).append(" added.");
+            currentPlayer.addAttackCard(currentPlayer.removeCardAt(inputNum-1));
         }
 
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
         return new GameResponse(
                 "success",
                 message.toString(),
-                id,
-                currentPlayer.displayHand(),
+                gameState.getAttackBuilderID(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 null,
                 true,
@@ -1137,11 +1174,13 @@ public class GameService {
                 message.append("Quest built!");
             }
 
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
+
             return new GameResponse(
               "success",
                     message.toString(),
-                    id,
-                    currentPlayer.displayHand(),
+                    gameState.getAttackBuilderID(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     false,
@@ -1156,11 +1195,12 @@ public class GameService {
             for (int i = 0; i < quest.getStageSize(); i++) {
                 if (quest.getCardAt(i).getType().equals("Foe") && currentPlayer.getCardAt(inputNum-1).getType().equals("Foe")) {
                     message.append("Rejected: Foe already chosen.");
+                    ArrayList<String> allPlayerHands = getAllPlayerHands();
                     return new GameResponse(
                             "error",
                             message.toString(),
-                            id,
-                            currentPlayer.displayHand(),
+                            gameState.getAttackBuilderID(),
+                            allPlayerHands,
                             gameState.getPlayerList(),
                             null,
                             true,
@@ -1169,11 +1209,12 @@ public class GameService {
                 } else if (quest.getCardAt(i).getType().equals("Weapon")) {
                     if (quest.getCardAt(i).getName().equals(currentPlayer.getCardAt(inputNum-1).getName())) {
                         message.append("Rejected: Duplicate weapon.");
+                        ArrayList<String> allPlayerHands = getAllPlayerHands();
                         return new GameResponse(
                                 "error",
                                 message.toString(),
-                                id,
-                                currentPlayer.displayHand(),
+                                gameState.getAttackBuilderID(),
+                                allPlayerHands,
                                 gameState.getPlayerList(),
                                 null,
                                 true,
@@ -1183,14 +1224,15 @@ public class GameService {
                 }
             }
             quest.addCard(currentPlayer.getCardAt(inputNum-1));
-            gameState.getAdventureDeck().addToDiscard(currentPlayer.removeCardAt(inputNum-1));
             message.append(currentPlayer.getCardAt(inputNum-1).getName()).append(" added.");
+            gameState.getAdventureDeck().addToDiscard(currentPlayer.removeCardAt(inputNum-1));
         }
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
         return new GameResponse(
                 "success",
                 message.toString(),
-                id,
-                currentPlayer.displayHand(),
+                gameState.getAttackBuilderID(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 null,
                 true,
@@ -1329,11 +1371,12 @@ public class GameService {
         if (decision.equalsIgnoreCase("y")) {
             gameState.setBuilderID(id);
             message.append("Player ").append(id).append(" has sponsored!");
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     false,
@@ -1343,11 +1386,12 @@ public class GameService {
             gameState.setPlayerQuestIndex(gameState.getPlayerQuestIndex()+1);
             if (gameState.getPlayerQuestIndex() >= gameState.getPlayerList().size()) {
                 message.append("All players have declined. Ending turn...");
+                ArrayList<String> allPlayerHands = getAllPlayerHands();
                 return new GameResponse(
                         "success",
                         message.toString(),
                         id,
-                        currentPlayer.displayHand(),
+                        allPlayerHands,
                         gameState.getPlayerList(),
                         null,
                         false,
@@ -1356,11 +1400,12 @@ public class GameService {
             }
         }
         message.append("Player ").append(id).append(" declined, asking next player...");
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
         return new GameResponse(
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 null,
                 true,
@@ -1375,12 +1420,13 @@ public class GameService {
         if (gameState.getParticipantList().isEmpty()) {
             message.append("No participants, quest cancelled...");
             gameState.setFinishedQuest(true);
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
 
             return new GameResponse(
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     false,
@@ -1408,11 +1454,12 @@ public class GameService {
 
             message.append("Too many cards, trimming hand for player ").append(firstPlayer.getId());
 
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message.toString(),
                     firstPlayer.getId(),
-                    firstPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     true,
@@ -1420,11 +1467,12 @@ public class GameService {
             );
         } else {
             message.append("All participants ready to build attack.");
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     null,
                     false,
@@ -1441,12 +1489,13 @@ public class GameService {
         if (!noEligibleParticipants()) {
             message.append("No eligible participants for next stage. Ending quest...");
             gameState.setFinishedQuest(true);
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
 
             return new GameResponse(
               "failure",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     false,
@@ -1460,11 +1509,12 @@ public class GameService {
 
         if (currentStage < finalStage) {
             message.append("Prepare for next stage...");
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     false,
@@ -1473,12 +1523,13 @@ public class GameService {
         } else {
             message.append("Final stage of quest complete. Ending quest & rewarding winner(s)...");
             gameState.setFinishedQuest(true);
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
 
             return new GameResponse(
                     "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     false,
@@ -1507,11 +1558,12 @@ public class GameService {
         int amountToDelete = checkHand(gameState.getBuilderID());
         if (amountToDelete > 0) {
             message.append("Too many cards, trimming hand for player ").append(gameState.getBuilderID());
+            ArrayList<String> allPlayerHands = getAllPlayerHands();
             return new GameResponse(
               "success",
                     message.toString(),
                     id,
-                    currentPlayer.displayHand(),
+                    allPlayerHands,
                     gameState.getPlayerList(),
                     c,
                     true,
@@ -1519,11 +1571,12 @@ public class GameService {
             );
         }
         message.append("Eligible players have been rewarded!");
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
         return new GameResponse(
                 "success",
                 message.toString(),
                 id,
-                currentPlayer.displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 c,
                 false,
@@ -1632,11 +1685,12 @@ public class GameService {
     public GameResponse startTurn(String id) {
         Player currentPlayer = gameState.getPlayerList().get(gameState.getPlayerTurnIndex());
         currentPlayer.sortHand();
+        ArrayList<String> allPlayerHands = getAllPlayerHands();
         return new GameResponse (
                 "success",
                 "Current Player: " + currentPlayer.getId(),
                 id,
-                currentPlayer.displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 null,
                 false,
@@ -1663,6 +1717,7 @@ public class GameService {
     public GameResponse handleEvent(String id, Card c) {
         Player currentPlayer = gameState.getPlayerList().get(gameState.getPlayerTurnIndex());
         String message = "unhandled card";
+        ArrayList<String> allPlayerHands;
 
         if (c.getType().equals("Event")) {
             int amountToDelete;
@@ -1675,12 +1730,13 @@ public class GameService {
                     }
 
                     message = "Player " + id + " lost 2 shields!";
+                    allPlayerHands = getAllPlayerHands();
 
                     return new GameResponse(
                             "success",
                             message,
                             id,
-                            currentPlayer.displayHand(),
+                            allPlayerHands,
                             gameState.getPlayerList(),
                             c,
                             false,
@@ -1696,12 +1752,13 @@ public class GameService {
                         gameState.setAmountToDelete(amountToDelete);
 
                         message = "Too many cards, trimming hand for player " + id;
+                        allPlayerHands = getAllPlayerHands();
 
                         return new GameResponse(
                           "success",
                                 message,
                                 id,
-                                currentPlayer.displayHand(),
+                                allPlayerHands,
                                 gameState.getPlayerList(),
                                 c,
                                 true,
@@ -1709,12 +1766,13 @@ public class GameService {
                         );
                     } else {
                         message = "Player " + id + " draws 2 cards!";
+                        allPlayerHands = getAllPlayerHands();
 
                         return new GameResponse(
                                 "success",
                                 message,
                                 id,
-                                currentPlayer.displayHand(),
+                                allPlayerHands,
                                 gameState.getPlayerList(),
                                 c,
                                 false,
@@ -1744,12 +1802,13 @@ public class GameService {
                         gameState.setTrimQueue(toTrim);
 
                         message = "Too many cards, trimming hand for player " + firstPlayer.getId();
+                        allPlayerHands = getAllPlayerHands();
 
                         return new GameResponse(
                           "success",
                                 message,
                                 firstPlayer.getId(),
-                                firstPlayer.displayHand(),
+                                allPlayerHands,
                                 gameState.getPlayerList(),
                                 c,
                                 true,
@@ -1757,12 +1816,13 @@ public class GameService {
                         );
                     } else {
                         message = "All players draw 2 cards!";
+                        allPlayerHands = getAllPlayerHands();
 
                         return new GameResponse(
                                 "success",
                                 message,
                                 id,
-                                currentPlayer.displayHand(),
+                                allPlayerHands,
                                 gameState.getPlayerList(),
                                 c,
                                 false,
@@ -1774,12 +1834,12 @@ public class GameService {
             message = "A quest will start!";
             gameState.setFinishedQuest(false);
         }
-
+        allPlayerHands = getAllPlayerHands();
         return new GameResponse(
                 "success",
                 message,
                 id,
-                currentPlayer.displayHand(),
+                allPlayerHands,
                 gameState.getPlayerList(),
                 c,
                 false,

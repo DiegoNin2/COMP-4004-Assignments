@@ -1,6 +1,14 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
+async function handleInput(input) {
+    let inputField = driver.findElement(By.id('player-input'));
+    let userInput = input;
+    console.log("input: ", userInput);
+    console.log("sending input...");
+    await inputField.sendKeys(userInput);
+}
+
 //two winner
 async function scenario1() {
     let driver = await new Builder().forBrowser('chrome').build();
@@ -10,8 +18,379 @@ async function scenario1() {
 
         await driver.get('http://127.0.0.1:8081');
 
+        console.log("starting game...");
+        let startButton = driver.findElement(By.id('start-game-btn'));
+        await startButton.click();
 
+        //input for sponsoring quest 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        let submitButton = driver.findElement(By.id('submit-input-btn'));
+        await submitButton.click();
 
+        //input for building quest 1
+        //settles stage 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //gets participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //trimming
+        //P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 2
+        //gets participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 3
+        //gets participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 4
+        //gets participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //input for sponsoring quest 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("n");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        await submitButton.click();
+
+        //input for building quest 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("withdraw");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 2
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 3
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("2");
+        await submitButton.click();
+
+        //asserts
         let player1Cards = await driver.findElement(By.id("player1-hand")).getText();
         let player2Cards = await driver.findElement(By.id("player2-hand")).getText();
         let player3Cards = await driver.findElement(By.id("player3-hand")).getText();
@@ -38,8 +417,460 @@ async function scenario2() {
 
         await driver.get('http://127.0.0.1:8081');
 
+        //input for sponsoring quest 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        let submitButton = driver.findElement(By.id('submit-input-btn'));
+        await submitButton.click();
 
+        //input for quest
+        //settles stage 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
 
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //trimming
+        //P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("3");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 2
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 3
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("8");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("8");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 4
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("12");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("2");
+        await submitButton.click();
+
+        //input for prosperity
+        //Player 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //Player 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //Player 3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //Player 4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //input for Queen's Favor
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("4");
+        await submitButton.click();
+
+        //input for sponsoring quest 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        await submitButton.click();
+
+        //input for building quest 2
+        //settles stage 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("8");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //trimming
+        //P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 2
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 3
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("10");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("8");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("11");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("3");
+        await submitButton.click();
+
+        //asserts
         let player1Cards = await driver.findElement(By.id("player1-hand")).getText();
         let player2Cards = await driver.findElement(By.id("player2-hand")).getText();
         let player3Cards = await driver.findElement(By.id("player3-hand")).getText();
@@ -66,8 +897,130 @@ async function scenario3() {
 
         await driver.get('http://127.0.0.1:8081');
 
+        //input for sponsoring quest
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        let submitButton = driver.findElement(By.id('submit-input-btn'));
+        await submitButton.click();
 
+        //input for quest
+        //settles stage 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
 
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles for stage 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //trimming
+        //P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("5");
+        await submitButton.click();
+
+        //P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("3");
+        await submitButton.click();
+
+        //builds attack for P2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("12");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //asserts
         let player1Cards = await driver.findElement(By.id("player1-hand")).getText();
         let player2Cards = await driver.findElement(By.id("player2-hand")).getText();
         let player3Cards = await driver.findElement(By.id("player3-hand")).getText();
@@ -94,8 +1047,305 @@ async function scenario4() {
 
         await driver.get('http://127.0.0.1:8081');
 
+        //input for sponsoring quest 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("n");
+        let submitButton = driver.findElement(By.id('submit-input-btn'));
+        await submitButton.click();
 
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Would you like to build the quest? (y/n)'));
+        handleInput("y");
+        await submitButton.click();
 
+        //input for quest
+        //settles stage 1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 2
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //settles stage 4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("2");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("3");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card to add to the stage or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 1
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //trimming
+        //P1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //builds attack for P1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 2
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P1
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 3
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("9");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for stage 4
+        //get participants
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'do you want to participate in the quest? (participate/withdraw)'));
+        handleInput("participate");
+        await submitButton.click();
+
+        //builds attack for P3
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("8");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("6");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("7");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //builds attack for P4
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("4");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("5");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'select a card for your attack or quit'));
+        handleInput("quit");
+        await submitButton.click();
+
+        //input for builder discard
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        await driver.wait(until.elementTextContains(driver.findElement(By.id('player-input')), 'Select a card to discard.'));
+        handleInput("1");
+        await submitButton.click();
+
+        //asserts
         let player1Cards = await driver.findElement(By.id("player1-hand")).getText();
         let player2Cards = await driver.findElement(By.id("player2-hand")).getText();
         let player3Cards = await driver.findElement(By.id("player3-hand")).getText();
@@ -112,3 +1362,4 @@ async function scenario4() {
         console.error("something went wrong", error);
     }
 }
+
