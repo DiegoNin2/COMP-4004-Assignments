@@ -405,6 +405,8 @@ async function scenario1() {
 
     } catch (error) {
         console.error("something went wrong", error);
+    } finally {
+        await driver.quit();
     }
 }
 
@@ -885,6 +887,8 @@ async function scenario2() {
 
     } catch (error) {
         console.error("something went wrong", error);
+    } finally {
+              await driver.quit();
     }
 }
 
@@ -1035,6 +1039,8 @@ async function scenario3() {
 
     } catch (error) {
         console.error("something went wrong", error);
+    } finally {
+              await driver.quit();
     }
 }
 
@@ -1360,6 +1366,12 @@ async function scenario4() {
 
     } catch (error) {
         console.error("something went wrong", error);
+    } finally {
+              await driver.quit();
     }
 }
 
+scenario1();
+scenario2();
+scenario3();
+scenario4();
